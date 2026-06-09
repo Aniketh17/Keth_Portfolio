@@ -2,219 +2,348 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <meta name="description" content="Aniketh K — AI/ML Engineer & Software Developer. Master's in AI at University of Auckland. Building intelligent systems and scalable software.">
+    <meta name="theme-color" content="#0a0a0f">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="x-icon" href="logo.webp">
-    <title>ANIKETH K</title>
+    <link rel="icon" type="image/webp" href="logo.webp">
+    <title>Aniketh K — AI/ML Engineer & Software Developer</title>
 </head>
 <body>
+
+    <!-- ========== NAVIGATION ========== -->
     <header>
-      <nav class="navbar">
-        <div class="logo">ANIKETH K</div>
-        <div class="menu-toggle" id="menuToggle">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#education">Education</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-    
-    
+        <nav class="navbar" id="navbar">
+            <a href="#hero" class="nav-logo">AK</a>
+            <div class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="Updated_Resume.pdf" class="nav-resume-btn" download>Resume</a></li>
+            </ul>
+        </nav>
     </header>
-    
-  <section class="hero">
-      <div class="hero-content">
-          <h1>Hi, I'm ANIKETH</h1>
-          <p>A Web Developer with a passion for creating beautiful and functional websites.</p>
-          <a href="#projects" class="cta-button" style="background-color: white; width: 205px; color: black; border-radius: 25px; font-weight: 700;;">View My Work</a> 
-          <a href="Updated_Resume.pdf" class="btn btn-download" download>Download Resume</a>
-      </div>
-      </section>
-      <section class="education">
-        <h2>Education</h2>
-        <div class="education-timeline">
-            <div class="education-entry" data-aos="fade-up">
-                <div class="education-date">2021 - 2025</div>
-                <div class="education-details">
-                    <h3>Bachelor's in Computer Science</h3>
-                    <p>Atria Institute Of Technology</p>
+
+    <main>
+
+        <!-- ========== HERO ========== -->
+        <section class="hero" id="hero">
+            <div class="hero-content">
+                <span class="hero-greeting" id="typewriter" aria-label="Code greeting animation"><span id="typewriter-text">&lt; hello world /&gt;</span><span class="typewriter-cursor"></span></span>
+                <h1 class="hero-title">Hi, I'm <span class="accent">Aniketh.</span></h1>
+                <p class="hero-subtitle">AI/ML Engineer · Software Developer</p>
+                <p class="hero-description">
+                    I build intelligent systems that learn and software that scales. 
+                    Currently pursuing my Master's in AI, turning research into real-world solutions.
+                </p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn-primary">
+                        View My Work
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>
+                    </a>
+                    <a href="ANIKETH_K_RESUME.pdf" class="btn-ghost" download>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download Resume
+                    </a>
                 </div>
             </div>
-            <div class="education-entry" data-aos="fade-up">
-                <div class="education-date">2019 - 2021</div>
-                <div class="education-details">
-                    <h3>Pre University</h3>
-                    <p>Base Pu College</p>
+            <a href="#about" class="scroll-indicator" aria-label="Scroll to about section">
+                <span>scroll</span>
+                <div class="chevron"></div>
+            </a>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== ABOUT ========== -->
+        <section class="about" id="about">
+            <div class="section-container">
+                <div class="about-grid">
+                    <div class="about-text reveal">
+                        <span class="section-label">About Me</span>
+                        <h2 class="section-title">Building at the intersection of AI and software.</h2>
+                        <p class="section-subtitle">
+                            I'm a software developer turned AI enthusiast, currently pursuing my Master's in Artificial Intelligence at the University of Auckland. 
+                            My journey started with building full-stack web applications — from e-commerce platforms with real payment integrations to production-ready microservices architectures. 
+                            Now I'm channeling that engineering discipline into machine learning, working with neural networks, data pipelines, and intelligent systems.
+                        </p>
+                        <p class="section-subtitle" style="margin-top: 1rem;">
+                            I bring a builder's mindset to AI — not just understanding the theory, but shipping solutions that work in the real world. Whether it's a scalable API or a trained model, I care about clean architecture and measurable impact.
+                        </p>
+                    </div>
+                    <div class="about-stats-card reveal reveal-delay-2">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Master's in AI</h4>
+                                <p>University of Auckland</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Software Developer</h4>
+                                <p>Full-Stack &amp; AI/ML</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Auckland, New Zealand</h4>
+                                <p>Open to opportunities</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="education-entry" data-aos="fade-up">
-              <div class="education-date">2009 - 2019</div>
-              <div class="education-details">
-                  <h3>Primary Education</h3>
-                  <p>School Vivekananda</p>
-              </div>
-          </div>
-        </div>
-    </section>
-    <section class="about" data-aos="fade-up">
-      <div class="about-content">
-          <div class="text-container">
-              <h2>About Me</h2>
-              <p>
-                  I am an enthusiastic web developer with a passion for creating beautiful, responsive, and user-friendly websites. My journey in web development began with a curiosity for technology and a desire to build meaningful digital experiences. Over the years, I have honed my skills in HTML, CSS, JavaScript, and various web development frameworks. I am always eager to learn new technologies and take on exciting challenges. My goal is to deliver innovative solutions that not only meet but exceed client expectations.
-              </p>
-              <a href="#projects" class="btn" data-aos="fade-up">View My Work</a>
-          </div>
-          <div class="background-shapes"></div>
-      </div>
-  </section>
-  <section class="skills" id="skills">
-    <div class="skills-content">
-        <h2>My Skills</h2>
-        <div class="skills-gallery">
-            <div class="skills-gallery-inner">
-              <img src="html.png" alt="HTML">
-              <img src="css.svg" alt="CSS">
-              <img src="js.jpg" alt="JavaScript">
-              <img src="react.webp" alt="React.js">
-              <img src="node.png" alt="Node.js">
-              <img src="express.png" alt="Express.js">
-              <img src="mongodb.svg" alt="MongoDB">
-              <img src="sql.png" alt="SQL">
-              <img src="vs.jpeg" alt="Visual Studio Code">
-              <img src="ava.svg" alt="Java">
-                <!-- Repeat images to ensure smooth scrolling effect -->
-              <img src="html.png" alt="HTML">
-              <img src="css.svg" alt="CSS">
-              <img src="js.jpg" alt="JavaScript">
-              <img src="react.webp" alt="React.js">
-              <img src="node.png" alt="Node.js">
-              <img src="express.png" alt="Express.js">
-              <img src="mongodb.svg" alt="MongoDB">
-              <img src="sql.png" alt="SQL">
-              <img src="vs.jpeg" alt="Visual Studio Code">
-              <img src="ava.svg" alt="Java">
+        </section>
+
+
+        <!-- ========== SKILLS ========== -->
+        <section class="skills" id="skills">
+            <div class="section-container">
+                <div class="skills-header reveal">
+                    <span class="section-label">Skills &amp; Technologies</span>
+                    <h2 class="section-title">Tools I work with.</h2>
+                    <p class="section-subtitle">From machine learning pipelines to production-ready applications.</p>
+                </div>
+                <div class="skills-categories">
+                    <div class="skill-category reveal reveal-delay-1">
+                        <div class="skill-category-label">AI / Machine Learning</div>
+                        <div class="skill-chips">
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="" class="chip-icon">Python</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tensorflow/tensorflow-original.svg" alt="" class="chip-icon">TensorFlow</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pytorch/pytorch-original.svg" alt="" class="chip-icon">PyTorch</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg" alt="" class="chip-icon">scikit-learn</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pandas/pandas-original.svg" alt="" class="chip-icon">Pandas</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/numpy/numpy-original.svg" alt="" class="chip-icon">NumPy</span>
+                        </div>
+                    </div>
+                    <div class="skill-category reveal reveal-delay-2">
+                        <div class="skill-category-label">Development</div>
+                        <div class="skill-chips">
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="" class="chip-icon">React.js</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="" class="chip-icon">Node.js</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg" alt="" class="chip-icon">Express.js</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg" alt="" class="chip-icon">Spring Boot</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="" class="chip-icon">JavaScript</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="" class="chip-icon">Java</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="" class="chip-icon">HTML / CSS</span>
+                        </div>
+                    </div>
+                    <div class="skill-category reveal reveal-delay-3">
+                        <div class="skill-category-label">Data &amp; Infrastructure</div>
+                        <div class="skill-chips">
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" alt="" class="chip-icon">MongoDB</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="" class="chip-icon">SQL</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg" alt="" class="chip-icon">Supabase</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="" class="chip-icon">Docker</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="" class="chip-icon">Git</span>
+                            <span class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/railway/railway-original.svg" alt="" class="chip-icon">Railway</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== EDUCATION ========== -->
+        <section class="education" id="education">
+            <div class="section-container">
+                <div class="education-header reveal">
+                    <span class="section-label">Education</span>
+                    <h2 class="section-title">Academic journey.</h2>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item reveal reveal-delay-1">
+                        <div class="timeline-card">
+                            <div class="timeline-date">2026 — Present</div>
+                            <h3>Master's in Artificial Intelligence</h3>
+                            <p>University of Auckland</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item reveal reveal-delay-2">
+                        <div class="timeline-card">
+                            <div class="timeline-date">2021 — 2025</div>
+                            <h3>Bachelor's in Computer Science</h3>
+                            <p>Atria Institute of Technology</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item reveal reveal-delay-3">
+                        <div class="timeline-card">
+                            <div class="timeline-date">2019 — 2021</div>
+                            <h3>Pre-University Education</h3>
+                            <p>Base PU College</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== PROJECTS ========== -->
+        <section class="projects" id="projects">
+            <div class="section-container">
+                <div class="projects-header reveal">
+                    <span class="section-label">Featured Work</span>
+                    <h2 class="section-title">Things I've built.</h2>
+                    <p class="section-subtitle">A selection of projects spanning full-stack development and real-world integrations.</p>
+                </div>
+
+                <!-- Top row: 2 featured cards -->
+                <div class="projects-grid">
+                    <a href="https://www.itomaster.com" target="_blank" rel="noopener noreferrer" class="project-card featured reveal reveal-delay-1" id="project-ito">
+                        <img src="ito.png" alt="ITO Master e-commerce platform" class="project-card-img" loading="lazy">
+                        <div class="project-card-overlay"></div>
+                        <div class="project-card-content">
+                            <h3>ITO Master</h3>
+                            <div class="project-tech">
+                                <span>React</span>
+                                <span>Spring Boot</span>
+                                <span>Supabase</span>
+                                <span>Docker</span>
+                            </div>
+                            <p>Full-stack e-commerce platform with Razorpay payments, NimbusPost shipping, and microservices architecture deployed on Railway.</p>
+                            <span class="project-link">
+                                View Project
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                            </span>
+                        </div>
+                    </a>
+                    <a href="https://aryancarefoundation.netlify.app/" target="_blank" rel="noopener noreferrer" class="project-card featured reveal reveal-delay-2" id="project-aryancare">
+                        <img src="ac.png" alt="Aryan Care Foundation website" class="project-card-img" loading="lazy">
+                        <div class="project-card-overlay"></div>
+                        <div class="project-card-content">
+                            <h3>Aryan Care Foundation</h3>
+                            <div class="project-tech">
+                                <span>HTML</span>
+                                <span>CSS</span>
+                                <span>JavaScript</span>
+                            </div>
+                            <p>Charity website focused on accessibility and engagement to raise awareness and drive donations.</p>
+                            <span class="project-link">
+                                View Project
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bottom row: 3 cards -->
+                <div class="projects-grid-bottom">
+                    <a href="https://tinyy-paws.netlify.app/" target="_blank" rel="noopener noreferrer" class="project-card reveal reveal-delay-1" id="project-tinypaws">
+                        <img src="tp.png" alt="Tiny Paws pet care website" class="project-card-img" loading="lazy">
+                        <div class="project-card-overlay"></div>
+                        <div class="project-card-content">
+                            <h3>Tiny Paws</h3>
+                            <div class="project-tech">
+                                <span>React</span>
+                                <span>Node.js</span>
+                            </div>
+                            <p>Pet care platform with dynamic features and interactive user experience.</p>
+                            <span class="project-link">
+                                View Project
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                            </span>
+                        </div>
+                    </a>
+                    <a href="https://geen-harbour-wildlife.netlify.app/" target="_blank" rel="noopener noreferrer" class="project-card reveal reveal-delay-2" id="project-greenharbor">
+                        <img src="gh.png" alt="Green Harbor wildlife conservation site" class="project-card-img" loading="lazy">
+                        <div class="project-card-overlay"></div>
+                        <div class="project-card-content">
+                            <h3>Green Harbor</h3>
+                            <div class="project-tech">
+                                <span>HTML</span>
+                                <span>CSS</span>
+                                <span>JavaScript</span>
+                            </div>
+                            <p>Educational platform promoting wildlife conservation through engaging visuals.</p>
+                            <span class="project-link">
+                                View Project
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                            </span>
+                        </div>
+                    </a>
+                    <div class="project-card reveal reveal-delay-3" id="project-portfolio">
+                        <img src="portfolio.png" alt="Personal portfolio website" class="project-card-img" loading="lazy">
+                        <div class="project-card-overlay"></div>
+                        <div class="project-card-content">
+                            <h3>This Portfolio</h3>
+                            <div class="project-tech">
+                                <span>HTML</span>
+                                <span>CSS</span>
+                                <span>JavaScript</span>
+                            </div>
+                            <p>Glassmorphic dark-mode portfolio with animated gradient mesh and scroll reveals.</p>
+                            <span class="project-link">
+                                You're here
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========== CONTACT ========== -->
+        <section class="contact" id="contact">
+            <div class="section-container contact-content">
+                <span class="section-label reveal">Get in Touch</span>
+                <h2 class="section-title reveal">Let's connect.</h2>
+                <p class="section-subtitle reveal reveal-delay-1">
+                    Open to AI/ML roles, software engineering positions, and interesting collaborations. 
+                    Let's build something meaningful.
+                </p>
+                <div class="contact-links reveal reveal-delay-2">
+                    <a href="mailto:aniketh123ani@gmail.com" class="contact-pill" id="contact-email">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        Email
+                    </a>
+                    <a href="https://www.linkedin.com/in/anikethk/" target="_blank" rel="noopener noreferrer" class="contact-pill" id="contact-linkedin">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn
+                    </a>
+                    <a href="https://github.com/Aniketh17" target="_blank" rel="noopener noreferrer" class="contact-pill" id="contact-github">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                        GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="section-container">
+            <p>&copy; 2025 Aniketh K. Built with <span class="accent-text">intention</span>.</p>
         </div>
-    </div>
-</section>
+    </footer>
 
-<section class="projects" id="projects">
-  <div class="projects-content">
-      <h2>My Projects</h2>
-      <div class="projects-gallery">
-          <div class="project-item">
-              <div class="project-image">
-                  <a href="#" target="_blank">
-                      <img src="portfolio.png" alt="Project 1">
-                  </a>
-              </div>
-              <div class="project-description">
-                  <h3>Personal Portfolio</h3>
-                  <p>Developed a minimal responsive personal portfolio website using HTML, CSS, and JavaScript to showcase my web development projects and
-                    skills while keeping it elegant.</p>
-              </div>
-          </div>
-           <div class="project-item">
-              <div class="project-description">
-                  <h3>Ito Master</h3>
-                  <p>ITO MASTER is a robust e-commerce platform built with a React.js frontend and a Spring Boot microservices backend. It features seamless real-world integrations, including Razorpay for payments and NimbusPost for automated shipping logistics. The architecture utilizes Supabase for scalable PostgreSQL data and optimized media storage. Fully containerized with Docker and deployed on Railway, the project demonstrates a secure, production-ready distributed system.</p>
-              </div>
-              <div class="project-image">
-                  <a href="www.itomaster.com" target="_blank">
-                      <img src="ito.png" alt="Project 2">
-                  </a>
-              </div>
-          </div>
-          <div class="project-item">
-              <div class="project-description">
-                  <h3>Aryan Care Foundation</h3>
-                  <p>Built a user-friendly front-end for a charity website, employing modern web technologies to enhance accessibility and
-                    engagement, aimed at raising awareness and driving donations.</p>
-              </div>
-              <div class="project-image">
-                  <a href="https://aryancarefoundation.netlify.app/" target="_blank">
-                      <img src="ac.png" alt="Project 3">
-                  </a>
-              </div>
-          </div>
-          <div class="project-item">
-              <div class="project-image">
-                  <a href="https://tinyy-paws.netlify.app/." target="_blank">
-                      <img src="tp.png" alt="Project 4">
-                  </a>
-              </div>
-              <div class="project-description">
-                  <h3>Tiny Paws</h3>
-                  <p>Designed the front end of a comprehensive pet care website. Currently developing the backend to integrate dynamic features and user interactions.</p>
-              </div>
-          </div>
-          <div class="project-item">
-              <div class="project-description">
-                  <h3>Green Harbor</h3>
-                  <p>Developed an educational website focusing on the environmental
-                    impacts of deforestation and poaching by utilizing engaging visuals and content to promote conservation efforts.</p>
-              </div>
-              <div class="project-image">
-                  <a href="https://geen-harbour-wildlife.netlify.app/." target="_blank">
-                      <img src="gh.png" alt="Project 5">
-                  </a>
-              </div>
-          </div>
-      </div>
-  </div>
-</section>
-
-<section class="contact" id="contact">
-  <div class="contact-content">
-    <h2>Contact Me</h2>
-    <div class="contact-links">
-      <a href="mailto:aniketh123ani@gmail.com" class="contact-link">
-        <i class="fa-solid fa-envelope"></i>
-        <span>Email</span>
-      </a>
-      <a href="https://www.linkedin.com/in/ANIKETH K/" target="_blank" class="contact-link">
-        <i class="fa-brands fa-linkedin"></i>
-        <span>LinkedIn</span>
-      </a>
-      <a href="https://github.com/Aniketh17" target="_blank" class="contact-link">
-        <i class="fa-brands fa-github"></i>
-        <span>GitHub</span>
-      </a>
-      <!-- Add more links if needed -->
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="footer-content">
-    <p>&copy; 2024 Aniketh K. All rights reserved.</p>
-    <ul class="footer-links">
-      <li><a href="mailto:aniketh123ani@gmail.com">Email</a></li>
-      <li><a href="https://www.linkedin.com/in/ANIKETH K/" target="_blank">LinkedIn</a></li>
-      <li><a href="https://github.com/Aniketh17" target="_blank">GitHub</a></li>
-      <!-- Add more links if needed -->
-    </ul>
-  </div>
-</footer>
-
-
-
-
-  
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
 </html>
