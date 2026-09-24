@@ -47,7 +47,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({ onExploreProjects 
         {/* Character Portrait with HUD Frame */}
         <div className="relative rounded-xl overflow-hidden aspect-[3/4] bg-neutral-900 border border-white/10">
           <img
-            src="/assets/aniketh_character.jpg"
+            src="./assets/aniketh_character.jpg"
             alt="Aniketh K — AI Systems Character"
             className="w-full h-full object-cover object-top transition-transform duration-700 ease-out"
             style={{

@@ -13,9 +13,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [pillsVisible, setPillsVisible] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Typewriter hook tailored to portfolio ethos
+  // Typewriter hook tailored to broader software engineering ethos
   const typewriterText =
-    'Building intelligent neural systems that learn and scalable software that endures. What are we building?';
+    'Building robust architectures, dynamic interfaces, and scalable full-stack platforms. What are we building today?';
   const { displayed, done } = useTypewriter(typewriterText, 36, 600);
 
   // Pills become visible 400ms after page load, independent of typewriter
@@ -42,7 +42,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     { label: 'Explore My Work', target: '#projects' },
     { label: 'View Tech Stack', target: '#skills' },
     { label: 'About My Journey', target: '#about' },
-    { label: 'Download Resume', download: 'Aniketh_NZ_Resume.pdf' },
+    { label: 'Download Resume', download: '/Aniketh_NZ_Resume.pdf' },
   ];
 
   const handlePillClick = (item: { label: string; target?: string; download?: string }) => {
@@ -86,7 +86,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         >
           Hey there, I'm Aniketh Rao,
           <br />
-          AI/ML Engineer &amp; Intelligent Systems Architect
+          Software Engineer &amp; Full-Stack Architect
         </div>
 
         {/* 2. Typewriter text */}

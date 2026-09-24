@@ -8,46 +8,45 @@ interface SkillGroup {
 
 const skillGroups: SkillGroup[] = [
   {
-    category: 'AI / Machine Learning',
-    badge: 'Neural Core',
+    category: 'AI and Machine Learning',
+    badge: 'Core Research',
     skills: [
-      'Retrieval-Augmented Generation (RAG)',
-      'Cross & Bi-Encoders',
-      'PyTorch',
-      'TensorFlow',
-      'Python',
-      'scikit-learn',
-      'FastAPI',
-      'Vector Search',
-      'Pandas & NumPy',
+      'Retrieval-Augmented Generation',
+      'Bi-Encoders and Cross-Encoders',
+      'LLM Fine-tuning (LoRA, PEFT)',
+      'PyTorch and TensorFlow',
+      'Transformer Architectures',
+      'Vector Databases (FAISS, Pinecone)',
+      'Langchain and Semantic Kernel',
+      'Prompt Engineering',
+      'Pandas and NumPy',
     ],
   },
   {
-    category: 'Software Architecture & Development',
-    badge: 'Engineering',
+    category: 'Full-Stack Engineering',
+    badge: 'Platforms',
     skills: [
-      'React.js',
-      'TypeScript',
-      'Node.js',
-      'Spring Boot',
-      'Express.js',
-      'Java',
-      'JavaScript',
-      'REST APIs & Microservices',
+      'React.js and Next.js',
+      'TypeScript and JavaScript',
+      'Node.js and Express',
+      'Spring Boot (Java)',
+      'FastAPI and Flask',
+      'REST APIs and Microservices',
       'Tailwind CSS',
+      'PostgreSQL and Redis',
     ],
   },
   {
-    category: 'Data & Cloud Infrastructure',
-    badge: 'Operations',
+    category: 'Cloud and MLOps',
+    badge: 'Infrastructure',
     skills: [
-      'Docker Containerization',
-      'Supabase & PostgreSQL',
-      'MongoDB',
-      'Git Version Control',
-      'Railway Cloud',
-      'CI/CD Pipelines',
-      'Data Governance & Grounding',
+      'Docker and Kubernetes',
+      'GitHub Actions and CI/CD',
+      'Railway and Supabase Cloud',
+      'MLflow and Weights and Biases',
+      'Langfuse (LLM Observability)',
+      'MongoDB and PostgreSQL',
+      'Git and Version Control',
     ],
   },
 ];
@@ -56,20 +55,20 @@ export const SkillsSection: React.FC = () => {
   return (
     <section
       id="skills"
-      className="relative min-h-screen py-28 px-5 sm:px-8 md:px-12 flex flex-col justify-center items-center z-10 bg-slate-900 text-white"
+      className="relative min-h-screen py-16 sm:py-24 lg:py-28 px-4 sm:px-8 md:px-12 flex flex-col justify-center items-center z-10 bg-slate-900 text-white"
     >
       <div className="relative z-10 max-w-5xl w-full">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-mono tracking-wider uppercase mb-4 backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
-            Neural Stack &amp; Infrastructure
+            AI Stack and Infrastructure
           </div>
-          <h2 className="font-serif text-4xl sm:text-6xl font-bold tracking-tight text-white mb-4">
-            Capabilities &amp; Tech Matrix.
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white mb-4">
+            Capabilities and Tech Matrix.
           </h2>
           <p className="font-sans text-slate-300 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            Disciplined software engineering meets state-of-the-art machine learning research.
+            AI research depth meets solid production engineering.
           </p>
         </div>
 
@@ -97,7 +96,7 @@ export const SkillsSection: React.FC = () => {
                 {group.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-200 font-mono hover:bg-white hover:text-slate-900 transition-all duration-200 cursor-default select-none"
+                    className="skill-pill px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-200 font-mono hover:bg-white hover:text-slate-900 transition-all duration-200 cursor-default select-none"
                   >
                     {skill}
                   </span>
@@ -108,23 +107,23 @@ export const SkillsSection: React.FC = () => {
         </div>
 
         {/* Academic Journey Highlight */}
-        <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-white/15 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="mt-10 sm:mt-12 p-5 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-white/15 backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-5 shadow-xl">
           <div className="text-left">
             <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">
               Academic Background
             </span>
-            <h4 className="font-serif text-2xl font-bold text-white">
-              Master's in Artificial Intelligence
+            <h4 className="font-serif text-xl sm:text-2xl font-bold text-white">
+              Master of Artificial Intelligence
             </h4>
             <p className="text-slate-400 text-sm mt-1">
-              University of Auckland, New Zealand · 2026 — Present
+              University of Auckland, New Zealand. 2026 to Present
             </p>
           </div>
           <div className="flex items-center gap-3">
             <a
-              href="Aniketh_NZ_Resume.pdf"
+              href="/Aniketh_NZ_Resume.pdf"
               download
-              className="px-6 py-3 rounded-full bg-white text-slate-900 font-bold text-xs sm:text-sm hover:bg-slate-200 transition-all flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 active:scale-95"
+              className="touch-target w-full sm:w-auto px-5 sm:px-6 py-3 rounded-full bg-white text-slate-900 font-bold text-xs sm:text-sm hover:bg-slate-200 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:scale-105 active:scale-95"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

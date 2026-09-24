@@ -7,12 +7,17 @@
   --font-sans: 'Plus Jakarta Sans', sans-serif;
   --font-display: 'Outfit', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --motion-fast: 160ms;
+  --motion-base: 280ms;
+  --motion-slow: 500ms;
+  --focus-ring: #67e8f9;
 }
 
 body {
   font-family: var(--font-sans);
   background: #0f172a;
   color: #f8fafc;
+  line-height: 1.5;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -33,11 +38,31 @@ select,
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 6.5rem;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.32);
+  color: #f8fafc;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
 }
 
 /* Custom modern scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 ::-webkit-scrollbar-track {
@@ -76,4 +101,135 @@ html {
 .text-stroke-dream {
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
   color: transparent;
+}
+
+/* Project reel: transform-only motion avoids scroll snapping and visible reset jumps. */
+.project-carousel-viewport {
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.project-carousel-viewport:active {
+  cursor: grabbing;
+}
+
+.project-carousel-track {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.project-carousel-card {
+  min-height: 100%;
+}
+
+/* Keep the projector visually connected to the introduction on taller screens. */
+@media (min-width: 640px) and (min-height: 800px) {
+  .projector-stage {
+    justify-content: flex-start;
+    padding-top: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .project-carousel-card,
+  .project-carousel-card *,
+  button,
+  a {
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE DRAWER — premium slide-in from right
+───────────────────────────────────────────── */
+@keyframes drawerSlideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes drawerFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes navItemSlideIn {
+  from { transform: translateX(20px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+.mobile-drawer {
+  animation: drawerSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.mobile-drawer-overlay {
+  animation: drawerFadeIn 0.25s ease both;
+}
+
+.mobile-drawer-item {
+  animation: navItemSlideIn 0.32s ease both;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+/* Staggered entrance delays */
+.mobile-drawer-item:nth-child(1) { animation-delay: 0.06s; }
+.mobile-drawer-item:nth-child(2) { animation-delay: 0.11s; }
+.mobile-drawer-item:nth-child(3) { animation-delay: 0.16s; }
+.mobile-drawer-item:nth-child(4) { animation-delay: 0.21s; }
+.mobile-drawer-item:nth-child(5) { animation-delay: 0.26s; }
+.mobile-drawer-item:nth-child(6) { animation-delay: 0.31s; }
+
+/* ─────────────────────────────────────────────
+   MOBILE PROJECT MODAL — bottom-sheet pattern
+───────────────────────────────────────────── */
+@keyframes bottomSheetUp {
+  from { transform: translateY(100%); opacity: 0.6; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.mobile-bottom-sheet {
+  animation: bottomSheetUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─────────────────────────────────────────────
+   TOUCH FEEDBACK — coarse pointer active states
+───────────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  .skill-pill:active {
+    background: white !important;
+    color: #0f172a !important;
+  }
+
+  .project-carousel-viewport {
+    touch-action: pan-y pinch-zoom;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE STAGE — hologram vertical compression
+───────────────────────────────────────────── */
+@media (max-width: 639px) {
+  .projector-stage {
+    gap: 0 !important;
+  }
+
+  /* Speech bubbles must not overflow viewport */
+  .speech-bubble {
+    max-width: min(210px, 56vw);
+    white-space: normal !important;
+    word-break: break-word;
+  }
+}
+
+/* Minimum 44pt touch target helper (Apple HIG) */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

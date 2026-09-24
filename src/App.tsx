@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { HologramProjectorStage } from './components/HologramProjectorStage';
 import { ProjectsSection } from './components/ProjectsSection';
@@ -8,38 +8,62 @@ import { ContactSection } from './components/ContactSection';
 
 export const App: React.FC = () => {
   const [interactiveMode, setInteractiveMode] = useState(true);
+  const [themeOverride, setThemeOverride] = useState<'day' | 'night' | null>(null);
+  const [locationCity, setLocationCity] = useState('Auckland');
+
+  // Compute auto day/night from current local hour
+  const getAutoIsNight = () => {
+    const hour = new Date().getHours();
+    return hour >= 18 || hour < 6;
+  };
+
+  const isNight = themeOverride !== null ? themeOverride === 'night' : getAutoIsNight();
+
+  // Toggle theme manually
+  const toggleTheme = () => {
+    setThemeOverride(isNight ? 'day' : 'night');
+  };
+
+  // Geolocation: fetch city via IP (no API key needed, free service)
+  useEffect(() => {
+    fetch('https://ipapi.co/json/')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.city) setLocationCity(data.city);
+      })
+      .catch(() => {
+        // Fallback to Auckland on error
+      });
+  }, []);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0b0f19] text-slate-100 overflow-x-hidden selection:bg-indigo-500 selection:text-white">
-      {/* Floating Left Navigation & Top Header Bar */}
+    <div
+      className="relative min-h-screen text-slate-100 overflow-x-hidden selection:bg-indigo-500 selection:text-white transition-colors duration-700"
+      style={{ background: isNight ? '#090d16' : '#0b1628' }}
+    >
       <Navbar
         interactiveMode={interactiveMode}
-        onToggleInteractiveMode={() => setInteractiveMode(!interactiveMode)}
+        onToggleInteractiveMode={() => setInteractiveMode((v) => !v)}
         onContactClick={() => scrollToSection('contact')}
+        isNight={isNight}
+        onToggleTheme={toggleTheme}
+        locationCity={locationCity}
       />
 
       <main>
-        {/* Act I: 3D Holographic Projector & Dreamscape Stage (Image 2 + Image 1) */}
         <HologramProjectorStage
           interactiveMode={interactiveMode}
           onExploreProjects={() => scrollToSection('projects')}
+          isNight={isNight}
         />
-
-        {/* Act II: Projects & Flagship IMAC Clinical Advisor RAG Showcase */}
         <ProjectsSection />
-
-        {/* Act III: About Aniketh & Neural Capabilities */}
         <AboutSection />
         <SkillsSection />
-
-        {/* Act IV: Direct Outreach & Transmission Terminal */}
         <ContactSection />
       </main>
     </div>

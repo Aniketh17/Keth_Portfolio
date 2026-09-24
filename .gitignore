@@ -1,3 +1,11 @@
-package.json
-node_modules
-package-lock.json
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS / Editor
+.DS_Store
+Thumbs.db
