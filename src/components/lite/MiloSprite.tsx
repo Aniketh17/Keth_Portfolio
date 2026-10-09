@@ -9,7 +9,12 @@ export type SpriteState = 'idle' | 'walk' | 'run' | 'sit' | 'happy';
 
 /** CSS duration for one 8-frame loop of each strip. */
 const STRIP_DURATION: Record<SpriteState, string> = { idle: '2.4s', walk: '0.8s', run: '0.5s', sit: '0.7s', happy: '1.1s' };
-export const SPRITE_URL = (s: SpriteState): string => `${import.meta.env.BASE_URL}sprites/${s}.webp`;
+/**
+ * Absolute, resolved against the page. The URL travels through a CSS custom property, and CSS resolves relative
+ * URLs against the stylesheet (which lives in /assets/), not the page; the production build uses a relative base,
+ * so a relative path there points at /assets/sprites/ and 404s.
+ */
+export const SPRITE_URL = (s: SpriteState): string => new URL(`${import.meta.env.BASE_URL}sprites/${s}.webp`, document.baseURI).href;
 const ALL_STATES: SpriteState[] = ['idle', 'walk', 'run', 'sit', 'happy'];
 
 /** Starts fetching the other strips once the page has settled, so the first paint only needs the idle one. */
