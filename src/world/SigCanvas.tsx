@@ -130,7 +130,7 @@ const setFace = (t: CanvasTexture, index: number) => t.offset.set((index % CELLS
 /** Where Sig sits on screen (-1..1 on each axis) for each zone, on wide and narrow screens. */
 const PERCH: Record<'wide' | 'narrow', { overview: [number, number][]; inspect: [number, number] }> = {
   wide: {
-    overview: [[0.64, -0.12], [0.84, -0.62], [0.84, -0.58], [0.84, -0.58], [0.72, 0.18]],
+    overview: [[0.86, -0.5], [0.86, -0.62], [0.84, -0.58], [0.84, -0.58], [0.86, -0.3]],
     inspect: [0.86, 0.58],
   },
   narrow: {
@@ -199,7 +199,7 @@ function SigScene({ narrow }: { narrow: boolean }) {
     let ty: number;
     if (narrow) {
       tx = vw - dims.cube * 0.95 - 6;
-      ty = vh - dims.cube * 1.25 - 10;
+      ty = vh - dims.cube * 1.0 - 4;
     } else {
       const [nx, ny] = s.mode === 'inspect' ? PERCH.wide.inspect : PERCH.wide.overview[Math.min(4, s.zone)];
       tx = ((nx + 1) / 2) * vw;

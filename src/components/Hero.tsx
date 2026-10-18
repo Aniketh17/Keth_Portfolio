@@ -7,13 +7,13 @@ export function Hero() {
       <div className="wrap grid gap-10 lg:items-center">
         <div className="fade-in">
           <p className="label eyebrow">
-            Software engineer · {profile.location}
+            Software × AI × a little obsession
           </p>
           <h1 id="hero-title" className="h-hero mt-5">
-            Careful software, <span className="underline decoration-soda decoration-[0.08em] underline-offset-[0.12em]">kindly built.</span>
+            From “what if?” <span className="underline decoration-soda decoration-[0.08em] underline-offset-[0.12em]">to “it works.”</span>
           </h1>
           <p className="prose-w mt-6 text-lg text-muted">
-            Hi, I'm Aniketh. I'm a software engineer who enjoys making things that are dependable, easy to use and honest about what they can do. Lately that has meant practical AI: tools that help people with real decisions, and stay out of the way the rest of the time. Come in and have a look around.
+            I turn curious ideas into working software, combining engineering fundamentals with AI to solve problems worth solving.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href="#work" className="btn btn-solid">
