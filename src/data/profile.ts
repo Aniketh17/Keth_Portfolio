@@ -49,7 +49,6 @@ export const skillGroups: SkillGroup[] = [
       { name: 'React and TypeScript', usedIn: 'This portfolio, ITO Master' },
       { name: 'Vite and Tailwind CSS', usedIn: 'This portfolio' },
       { name: 'Framer Motion', usedIn: 'Tiny Paws' },
-      { name: 'Three.js and React Three Fiber', usedIn: 'This portfolio: Milo and the staircase' },
       { name: 'Responsive layouts', usedIn: 'Tiny Paws, this portfolio' },
     ],
   },

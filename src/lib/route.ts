@@ -25,31 +25,17 @@ export function useRoute(): Route {
 
 export const projectHref = (slug: string): string => `${PROJECT_PREFIX}${slug}`;
 
-let navigatedInternally = false;
-/** True when the visitor came from the home page, so "back" can use history instead of adding an entry. */
-export const cameFromHome = (): boolean => navigatedInternally;
-
-export function openProject(slug: string): void {
-  navigatedInternally = true;
-  window.location.hash = projectHref(slug);
-}
+let homeScroll = 0;
+/** Remember where the visitor was on the home page so closing a case study returns them there. */
+export const rememberHomeScroll = (): void => {
+  homeScroll = window.scrollY;
+};
+export const takeHomeScroll = (): number => {
+  const y = homeScroll;
+  homeScroll = 0;
+  return y;
+};
 
 export function closeProject(): void {
-  if (navigatedInternally && window.history.length > 1) {
-    navigatedInternally = false;
-    window.history.back();
-  } else {
-    window.location.hash = '#/';
-  }
+  window.location.hash = '#/';
 }
-
-/** Set when a case study is closed so the home page can restore the visitor's scroll position. */
-let restoreHomeScroll = false;
-export const markRestoreHomeScroll = (): void => {
-  restoreHomeScroll = true;
-};
-export const consumeRestoreHomeScroll = (): boolean => {
-  const v = restoreHomeScroll;
-  restoreHomeScroll = false;
-  return v;
-};

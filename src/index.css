@@ -2,48 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Design tokens. Blueberry is the provisional value from the brief (#172B4D) and Pop Soda is provisional too:
+ * no brand file in the repository defines either. Change them here and everything follows; the canvas and the
+ * lines are derived from them rather than separate colours.
+ */
 :root {
-  --night: #111426;
-  --violet: #7568ff;
-  --citron: #d9f477;
-  --ivory: #f6f0e6;
-  --peach: #ff9678;
-  --ink: #1a1d33;
-  /* Set from JS: height of the fixed scene strip on stacked (narrow) layouts. */
-  --strip: 0px;
-  color-scheme: dark;
+  --blueberry-rgb: 23 43 77; /* #172B4D */
+  --pop-soda-rgb: 255 111 79; /* #FF6F4F, provisional */
+  --canvas-rgb: 255 245 243; /* pop soda at 6% over white */
+  --paper-rgb: 255 252 252; /* pop soda at 2% over white */
+  --blueberry: rgb(var(--blueberry-rgb));
+  --pop-soda: rgb(var(--pop-soda-rgb));
+  --canvas: rgb(var(--canvas-rgb));
+  --paper: rgb(var(--paper-rgb));
+  --muted: color-mix(in srgb, var(--blueberry) 72%, white);
+  --line: color-mix(in srgb, var(--blueberry) 16%, transparent);
+  --grid-line: color-mix(in srgb, var(--blueberry) 7%, transparent);
+  --grid-size: 48px;
+  --radius: 6px;
+  --ease: cubic-bezier(0.22, 0.7, 0.2, 1);
+  --dur-fast: 140ms;
+  --dur: 320ms;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --max: 76rem;
+  color-scheme: light;
 }
 
 html {
-  background: var(--night);
+  background: var(--canvas);
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  background: var(--night);
-  color: var(--ivory);
+  color: var(--blueberry);
   font-family: 'Instrument Sans', system-ui, sans-serif;
-  font-size: 1rem;
+  font-size: 1.0625rem;
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  /* The persistent grid: static, quiet, and behind everything. */
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: -1px -1px;
+}
+@media (max-width: 640px) {
+  :root {
+    --grid-size: 32px;
+  }
 }
 
 ::selection {
-  background: var(--citron);
-  color: var(--ink);
+  background: var(--pop-soda);
+  color: var(--blueberry);
 }
 
 :focus-visible {
-  outline: 3px solid var(--citron);
+  outline: 3px solid var(--blueberry);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 3px;
 }
-
-.on-ivory :focus-visible,
-.focus-dark:focus-visible {
-  outline-color: #4a3fd0;
+.on-dark :focus-visible {
+  outline-color: var(--pop-soda);
 }
 
 .skip-link {
@@ -52,321 +74,167 @@ body {
   top: -4rem;
   z-index: 100;
   padding: 0.6rem 1rem;
-  background: var(--citron);
-  color: var(--ink);
+  background: var(--blueberry);
+  color: #fff;
   font-weight: 600;
-  border-radius: 0.5rem;
-  transition: top 0.15s;
+  border-radius: var(--radius);
 }
 .skip-link:focus {
   top: 1rem;
 }
 
-/* The scene sits behind the content on wide screens and becomes a strip above it on narrow ones. */
-.scene-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background: var(--night);
+/* Layout */
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+/* Quiet areas: dense evidence sits on a flat surface so the grid recedes behind it. */
+.surface {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
 }
 
-/* Keeps the text column readable where the scene extends underneath it. */
-@media (min-width: 1024px) {
-  .scene-layer::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: linear-gradient(90deg, rgba(17, 20, 38, 0.92) 0%, rgba(17, 20, 38, 0.8) 34%, rgba(17, 20, 38, 0) 62%);
-    pointer-events: none;
-  }
+/* Type */
+.label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.h-hero {
+  font-size: clamp(2.5rem, 7vw, 5.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+.h-section {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+.prose-w {
+  max-width: 62ch;
+}
+.link {
+  text-decoration: underline;
+  text-decoration-color: var(--pop-soda);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--dur-fast);
+}
+.link:hover {
+  text-decoration-color: var(--blueberry);
 }
 
-@media (max-width: 1023px) {
-  .scene-layer {
-    bottom: auto;
-    height: var(--strip);
-    border-bottom: 1px solid rgba(176, 168, 255, 0.18);
-  }
-  .scene-layer::after {
-    content: '';
-    position: absolute;
-    inset: auto 0 0 0;
-    height: 28px;
-    background: linear-gradient(to bottom, transparent, var(--night));
-  }
-  .content-offset {
-    padding-top: var(--strip);
-  }
-  .section-anchor {
-    scroll-margin-top: var(--strip);
-  }
+/* Buttons */
+.btn {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1.4rem;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--blueberry);
+  font-weight: 600;
+  transition: background var(--dur-fast), color var(--dur-fast), transform var(--dur-fast);
+}
+.btn-solid {
+  background: var(--blueberry);
+  color: #fff;
+}
+.btn-solid:hover {
+  background: color-mix(in srgb, var(--blueberry) 85%, var(--pop-soda));
+}
+.btn-ghost:hover {
+  background: var(--blueberry);
+  color: #fff;
+}
+.on-dark .btn {
+  border-color: var(--canvas);
+}
+.on-dark .btn-solid {
+  background: var(--pop-soda);
+  color: var(--blueberry);
+  border-color: var(--pop-soda);
+}
+.on-dark .btn-ghost:hover {
+  background: var(--canvas);
+  color: var(--blueberry);
 }
 
-.scene-canvas {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.8s ease;
+/* Project index */
+.index-row {
+  display: grid;
+  width: 100%;
+  gap: 0.25rem;
+  text-align: left;
+  padding: 1.1rem 0 1.1rem 1rem;
+  border-top: 1px solid var(--line);
+  border-left: 3px solid transparent;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), padding var(--dur) var(--ease);
 }
-.scene-canvas[data-ready='true'] {
-  opacity: 1;
+.index-row[aria-pressed='true'] {
+  border-left-color: var(--pop-soda);
+  background: color-mix(in srgb, var(--pop-soda) 9%, transparent);
+  padding-left: 1.25rem;
 }
-
-.font-display {
-  font-variation-settings: 'opsz' 96, 'SOFT' 30;
-  letter-spacing: -0.015em;
-}
-
-/* Glass panel used for content cards on the dark background. */
-.panel {
-  border: 1px solid rgba(176, 168, 255, 0.16);
-  border-radius: 1.25rem;
-  background: linear-gradient(160deg, rgba(34, 39, 80, 0.78), rgba(24, 28, 54, 0.88));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 18px 40px -22px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
+.index-row:hover {
+  background: color-mix(in srgb, var(--pop-soda) 6%, transparent);
 }
 
-/* Film grain over the whole page: a quiet texture that makes flat colour feel printed. */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Exploded view: layers sit stacked, then separate. Only transform and opacity animate. */
+.layer {
+  transition: transform var(--dur) var(--ease), margin var(--dur) var(--ease), box-shadow var(--dur) var(--ease), background var(--dur-fast);
 }
-
-/* Scroll progress along the top edge. */
-.progress-bar {
-  position: fixed;
-  inset: 0 0 auto 0;
-  height: 3px;
-  z-index: 50;
-  transform-origin: left;
-  background: linear-gradient(90deg, var(--violet), var(--citron));
+.stack .layer {
+  margin-top: -2.4rem;
+  transform: translateX(calc(var(--i) * 0.3rem));
 }
-
-/* Milo's speech bubble. */
-.bubble {
-  position: relative;
-  background: var(--ivory);
-  color: var(--ink);
-  border-radius: 1rem;
-  padding: 0.55rem 0.9rem;
-  font-size: 0.92rem;
-  font-weight: 500;
-  line-height: 1.35;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-  animation: bubble-in 0.35s ease both;
+.stack {
+  padding-right: 2rem;
 }
-.bubble::after {
-  content: '';
-  position: absolute;
-  left: 1.4rem;
-  bottom: -0.45rem;
-  width: 0.9rem;
-  height: 0.9rem;
-  background: var(--ivory);
-  transform: rotate(45deg);
-  border-radius: 0 0 0.2rem 0;
+.stack .layer:first-child {
+  margin-top: 0;
 }
-@keyframes bubble-in {
+.stack .layer:not(:last-child) {
+  opacity: 0.97;
+}
+.exploded .layer {
+  margin-top: 0.5rem;
+  transform: translateX(0);
+}
+.exploded .layer[aria-pressed='true'] {
+  transform: translateX(0.75rem);
+  box-shadow: -4px 0 0 var(--pop-soda);
+}
+.layer-enter {
+  animation: rise var(--dur) var(--ease) both;
+}
+@keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(6px) scale(0.96);
+    transform: translateY(6px);
   }
 }
 
-.shimmer {
-  background: linear-gradient(100deg, transparent 20%, rgba(176, 168, 255, 0.12) 50%, transparent 80%);
-  background-size: 200% 100%;
-  animation: shimmer 2.2s linear infinite;
-}
-@keyframes shimmer {
-  to {
-    background-position: -200% 0;
-  }
-}
-
-.stair-step {
-  --step: 0px;
-  margin-left: var(--step);
-}
-@media (min-width: 1024px) {
-  .stair-step {
-    --step: calc(var(--i, 0) * 1.1rem);
-  }
+.fade-in {
+  animation: rise 0.5s var(--ease) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
   }
-}
-
-/* Phone stages: sprite strips rendered from the 3D model. Eight frames, stepped, with no JS per frame. */
-.milo-sprite {
-  display: block;
-  width: var(--s);
-  height: var(--s);
-  background-image: var(--img);
-  background-repeat: no-repeat;
-  background-size: calc(var(--s) * 8) var(--s);
-  animation: milo-steps var(--dur, 1s) steps(8) infinite;
-}
-.milo-sprite-still {
-  animation: none;
-}
-@keyframes milo-steps {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: calc(var(--s) * -8) 0;
-  }
-}
-
-.hearts i {
-  position: absolute;
-  font-style: normal;
-  font-size: 1.1rem;
-  color: var(--peach);
-  opacity: 0;
-  animation: heart-float 1.4s ease-out forwards;
-}
-.hearts i:nth-child(1) {
-  left: 0;
-}
-.hearts i:nth-child(2) {
-  left: 1.2rem;
-  animation-delay: 0.15s;
-}
-.hearts i:nth-child(3) {
-  left: 2.4rem;
-  animation-delay: 0.3s;
-}
-@keyframes heart-float {
-  0% {
-    opacity: 0;
-    transform: translateY(0) scale(0.6);
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-3.4rem) scale(1.1);
-  }
-}
-
-.orb-idle {
-  animation: orb-pulse 2.4s ease-in-out infinite;
-}
-@keyframes orb-pulse {
-  50% {
-    opacity: 0.55;
-  }
-}
-.cubes {
-  animation: spin-slow 9s linear infinite;
-}
-.ball {
-  animation: ball-hop 0.9s ease-in-out infinite;
-  transform-box: fill-box;
-  transform-origin: center bottom;
-}
-.bone {
-  animation: bone-bob 2.2s ease-in-out infinite;
-}
-@keyframes spin-slow {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes ball-hop {
-  0%,
-  100% {
-    transform: translateY(0) scaleY(0.9);
-  }
-  50% {
-    transform: translateY(-20px) scaleY(1.05);
-  }
-}
-@keyframes bone-bob {
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-/* Compact layouts (under 1024px): lighter and shorter. No blur, no film grain, no forced full-height sections. */
-@media (max-width: 1023px) {
-  .panel {
-    backdrop-filter: none;
-    background: linear-gradient(160deg, #222750, #181c36);
-  }
-  body::after {
-    display: none;
-  }
-  section.section-anchor {
-    min-height: auto !important;
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .milo-sprite,
-  .cubes,
-  .ball,
-  .bone,
-  .orb-idle {
-    animation: none !important;
-  }
-}
-
-/* Peek entrances: each lane's Milo arrives differently. */
-@keyframes peek-run {
-  from {
-    transform: translateX(170%);
-  }
-  to {
-    transform: none;
-  }
-}
-@keyframes peek-walk {
-  from {
-    transform: translateX(-150%);
-  }
-  to {
-    transform: none;
-  }
-}
-@keyframes peek-drop {
-  0% {
-    transform: translateY(-130px);
-  }
-  55% {
-    transform: translateY(0) scale(1.06, 0.9);
-  }
-  75% {
-    transform: translateY(-14px);
-  }
-  100% {
-    transform: none;
-  }
-}
-.peek-run {
-  animation: peek-run 0.9s cubic-bezier(0.15, 0.7, 0.3, 1) both;
-}
-.peek-walk {
-  animation: peek-walk 0.9s ease-out both;
-}
-.peek-drop {
-  animation: peek-drop 0.85s ease-in both;
 }

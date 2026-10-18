@@ -20,52 +20,32 @@ export function projectLinks(p: Project): { label: string; url: string }[] {
   return out;
 }
 
-/**
- * Real screenshot when there is one and it loads; otherwise a typographic tile built from the project's own
- * workflow steps, so a missing or broken image never leaves a hole or throws.
- */
-export function ProjectVisual({ project, className = '' }: { project: Project; className?: string }) {
+/** Real screenshot. If it fails to load the figure disappears rather than leaving a broken image. */
+export function Screenshot({ project, eager = false }: { project: Project; eager?: boolean }) {
   const [broken, setBroken] = useState(false);
   useEffect(() => setBroken(false), [project.image?.src]);
-  const src = project.image && !broken ? `${import.meta.env.BASE_URL}${project.image.src}` : null;
-
-  if (src && project.image) {
-    return (
-      <img
-        src={src}
-        alt={project.image.alt}
-        loading="lazy"
-        onError={() => setBroken(true)}
-        className={`h-full w-full object-cover object-top ${className}`}
-      />
-    );
-  }
-
-  const steps = project.diagrams?.[0]?.steps.slice(0, 4);
+  if (!project.image || broken) return null;
   return (
-    <div
-      className={`flex h-full w-full flex-col justify-center gap-2 p-5 ${className}`}
-      style={{ background: `linear-gradient(135deg, #181C36 0%, #222750 100%)`, borderTop: `4px solid ${project.accent}` }}
-    >
-      {steps ? (
-        <ol className="flex flex-col gap-1.5 font-mono text-[0.75rem] uppercase tracking-wider text-ivory/90">
-          {steps.map((s, i) => (
-            <li key={s.label} className="flex items-center gap-2">
-              <span aria-hidden="true" className="text-ivory/60">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span>{s.label}</span>
-              {i < steps.length - 1 && (
-                <span aria-hidden="true" className="ml-auto text-ivory/40">
-                  ↓
-                </span>
-              )}
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <span className="font-display text-3xl text-ivory">{project.shortTitle}</span>
-      )}
-    </div>
+    <img
+      src={`${import.meta.env.BASE_URL}${project.image.src}`}
+      alt={project.image.alt}
+      width={1024}
+      height={515}
+      loading={eager ? 'eager' : 'lazy'}
+      onError={() => setBroken(true)}
+      className="block h-auto w-full"
+    />
   );
+}
+
+export function useMedia(query: string): boolean {
+  const [match, setMatch] = useState(() => (typeof window === 'undefined' ? false : window.matchMedia(query).matches));
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const on = () => setMatch(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, [query]);
+  return match;
 }

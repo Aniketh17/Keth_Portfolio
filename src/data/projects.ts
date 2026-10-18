@@ -1,4 +1,4 @@
-import type { Project, RouteDefinition } from './types';
+import type { Project } from './types';
 
 /**
  * Single source of truth for project content. Every field except the identity
@@ -63,6 +63,7 @@ export const projects: Project[] = [
     diagrams: [
       {
         title: 'From question to cited answer',
+        basis: 'documented',
         caption: 'The query path in the IMAC Advisor, as documented in the project README.',
         steps: [
           { label: 'Redact', detail: 'PII masked: NHI, phone, email, DOB, names, addresses.' },
@@ -132,6 +133,7 @@ export const projects: Project[] = [
     diagrams: [
       {
         title: 'The review workflow',
+        basis: 'conceptual',
         caption: 'How suggestions and human review fit together.',
         steps: [
           { label: 'Transaction arrives', detail: 'A new bank transaction needs a category.' },
@@ -194,6 +196,7 @@ export const projects: Project[] = [
     diagrams: [
       {
         title: 'Requirement to application summary',
+        basis: 'conceptual',
         steps: [
           { label: 'Analyse', detail: 'Read the job listing.' },
           { label: 'Split', detail: 'Break compound requirements into single claims.' },
@@ -309,37 +312,6 @@ export const projects: Project[] = [
     demoUrl: 'https://tiny-paaws.netlify.app/',
     status: 'Front-end prototype',
     accent: '#7BB5AB',
-  },
-];
-
-/**
- * Fetch the Proof routes. Each leads to a real project; change `projectId`
- * here to repoint a route.
- */
-export const routes: RouteDefinition[] = [
-  {
-    id: 'ai',
-    label: 'AI and machine learning',
-    button: 'Show me your AI work.',
-    blurb: 'Retrieval, reranking and grounding in a clinical setting.',
-    projectId: 'imac-advisor',
-    miloLine: "Let's look at the evidence.",
-  },
-  {
-    id: 'engineering',
-    label: 'Software engineering',
-    button: 'Show me your software engineering.',
-    blurb: 'A workflow built around data, suggestions and human review.',
-    projectId: 'transaction-coding',
-    miloLine: 'Want to see how it works?',
-  },
-  {
-    id: 'build',
-    label: 'End-to-end product development',
-    button: 'Show me how you build.',
-    blurb: 'From the problem to the design decisions, step by step.',
-    projectId: 'fit-check',
-    miloLine: "Not enough information? Let's not guess.",
   },
 ];
 

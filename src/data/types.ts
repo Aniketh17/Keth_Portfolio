@@ -1,5 +1,3 @@
-export type RouteId = 'ai' | 'engineering' | 'build';
-
 export interface ProjectLink {
   label: string;
   url: string;
@@ -12,6 +10,8 @@ export interface FlowStep {
 
 export interface Diagram {
   title: string;
+  /** documented: taken from the project's own README or code. conceptual: described in the brief, not verified against code. */
+  basis: 'documented' | 'conceptual';
   caption?: string;
   steps: FlowStep[];
 }
@@ -65,16 +65,6 @@ export interface Project {
   status?: string;
   /** Accent used for this project's own visual identity on its case study. */
   accent: string;
-}
-
-export interface RouteDefinition {
-  id: RouteId;
-  label: string;
-  button: string;
-  blurb: string;
-  /** Project the route leads to first; must exist in the project list. */
-  projectId: string;
-  miloLine: string;
 }
 
 export interface TimelineItem {
