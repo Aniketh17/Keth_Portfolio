@@ -5,7 +5,6 @@ import { destinations, inspectDest, type Dest } from './layout';
 import { Environment } from './scene/Environment';
 import { anim, palette } from './scene/common';
 import { Conductor, HeroFrames, Stage } from './scene/Stage';
-import { Sig } from './scene/Sig';
 import { Systems, Terminus, Timeline } from './scene/Zones';
 import { frame, world } from './store';
 import { useWorldTextures } from './textures';
@@ -126,7 +125,6 @@ function Scene() {
       <Systems textures={textures} />
       <Timeline />
       <Terminus />
-      <Sig />
     </>
   );
 }

@@ -27,7 +27,7 @@ function useClock(): string {
  * the pill collapses to the counter and current chapter, and opens the links.
  */
 export function SiteNav() {
-  const world = useWorld((s) => s.status === 'ready' || s.status === 'loading');
+  const world = useWorld((s) => !s.lite && (s.status === 'ready' || s.status === 'loading'));
   const zone = useWorld((s) => s.zone);
   const [open, setOpen] = useState(false);
   const clock = useClock();
@@ -48,8 +48,8 @@ export function SiteNav() {
     }
   };
 
-  const current = world ? CHAPTERS[Math.min(zone, CHAPTERS.length - 1)] : null;
-  const counter = current ? `${String(zone + 1).padStart(2, '0')}/${String(CHAPTERS.length).padStart(2, '0')}` : null;
+  const current = CHAPTERS[Math.min(zone, CHAPTERS.length - 1)];
+  const counter = `${String(zone + 1).padStart(2, '0')}/${String(CHAPTERS.length).padStart(2, '0')}`;
 
   const links = CHAPTERS.slice(1).map((c) => (
     <a key={c.id} href={`#${c.id}`} onClick={go(c.id)} aria-current={current?.id === c.id ? 'true' : undefined}>

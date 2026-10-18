@@ -4,7 +4,7 @@ import { achievements, education, experience, profile, skillGroups } from '../da
 import { getProjectById, projects } from '../data/projects';
 import type { TimelineItem } from '../data/types';
 import { projectHref } from '../lib/route';
-import { world } from '../world/store';
+import { useWorld, world } from '../world/store';
 import { EvidenceChip } from './Evidence';
 import { ExternalLink } from './ui';
 
@@ -17,6 +17,7 @@ const STATS: [string, string][] = [
 ];
 
 export function Approach() {
+  const lite = useWorld((s) => s.lite);
   const items = DECISIONS.flatMap((pick) => {
     const project = getProjectById(pick.projectId);
     const decision = project?.decisions?.find((d) => d.title === pick.title);
@@ -31,7 +32,7 @@ export function Approach() {
             <h2 id="approach-title" className="h-section">
               The tools matter. The decisions matter more.
             </h2>
-            <p className="text-muted">Five decisions, each tied to a project. Point at one and its project lights up in the scene; open it to see the evidence.</p>
+            <p className="text-muted">{lite ? 'Five decisions, each tied to a project. Open one to see the evidence behind it.' : 'Five decisions, each tied to a project. Point at one and its project lights up in the scene; open it to see the evidence.'}</p>
           </div>
           <ol className="mt-8 border-t border-line">
             {items.map(({ project, decision, pick }, i) => (
@@ -100,6 +101,7 @@ function Group({ title, items }: { title: string; items: TimelineItem[] }) {
 }
 
 export function About() {
+  const lite = useWorld((s) => s.lite);
   const [open, setOpen] = useState<string | null>('ai');
   return (
     <section id="about" aria-labelledby="about-title" className="pointer-events-none relative scroll-mt-16 py-16 lg:py-24">
@@ -109,7 +111,7 @@ export function About() {
           <h2 id="about-title" className="h-section mt-4">
             The work behind the work.
           </h2>
-          <p className="prose-w mt-3 text-muted">Each entry sits on a timeline in the scene, at its real dates. Hover or tap one to lift it forward.</p>
+          <p className="prose-w mt-3 text-muted">{lite ? 'Experience, achievements, education and the tools I reach for.' : 'Each entry sits on a timeline in the scene, at its real dates. Hover or tap one to lift it forward.'}</p>
           <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-4">
             {STATS.map(([n, label]) => (
               <div key={label} className="stat">
@@ -189,12 +191,12 @@ export function Contact() {
     }
   };
   return (
-    <section id="contact" aria-labelledby="contact-title" className="chapter-soda pointer-events-auto relative z-10 scroll-mt-16">
+    <section id="contact" aria-labelledby="contact-title" className="pointer-events-auto relative z-10 scroll-mt-16">
       <div className="wrap pb-10 pt-20 lg:pt-28">
-        <div className="contact-card">
-        <p className="label eyebrow !text-blueberry/70">04 · Contact</p>
-        <h2 id="contact-title" className="h-mega mt-4">
-          Say hello.
+        <p className="label eyebrow">04 · Contact</p>
+        <h2 id="contact-title" className="h-mega mt-4 text-blueberry">
+          Say <span className="underline decoration-soda decoration-[0.06em] underline-offset-[0.1em]">hello</span>
+          <span className="text-soda">.</span>
         </h2>
         <p className="mt-6 max-w-[34rem] text-xl">
           Have something worth building? I'm open to software engineering and applied AI opportunities, and to conversations about interesting technical problems.
@@ -210,33 +212,28 @@ export function Contact() {
             {copied ? 'Copied.' : ''}
           </span>
         </div>
-        <div className="mt-10 grid gap-8 border-t border-blueberry/25 pt-6 sm:grid-cols-3">
+        <div className="mt-12 grid gap-8 border-t border-line pt-6 sm:grid-cols-3">
           <div>
-            <p className="label !text-blueberry/70">Elsewhere</p>
+            <p className="label">Elsewhere</p>
             <ul className="mt-2">
               {profile.links
                 .filter((l) => l.label !== 'ITO Master (live site)')
                 .map((l) => (
                   <li key={l.url}>
-                    <ExternalLink href={l.url} className="inline-flex min-h-11 items-center font-medium underline decoration-blueberry decoration-2 underline-offset-4">
+                    <ExternalLink href={l.url} className="link inline-flex min-h-11 items-center font-medium">
                       {l.label}
                     </ExternalLink>
                   </li>
                 ))}
               <li>
-                <a
-                  href={profile.resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center font-medium underline decoration-blueberry decoration-2 underline-offset-4"
-                >
+                <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" className="link inline-flex min-h-11 items-center font-medium">
                   Resume (PDF)<span className="sr-only"> (opens in a new tab)</span>
                 </a>
               </li>
             </ul>
           </div>
-          <div className="contact-hide">
-            <p className="label !text-blueberry/70">Work</p>
+          <div>
+            <p className="label">Work</p>
             <ul className="mt-2">
               {projects.map((p) => (
                 <li key={p.id}>
@@ -247,14 +244,13 @@ export function Contact() {
               ))}
             </ul>
           </div>
-          <div className="contact-hide">
-            <p className="label !text-blueberry/70">Credits</p>
-            <p className="mt-2 text-sm">Built by hand in Auckland with React and three.js. Sig is an original character.</p>
+          <div>
+            <p className="label">Credits</p>
+            <p className="mt-2 text-sm text-muted">Built by hand in Auckland with React and three.js. Sig is an original character.</p>
           </div>
         </div>
-        <p className="contact-hide mt-12 text-[clamp(2.2rem,8vw,6rem)] leading-none tracking-tight">{profile.fullName}</p>
-        <p className="label mt-4 !text-blueberry/70">© 2026 · {profile.location}</p>
-        </div>
+        <p className="mt-12 text-[clamp(2.2rem,8vw,6rem)] leading-none tracking-tight text-blueberry">{profile.fullName}</p>
+        <p className="label mt-4">© 2026 · {profile.location}</p>
       </div>
     </section>
   );

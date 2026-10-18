@@ -524,8 +524,7 @@ dialog.lens[open] {
 .world-layer canvas {
   display: block;
 }
-.sheet,
-.contact-card {
+.sheet {
   pointer-events: auto;
 }
 body[data-world='on']::before {
@@ -537,17 +536,6 @@ body[data-world='on'] .sheet {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: clamp(1.25rem, 3vw, 2.25rem);
-}
-body[data-world='on'] .contact {
-  background: transparent;
-  color: var(--blueberry);
-}
-body[data-world='on'] .contact-card {
-  max-width: 46rem;
-  background: var(--blueberry);
-  color: var(--canvas);
-  border-radius: var(--radius);
-  padding: clamp(1.5rem, 4vw, 3rem);
 }
 
 /* ---------- Display type, markers, ticker and chapters ---------- */
@@ -803,4 +791,85 @@ body[data-world='on'] .sheet.sheet-dark .label.\!text-blueberry {
 }
 .sig-dismiss:hover {
   color: var(--canvas);
+}
+
+.sig-link {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--pop-soda);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.sig-link:hover {
+  color: var(--canvas);
+}
+
+/* ---------- Flowing layout (phones, small tablets, no WebGL) ---------- */
+.work-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgb(var(--canvas-rgb) / 0.9);
+}
+.poster {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--tone, var(--blueberry));
+}
+.poster img,
+.poster-atlas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+}
+.poster-atlas {
+  background-size: 300% 400%;
+  background-position: 0 0;
+}
+.chip {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+/* Experience is the one dark, full-bleed chapter, like the world's dark stage. */
+body[data-world='off'] #about {
+  margin-top: 1rem;
+  background: var(--blueberry);
+  color: var(--canvas);
+}
+body[data-world='off'] #about .text-muted,
+body[data-world='off'] #about .label {
+  color: rgb(var(--canvas-rgb) / 0.66);
+}
+body[data-world='off'] #about .border-line,
+body[data-world='off'] #about .border-b,
+body[data-world='off'] #about .border-t {
+  border-color: rgb(var(--canvas-rgb) / 0.2);
+}
+body[data-world='off'] #about .label.\!text-blueberry {
+  color: var(--canvas) !important;
+}
+body[data-world='off'] #about .link {
+  text-decoration-color: var(--pop-soda);
+}
+body[data-world='off'] #about :focus-visible {
+  outline-color: var(--pop-soda);
+}
+body[data-world='off'] header.fixed {
+  background: rgb(var(--canvas-rgb) / 0.92);
+  border-bottom: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }

@@ -1,6 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { OFFERS, SECTION_LINES, decisionLine, lineForFocus, loadQuiet, setQuiet, sigDismiss, sigPoke, sigSay, sigTake, PROJECT_LINES, ZONE_LINES } from '../../world/sig';
+import { lazy, Suspense, useEffect, useRef } from 'react';
+import { OFFERS, SECTION_LINES, decisionLine, lineForFocus, loadQuiet, setQuiet, sigDismiss, sigGo, sigPoke, sigSay, sigSurprise, sigTake, PROJECT_LINES, ZONE_LINES } from '../../world/sig';
 import { useWorld, world } from '../../world/store';
+
+// Sig has his own small canvas, loaded after the page so text and navigation never wait for him.
+const SigCanvas = lazy(() => import('../../world/SigCanvas'));
 
 /**
  * Everything about Sig that is not 3D: the line he is saying (a live region, so it is announced), the tap
@@ -10,7 +13,6 @@ import { useWorld, world } from '../../world/store';
 export function SigVoice() {
   const say = useWorld((s) => s.say);
   const quiet = useWorld((s) => s.quiet);
-  const status = useWorld((s) => s.status);
   const zone = useWorld((s) => s.zone);
   const active = useWorld((s) => s.active);
   const mode = useWorld((s) => s.mode);
@@ -24,17 +26,16 @@ export function SigVoice() {
 
   // Say something once per trigger, never the same thing twice.
   const once = (key: string, fn: () => void) => {
-    if (status !== 'ready' || seen.current.has(key)) return;
+    if (seen.current.has(key)) return;
     seen.current.add(key);
     fn();
   };
 
   useEffect(() => {
-    if (status !== 'ready') return;
     const t = window.setTimeout(() => once(`z${zone}`, () => sigSay(ZONE_LINES[zone], zone === 4 ? 'happy' : 'idle')), 900);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zone, status]);
+  }, [zone]);
 
   useEffect(() => {
     if (zone === 1 && mode === 'overview') once(`p${active}`, () => sigSay(PROJECT_LINES[active], 'think'));
@@ -66,7 +67,6 @@ export function SigVoice() {
 
   // Sub-sections announce themselves as they scroll into view (experience, achievements, education, skills).
   useEffect(() => {
-    if (status !== 'ready') return;
     const els = Array.from(document.querySelectorAll<HTMLElement>('[data-sig]'));
     const io = new IntersectionObserver(
       (entries) => {
@@ -81,11 +81,10 @@ export function SigVoice() {
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, []);
 
   // One gentle nudge after a long quiet stretch.
   useEffect(() => {
-    if (status !== 'ready') return;
     const reset = () => {
       window.clearTimeout(idle.current);
       idle.current = window.setTimeout(() => once('idle', () => sigSay('Psst. "Inspect system" is where the fun is.', 'sleepy')), 16000);
@@ -99,22 +98,22 @@ export function SigVoice() {
       window.removeEventListener('pointerdown', reset);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
-
-  if (status !== 'ready') return null;
+  }, []);
 
   return (
     <>
+      <Suspense fallback={null}>
+        <SigCanvas />
+      </Suspense>
       <button
         type="button"
         onClick={sigPoke}
         aria-label="Poke Sig, the guide"
-        className="fixed z-30 -translate-x-1/2 -translate-y-1/2 rounded-2xl"
+        className="fixed z-[36] -translate-x-1/2 -translate-y-1/2 rounded-2xl"
         style={{ left: 'var(--sig-x, 80vw)', top: 'var(--sig-y, 70vh)', width: 'calc(var(--sig-s, 80px) * 1.3)', height: 'calc(var(--sig-s, 80px) * 1.6)', minWidth: 52, minHeight: 52 }}
       />
       <div
-        className="sig-bubble pointer-events-none fixed z-30 w-max max-w-[min(19.5rem,calc(100vw-1.5rem))]"
-        
+        className="sig-bubble pointer-events-none fixed z-[36] w-max max-w-[min(19.5rem,calc(100vw-1.5rem))]"
       >
         <div aria-live="polite" role="status">
           {say && (
@@ -123,6 +122,11 @@ export function SigVoice() {
                 <span className="sr-only">Sig says: </span>
                 {say.text}
               </p>
+              {say.link && (
+                <button type="button" className="sig-link pointer-events-auto" onClick={() => sigGo(say.link!.slug)}>
+                  {say.link.label} <span aria-hidden="true">→</span>
+                </button>
+              )}
               {say.offer && (
                 <div className="sig-menu pointer-events-auto mt-3">
                   <ul>
@@ -138,6 +142,16 @@ export function SigVoice() {
                         </button>
                       </li>
                     ))}
+                    <li>
+                      <button type="button" onClick={sigSurprise}>
+                        <span className="font-mono text-[0.68rem] text-soda">04</span>
+                        <span className="min-w-0 flex-1 text-left">
+                          <span className="block text-[0.95rem] font-medium leading-tight">Surprise me</span>
+                          <span className="block text-[0.74rem] leading-tight text-canvas/60">A fact, or a project</span>
+                        </span>
+                        <span aria-hidden="true" className="arrow">→</span>
+                      </button>
+                    </li>
                   </ul>
                   <button type="button" className="sig-dismiss" onClick={sigDismiss}>
                     Not now
@@ -152,7 +166,7 @@ export function SigVoice() {
         type="button"
         aria-pressed={quiet}
         onClick={() => setQuiet(!quiet)}
-        className="fixed bottom-3 right-3 z-30 hidden min-h-9 items-center rounded-full border border-line bg-canvas/90 px-3 font-mono text-[0.7rem] uppercase tracking-wider text-muted hover:text-blueberry md:inline-flex"
+        className="fixed bottom-3 right-3 z-[34] hidden min-h-9 items-center rounded-full border border-line bg-canvas/90 px-3 font-mono text-[0.7rem] uppercase tracking-wider text-muted hover:text-blueberry md:inline-flex"
       >
         Sig: {quiet ? 'quiet' : 'on'}
       </button>

@@ -21,13 +21,17 @@ export interface Say {
   mood: Mood;
   /** Offer the three "what do you want to see" choices under the line. */
   offer?: boolean;
+  /** A shortcut to a project's write-up, shown under the line. */
+  link?: { label: string; slug: string };
 }
 
 export interface WorldState {
   status: WorldStatus;
   reduced: boolean;
-  /** Phones and small tablets: portrait camera framing and a lighter scene. */
+  /** Phones and small tablets. They get the flowing page, with no 3D world. */
   small: boolean;
+  /** True when the page is the plain flowing layout (a small screen, or no WebGL). */
+  lite: boolean;
   mode: Mode;
   /** Which chapter the camera is in: 0 arrival, 1 work, 2 approach, 3 experience, 4 contact. */
   zone: number;
@@ -87,7 +91,8 @@ type Listener = () => void;
 let state: WorldState = {
   status: 'loading',
   reduced: false,
-  small: false,
+  small: typeof window !== 'undefined' && window.innerWidth < 820,
+  lite: typeof window !== 'undefined' && window.innerWidth < 820,
   mode: 'overview',
   zone: 0,
   say: null,

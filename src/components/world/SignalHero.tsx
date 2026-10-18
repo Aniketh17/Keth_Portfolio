@@ -15,11 +15,10 @@ export function SignalHero() {
             Software engineer · {profile.location}
           </p>
           <h1 id="hero-title" className="h-hero mt-5">
-            Software that works. <span className="underline decoration-soda decoration-[0.08em] underline-offset-[0.12em]">AI that earns its place.</span>
+            Careful software, <span className="underline decoration-soda decoration-[0.08em] underline-offset-[0.12em]">kindly built.</span>
           </h1>
           <p className="prose-w pointer-events-auto mt-6 text-lg text-muted">
-            I'm Aniketh, a software engineer focused on dependable applications and practical AI systems. I work across backend engineering, full-stack
-            development, and applied machine learning, with an emphasis on turning technical ideas into useful, maintainable products.
+            Hi, I'm Aniketh. I'm a software engineer who enjoys making things that are dependable, easy to use and honest about what they can do. Lately that has meant practical AI: tools that help people with real decisions, and stay out of the way the rest of the time. Come in and have a look around.
           </p>
           <div className="pointer-events-auto mt-8 flex flex-wrap gap-3">
             <button type="button" className="btn btn-solid" onClick={() => scrollToId('work')}>
@@ -29,7 +28,7 @@ export function SignalHero() {
               View resume<span className="sr-only"> (PDF, opens in a new tab)</span>
             </a>
           </div>
-          <p className="prose-w pointer-events-auto mt-6 text-sm text-muted">Scroll, or poke the little cube on the right. It knows the way.</p>
+          <p className="prose-w pointer-events-auto mt-6 text-sm text-muted">Take your time. Scroll, or say hi to the little cube. It knows the way.</p>
         </div>
       </div>
       <div className="absolute inset-x-0 bottom-10 hidden lg:block">

@@ -81,7 +81,8 @@ export function EvidenceChip({ projectId, focusId, children }: { projectId: stri
   const { open } = useEvidence();
   const status = useWorld((s) => s.status);
   // In the 3D world a claim travels to the project and inspects it there; without the world it opens the lens.
-  const inWorld = status === 'ready' || status === 'loading';
+  const lite = useWorld((s) => s.lite);
+  const inWorld = !lite && (status === 'ready' || status === 'loading');
   return (
     <button type="button" onClick={() => (inWorld ? showEvidence(projectId, focusId) : open(projectId, focusId))} className="link inline-flex min-h-11 items-center gap-1.5 text-sm font-medium">
       <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-soda" />

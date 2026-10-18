@@ -195,3 +195,56 @@ export function watchWorld(): () => void {
     ro.disconnect();
   };
 }
+
+/** Keeps `small` and `reduced` current. Runs in every layout, since Sig and the nav need them even without the 3D world. */
+export function watchViewport(): () => void {
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const update = () => world.set({ reduced: motion.matches, small: window.innerWidth < SMALL_BREAKPOINT });
+  update();
+  window.addEventListener('resize', update);
+  motion.addEventListener('change', update);
+  const onPointer = (e: PointerEvent) => {
+    frame.lookX = e.clientX;
+    frame.lookY = e.clientY;
+  };
+  window.addEventListener('pointermove', onPointer, { passive: true });
+  window.addEventListener('pointerdown', onPointer, { passive: true });
+  return () => {
+    window.removeEventListener('resize', update);
+    motion.removeEventListener('change', update);
+    window.removeEventListener('pointermove', onPointer);
+    window.removeEventListener('pointerdown', onPointer);
+  };
+}
+
+const CHAPTER_IDS = ['top', 'work', 'approach', 'about', 'contact'];
+
+/** For the flowing layout: which chapter is on screen, tracked from plain scroll position. */
+export function watchZones(): () => void {
+  let raf = 0;
+  const update = () => {
+    raf = 0;
+    frame.scrollY = window.scrollY;
+    const mid = window.innerHeight * 0.4;
+    let zone = 0;
+    CHAPTER_IDS.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= mid) zone = i;
+    });
+    world.set({ zone });
+  };
+  const onScroll = () => {
+    if (!raf) raf = requestAnimationFrame(update);
+  };
+  update();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  const ro = new ResizeObserver(onScroll);
+  ro.observe(document.body);
+  return () => {
+    if (raf) cancelAnimationFrame(raf);
+    window.removeEventListener('scroll', onScroll);
+    window.removeEventListener('resize', onScroll);
+    ro.disconnect();
+  };
+}
