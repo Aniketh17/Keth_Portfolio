@@ -153,9 +153,14 @@ export function SigVoice() {
                       </button>
                     </li>
                   </ul>
-                  <button type="button" className="sig-dismiss" onClick={sigDismiss}>
-                    Not now
-                  </button>
+                  <div className="flex items-center justify-between">
+                    <button type="button" role="switch" aria-checked={!quiet} className="sig-dismiss !m-0 no-underline" onClick={() => setQuiet(true)}>
+                      Mute Sig
+                    </button>
+                    <button type="button" className="sig-dismiss !m-0" onClick={sigDismiss}>
+                      Not now
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -164,11 +169,13 @@ export function SigVoice() {
       </div>
       <button
         type="button"
-        aria-pressed={quiet}
+        role="switch"
+        aria-checked={!quiet}
+        aria-label="Sig's speech bubbles"
         onClick={() => setQuiet(!quiet)}
-        className="fixed bottom-3 right-3 z-[34] hidden min-h-9 items-center rounded-full border border-line bg-canvas/90 px-3 font-mono text-[0.7rem] uppercase tracking-wider text-muted hover:text-blueberry md:inline-flex"
+        className="fixed bottom-3 left-3 z-[34] inline-flex min-h-9 items-center rounded-full border border-line bg-canvas/90 px-3 font-mono text-[0.7rem] uppercase tracking-wider text-muted hover:text-blueberry md:left-auto md:right-3"
       >
-        Sig: {quiet ? 'quiet' : 'on'}
+        Sig: {quiet ? 'off' : 'on'}
       </button>
     </>
   );

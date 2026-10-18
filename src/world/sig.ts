@@ -262,6 +262,13 @@ let pokes = 0;
  * is a fresh line, with the choice card coming back now and then.
  */
 export function sigPoke(): void {
+  // While muted a tap is the switch: it wakes him up.
+  if (world.get().quiet) {
+    setQuiet(false);
+    lastAuto = performance.now();
+    show('Back again.', { mood: 'happy', ttl: 2600 });
+    return;
+  }
   pokes++;
   frame.pokes = pokes;
   lastAuto = performance.now();
