@@ -509,3 +509,43 @@ dialog.lens[open] {
     border-bottom-right-radius: 0;
   }
 }
+
+/* ---------- The Signal Room: the persistent world and the sheets that sit over it ---------- */
+.world-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.9s var(--ease);
+}
+.world-layer[data-ready='true'] {
+  opacity: 1;
+}
+.world-layer canvas {
+  display: block;
+}
+.sheet,
+.contact-card {
+  pointer-events: auto;
+}
+body[data-world='on']::before {
+  display: none;
+}
+body[data-world='on'] .sheet {
+  max-width: 37rem;
+  background: rgb(var(--canvas-rgb) / 0.95);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+}
+body[data-world='on'] .contact {
+  background: transparent;
+  color: var(--blueberry);
+}
+body[data-world='on'] .contact-card {
+  max-width: 46rem;
+  background: var(--blueberry);
+  color: var(--canvas);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 4vw, 3rem);
+}

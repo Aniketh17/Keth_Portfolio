@@ -1,6 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { getProjectById } from '../data/projects';
 import { projectHref } from '../lib/route';
+import { showEvidence } from '../world/env';
+import { useWorld } from '../world/store';
 import { Inspector } from './inspectors/Inspector';
 
 interface Ctx {
@@ -77,8 +79,11 @@ export function EvidenceProvider({ children }: { children: ReactNode }) {
 /** A small, consistent affordance: "see the evidence for this claim". */
 export function EvidenceChip({ projectId, focusId, children }: { projectId: string; focusId: string; children: ReactNode }) {
   const { open } = useEvidence();
+  const status = useWorld((s) => s.status);
+  // In the 3D world a claim travels to the project and inspects it there; without the world it opens the lens.
+  const inWorld = status === 'ready' || status === 'loading';
   return (
-    <button type="button" onClick={() => open(projectId, focusId)} className="link inline-flex min-h-11 items-center gap-1.5 text-sm font-medium">
+    <button type="button" onClick={() => (inWorld ? showEvidence(projectId, focusId) : open(projectId, focusId))} className="link inline-flex min-h-11 items-center gap-1.5 text-sm font-medium">
       <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-soda" />
       {children}
     </button>
