@@ -25,7 +25,7 @@ export interface DefinitionRow {
 export interface EvidenceExample {
   title: string;
   disclaimer: string;
-  rows: { requirement: string; state: string; evidence: string; explanation: string }[];
+  rows: { requirement: string; state: string; evidence: string; explanation: string; question?: string }[];
 }
 
 export interface Project {
@@ -57,7 +57,7 @@ export interface Project {
   principles?: string[];
   technologies: string[];
   /** Optional: a missing image never breaks the page; the card falls back to a typographic tile. */
-  image?: { src: string; alt: string };
+  image?: { src: string; alt: string; width?: number; height?: number };
   repoUrl?: string;
   demoUrl?: string;
   links?: ProjectLink[];
@@ -69,6 +69,10 @@ export interface Project {
 
 export interface TimelineItem {
   id: string;
+  /** Start and end as fractional years, for the ruler. Only where the dates are known. */
+  span?: [number, number];
+  /** A single point in time (year only), for achievements. */
+  at?: number;
   kind: 'work' | 'education' | 'achievement';
   title: string;
   org: string;
@@ -80,5 +84,5 @@ export interface SkillGroup {
   id: string;
   title: string;
   blurb: string;
-  items: { name: string; usedIn?: string }[];
+  items: { name: string; usedIn?: string; evidence?: { projectId: string; focusId: string; label: string } }[];
 }

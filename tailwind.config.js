@@ -13,8 +13,8 @@ export default {
         muted: 'var(--muted)',
       },
       fontFamily: {
-        sans: ["'Instrument Sans'", 'system-ui', 'sans-serif'],
-        mono: ["'JetBrains Mono'", 'ui-monospace', 'monospace'],
+        sans: ['Switzer', 'system-ui', 'sans-serif'],
+        mono: ["'Geist Mono'", 'ui-monospace', 'monospace'],
       },
     },
   },

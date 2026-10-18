@@ -13,6 +13,8 @@ npm run build    # tsc + vite build
 | Colours, grid, spacing, motion timings | `:root` tokens in `src/index.css` (Blueberry and Pop Soda are provisional values; no brand file defines them) |
 | Project content, links, flows | `src/data/projects.ts` |
 | Skills, experience, education, contact | `src/data/profile.ts` |
-| Artifact views (exploded flow, evidence table) | `src/components/Artifact.tsx` |
+| Inspectable regions, synthetic specimens, Tiny Paws journey | `src/data/artifacts.ts` |
+| The inspectors (one per project) | `src/components/inspectors/` |
+| Evidence lens (opens an inspector from any claim) | `src/components/Evidence.tsx` |
 
-Notes: routes are hash-based (`#/projects/<slug>`), so any static host works. Flows marked "conceptual" come from the project brief rather than code and are labelled as such on the page. Fonts: Instrument Sans and JetBrains Mono (Google Fonts); Söhne is not licensed here.
+Notes: routes are hash-based (`#/projects/<slug>`), so any static host works. Flows marked "conceptual" come from the project brief rather than code and are labelled as such on the page. Fonts: Switzer (Fontshare, free for commercial use) and Geist Mono (Google Fonts); Söhne is not licensed here. The IMAC image is a cropped (sidebar removed) and 2x-upscaled version of the original screenshot, so it is softer than a true high-resolution capture. Tiny Paws images are real captures of the running prototype. Fit Check and Transaction Coding use labelled illustrations on synthetic data.

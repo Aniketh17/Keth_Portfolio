@@ -14,7 +14,7 @@ export function HomePage() {
   return (
     <>
       <SiteNav />
-      <main id="main" tabIndex={-1} className="outline-none">
+      <main id="main" tabIndex={-1} className="pb-4 outline-none">
         <Hero />
         <Work />
         <Approach />

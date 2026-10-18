@@ -29,8 +29,8 @@ export function Screenshot({ project, eager = false }: { project: Project; eager
     <img
       src={`${import.meta.env.BASE_URL}${project.image.src}`}
       alt={project.image.alt}
-      width={1024}
-      height={515}
+      width={project.image.width ?? 1024}
+      height={project.image.height ?? 515}
       loading={eager ? 'eager' : 'lazy'}
       onError={() => setBroken(true)}
       className="block h-auto w-full"

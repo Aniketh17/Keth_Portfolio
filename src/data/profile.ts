@@ -34,11 +34,11 @@ export const skillGroups: SkillGroup[] = [
     title: 'Applied AI and machine learning',
     blurb: 'Retrieval, grounding and keeping people in the loop.',
     items: [
-      { name: 'Retrieval-augmented generation', usedIn: 'IMAC Advisor' },
-      { name: 'Bi-encoder and cross-encoder retrieval', usedIn: 'IMAC two-stage pipeline' },
-      { name: 'Azure OpenAI', usedIn: 'IMAC answer synthesis' },
-      { name: 'Confidence scoring and review paths', usedIn: 'IMAC Advisor, transaction coding' },
-      { name: 'Evidence-based LLM design', usedIn: 'Fit Check' },
+      { name: 'Retrieval-augmented generation', usedIn: 'IMAC Advisor', evidence: { projectId: 'imac-advisor', focusId: 'sources', label: 'Source grounding' } },
+      { name: 'Bi-encoder and cross-encoder retrieval', usedIn: 'IMAC two-stage pipeline', evidence: { projectId: 'imac-advisor', focusId: 'match', label: 'Reranker match scores' } },
+      { name: 'Azure OpenAI', usedIn: 'IMAC answer synthesis', evidence: { projectId: 'imac-advisor', focusId: 'answer', label: 'Clinical summary' } },
+      { name: 'Confidence scoring and review paths', usedIn: 'IMAC Advisor, transaction coding', evidence: { projectId: 'imac-advisor', focusId: 'confidence', label: 'Confidence badge' } },
+      { name: 'Evidence-based LLM design', usedIn: 'Fit Check', evidence: { projectId: 'fit-check', focusId: 'req-2', label: 'Fit Check evidence' } },
     ],
   },
   {
@@ -48,7 +48,7 @@ export const skillGroups: SkillGroup[] = [
     items: [
       { name: 'React and TypeScript', usedIn: 'This portfolio, ITO Master' },
       { name: 'Vite and Tailwind CSS', usedIn: 'This portfolio' },
-      { name: 'Framer Motion', usedIn: 'Tiny Paws' },
+      { name: 'Framer Motion', usedIn: 'Tiny Paws', evidence: { projectId: 'tiny-paws', focusId: 'cart', label: 'Basket drawer' } },
       { name: 'Responsive layouts', usedIn: 'Tiny Paws, this portfolio' },
     ],
   },
@@ -68,6 +68,7 @@ export const skillGroups: SkillGroup[] = [
 export const timeline: TimelineItem[] = [
   {
     id: 'uoa',
+    span: [2026.17, 2026.85],
     kind: 'education',
     title: 'Master of Artificial Intelligence',
     org: 'University of Auckland, New Zealand',
@@ -76,6 +77,7 @@ export const timeline: TimelineItem[] = [
   },
   {
     id: 'code-muster',
+    at: 2026.5,
     kind: 'achievement',
     title: 'Winner, WDCC × Figured "The Code Muster"',
     org: 'Hackathon',
@@ -87,6 +89,7 @@ export const timeline: TimelineItem[] = [
   },
   {
     id: 'ito',
+    span: [2025.42, 2025.92],
     kind: 'work',
     title: 'Freelance backend developer',
     org: 'Ito Master',
@@ -98,6 +101,7 @@ export const timeline: TimelineItem[] = [
   },
   {
     id: 'eruna',
+    span: [2024.67, 2025.17],
     kind: 'work',
     title: 'Junior software developer',
     org: 'Eruna Technologies, Bangalore',
@@ -110,6 +114,7 @@ export const timeline: TimelineItem[] = [
   },
   {
     id: 'beyonders',
+    at: 2024.35,
     kind: 'achievement',
     title: 'Winner, Beyonders Hackathon',
     org: 'Hackathon',
@@ -118,6 +123,7 @@ export const timeline: TimelineItem[] = [
   },
   {
     id: 'cicada',
+    at: 2024.65,
     kind: 'achievement',
     title: 'Runner-up, Cicada Hackathon',
     org: 'Hackathon',
@@ -126,6 +132,7 @@ export const timeline: TimelineItem[] = [
   },
   {
     id: 'atria',
+    span: [2021.0, 2026.0],
     kind: 'education',
     title: 'B.E. Computer Science & Engineering',
     org: 'Atria Institute of Technology, Bangalore',

@@ -2,8 +2,9 @@ import { useEffect, type ReactNode } from 'react';
 import { getProjectBySlug, projects } from '../data/projects';
 import type { Project } from '../data/types';
 import { closeProject, projectHref } from '../lib/route';
-import { EvidenceTable, ExplodedFlow } from './Artifact';
-import { ExternalLink, Screenshot, projectLinks } from './ui';
+import { ExplodedFlow } from './Artifact';
+import { Inspector } from './inspectors/Inspector';
+import { ExternalLink, projectLinks } from './ui';
 
 function usePageMeta(title: string, description: string) {
   useEffect(() => {
@@ -68,15 +69,7 @@ function CaseStudy({ project }: { project: Project }) {
         </div>
       </header>
 
-      {project.image && (
-        <figure className="surface overflow-hidden">
-          <Screenshot project={project} eager />
-          <figcaption className="border-t border-line px-4 py-3 text-sm text-muted">
-            <span className="label">Real interface · </span>
-            {project.image.alt}
-          </figcaption>
-        </figure>
-      )}
+      <Inspector project={project} />
 
       {(project.role || project.technologies.length > 0) && (
         <dl className="mt-8 grid gap-6 border-t border-line py-6 sm:grid-cols-2">
@@ -134,12 +127,6 @@ function CaseStudy({ project }: { project: Project }) {
               </div>
             ))}
           </dl>
-        </Block>
-      )}
-
-      {project.example && (
-        <Block n={next()} title="Example">
-          <EvidenceTable example={project.example} />
         </Block>
       )}
 

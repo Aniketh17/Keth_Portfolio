@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { CaseStudyPage } from './components/CaseStudyPage';
+import { EvidenceProvider } from './components/Evidence';
 import { HomePage } from './components/HomePage';
 import { rememberHomeScroll, useRoute } from './lib/route';
 
@@ -29,7 +30,7 @@ export function App() {
       >
         Skip to content
       </a>
-      {route.name === 'project' ? <CaseStudyPage slug={route.slug} /> : <HomePage />}
+      <EvidenceProvider>{route.name === 'project' ? <CaseStudyPage slug={route.slug} /> : <HomePage />}</EvidenceProvider>
     </>
   );
 }
