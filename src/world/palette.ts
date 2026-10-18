@@ -1,4 +1,4 @@
-import { Color } from 'three';
+import { Color, SRGBColorSpace } from 'three';
 
 /** Read the brand tokens from the page's CSS so the world and the HTML can never drift apart. */
 function channel(name: string): [number, number, number] {
@@ -7,7 +7,8 @@ function channel(name: string): [number, number, number] {
   return parts && parts.length >= 3 ? [parts[0], parts[1], parts[2]] : [128, 128, 128];
 }
 
-const toColor = ([r, g, b]: [number, number, number]) => new Color(r / 255, g / 255, b / 255);
+/** Brand colours are sRGB values; three.js needs them converted to its linear working space or they render washed out. */
+const toColor = ([r, g, b]: [number, number, number]) => new Color().setRGB(r / 255, g / 255, b / 255, SRGBColorSpace);
 const toCss = ([r, g, b]: [number, number, number]) => `rgb(${r}, ${g}, ${b})`;
 
 export interface Palette {

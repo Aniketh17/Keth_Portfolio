@@ -75,6 +75,7 @@ function updateFromScroll(): void {
   frame.from = a.d;
   frame.to = b.d;
   frame.blend = a.d === b.d ? 0 : smooth(clamp01((y - a.s) / Math.max(1, b.s - a.s)));
+  world.set({ zone: frame.blend > 0.5 ? frame.to : frame.from });
 
   const f = clamp01((y - frame.stageStart) / frame.stageRange) * (PROJECT_COUNT - 1);
   const s = world.get();

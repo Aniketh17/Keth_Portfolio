@@ -1,5 +1,6 @@
 import { profile } from '../../data/profile';
 import { scrollToId } from '../../world/env';
+import { Ticker } from '../Ticker';
 
 /**
  * Arrival. The headline and actions are plain HTML on the left; the featured artifact is the 3D object on the
@@ -10,8 +11,8 @@ export function SignalHero() {
     <section id="top" aria-labelledby="hero-title" className="pointer-events-none relative flex min-h-[100svh] items-start pt-[calc(4.5rem+36svh)] lg:items-center lg:pt-16">
       <div className="wrap">
         <div className="fade-in max-w-[30rem]">
-          <p className="label">
-            {profile.fullName} · Software engineer · {profile.location}
+          <p className="label eyebrow">
+            Software engineer · {profile.location}
           </p>
           <h1 id="hero-title" className="h-hero mt-5">
             Software that works. <span className="underline decoration-soda decoration-[0.08em] underline-offset-[0.12em]">AI that earns its place.</span>
@@ -28,8 +29,11 @@ export function SignalHero() {
               View resume<span className="sr-only"> (PDF, opens in a new tab)</span>
             </a>
           </div>
-          <p className="label mt-8">Master of Artificial Intelligence, University of Auckland</p>
+          <p className="prose-w pointer-events-auto mt-6 text-sm text-muted">Scroll, or poke the little cube on the right. It knows the way.</p>
         </div>
+      </div>
+      <div className="absolute inset-x-0 bottom-10 hidden lg:block">
+        <Ticker />
       </div>
     </section>
   );

@@ -30,3 +30,11 @@ Notes: routes are hash-based (`#/projects/<slug>`), so any static host works. Fl
 - The projects stage is a tall section with a pinned view; ordinary scrolling through it moves the carousel. Choosing a project scrolls to it, so scroll position is the single source of truth.
 - Inspection takes the active project apart in 3D (the IMAC interface into four real layers; Fit Check and Transaction Coding as routed threads; Tiny Paws as its real screens). The HTML dock explains the selected part and shares the same `focus` as the scene.
 - Reduced motion: the camera snaps, ambient motion stops, and rendering is on demand.
+
+## Sig, the guide
+
+An original geometric character (`src/world/scene/Sig.tsx`): a rounded cube with a face plate, ears, a coral diamond antenna and floating hands, about ten meshes with every expression in one small texture. Lines are in `src/world/sig.ts` and triggered by `src/components/world/SigVoice.tsx`. Poking him answers, and after a few pokes he offers three routes (AI, software engineering, how I build) that travel to a project and inspect it. A "Sig: on/quiet" switch mutes the automatic lines and is remembered.
+
+## The two recreated demos
+
+Fit Check ("Should I apply?" to a report) and Transaction Coding ("Auto-categorise" with a review lane) are real HTML screens in `src/mock/`, rendered at any step. `scripts/mocks/render.mjs` captures their frames into the texture atlases in `public/mock/` that the 3D scene plays; the case study pages and the no-WebGL view run the same screens live. Both are labelled as recreated from the project descriptions, on invented data, not screenshots of the products. Fit Check was an individual entry at a ZEIL hackathon.

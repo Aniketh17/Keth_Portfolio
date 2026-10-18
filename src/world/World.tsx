@@ -4,7 +4,8 @@ import { MathUtils, PerspectiveCamera, Vector3 } from 'three';
 import { destinations, inspectDest, type Dest } from './layout';
 import { Environment } from './scene/Environment';
 import { anim, palette } from './scene/common';
-import { Conductor, HeroArtifact, Stage } from './scene/Stage';
+import { Conductor, HeroFrames, Stage } from './scene/Stage';
+import { Sig } from './scene/Sig';
 import { Systems, Terminus, Timeline } from './scene/Zones';
 import { frame, world } from './store';
 import { useWorldTextures } from './textures';
@@ -120,11 +121,12 @@ function Scene() {
       <Conductor />
       <Rig />
       <Environment small={small} />
-      <HeroArtifact textures={textures} />
+      <HeroFrames />
       <Stage textures={textures} />
       <Systems textures={textures} />
       <Timeline />
       <Terminus />
+      <Sig />
     </>
   );
 }

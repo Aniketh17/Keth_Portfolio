@@ -16,10 +16,11 @@ export const BASIS_LABEL: Record<Basis, string> = {
 
 /* ---------------- IMAC: annotated and exploded real interface ---------------- */
 
-/** Size of the cropped screenshot (sidebar removed) in source pixels. */
-const IMG = { w: 852, h: 515, offsetX: 172 };
+/** Size of the cropped screenshot (sidebar and scrollbar removed) in source pixels. Boxes below are measured on it. */
+const IMG = { w: 1318, h: 805, offsetX: 0 };
+export const IMAC_ASPECT = IMG.w / IMG.h;
 export type Box = [x: number, y: number, w: number, h: number];
-/** Convert a box measured on the original 1024x515 screenshot into percentages of the cropped image. */
+/** Convert a box in source pixels into percentages of the image. */
 const pct = (x: number, y: number, w: number, h: number): Box => [
   ((x - IMG.offsetX) / IMG.w) * 100,
   (y / IMG.h) * 100,
@@ -48,7 +49,7 @@ export const IMAC_REGIONS: ImacRegion[] = [
     id: 'banner',
     n: 1,
     label: 'Advisory framing',
-    box: pct(241, 72, 704, 40),
+    box: pct(109, 111, 1101, 65),
     layer: 'banner',
     stages: [],
     basis: 'visible',
@@ -58,7 +59,7 @@ export const IMAC_REGIONS: ImacRegion[] = [
     id: 'query',
     n: 2,
     label: 'The question',
-    box: pct(241, 130, 704, 43),
+    box: pct(109, 203, 1101, 70),
     layer: 'query',
     stages: [0, 1],
     basis: 'documented',
@@ -69,7 +70,7 @@ export const IMAC_REGIONS: ImacRegion[] = [
     id: 'answer',
     n: 3,
     label: 'Clinical summary',
-    box: pct(241, 193, 411, 292),
+    box: pct(109, 302, 643, 458),
     layer: 'answer',
     stages: [4, 5],
     basis: 'visible',
@@ -79,7 +80,7 @@ export const IMAC_REGIONS: ImacRegion[] = [
     id: 'confidence',
     n: 4,
     label: 'Confidence badge',
-    box: pct(583, 204, 58, 20),
+    box: pct(644, 320, 90, 30),
     layer: 'answer',
     stages: [3, 4],
     basis: 'documented',
@@ -90,7 +91,7 @@ export const IMAC_REGIONS: ImacRegion[] = [
     id: 'sources',
     n: 5,
     label: 'Source grounding',
-    box: pct(669, 190, 276, 325),
+    box: pct(780, 296, 430, 509),
     layer: 'evidence',
     stages: [2, 3],
     basis: 'visible',
@@ -101,7 +102,7 @@ export const IMAC_REGIONS: ImacRegion[] = [
     id: 'match',
     n: 6,
     label: 'Per-source match score',
-    box: pct(878, 222, 60, 14),
+    box: pct(1128, 346, 70, 20),
     layer: 'evidence',
     stages: [3],
     basis: 'documented',
@@ -110,39 +111,10 @@ export const IMAC_REGIONS: ImacRegion[] = [
 ];
 
 export const IMAC_LAYERS: { id: LayerId; box: Box; dx: string; dy: string; regionId: string }[] = [
-  { id: 'banner', box: pct(241, 72, 704, 40), dx: '0%', dy: '-9%', regionId: 'banner' },
-  { id: 'query', box: pct(241, 130, 704, 43), dx: '0%', dy: '-3%', regionId: 'query' },
-  { id: 'answer', box: pct(241, 193, 411, 322), dx: '-3.5%', dy: '5%', regionId: 'answer' },
-  { id: 'evidence', box: pct(669, 190, 276, 325), dx: '3.5%', dy: '5%', regionId: 'sources' },
-];
-
-/* ---------------- Transaction Coding: triage bench (synthetic) ---------------- */
-
-export type Band = 'familiar' | 'unsure' | 'new';
-
-export interface Tx {
-  id: string;
-  description: string;
-  /** What the pattern match found, in words. No numbers: nothing here implies a measured accuracy. */
-  match: string;
-  suggestion: string | null;
-  band: Band;
-}
-
-export const TX_CATEGORIES = ['Groceries', 'Subscriptions', 'Fuel', 'Office supplies', 'Contractor payments', 'Travel', 'Equipment'];
-
-export const TX_BAND: Record<Band, { label: string; route: string }> = {
-  familiar: { label: 'Familiar pattern', route: 'Suggested. Quick to confirm.' },
-  unsure: { label: 'Unsure', route: 'Held for review.' },
-  new: { label: 'New to the system', route: 'Needs a category from a person.' },
-};
-
-export const TRANSACTIONS: Tx[] = [
-  { id: 'tx-0', description: 'COUNTDOWN AKL 0412', match: 'Matches earlier transactions from the same merchant, all coded as Groceries.', suggestion: 'Groceries', band: 'familiar' },
-  { id: 'tx-1', description: 'SPOTIFY P1F3A9', match: 'Matches a recurring monthly charge coded as Subscriptions.', suggestion: 'Subscriptions', band: 'familiar' },
-  { id: 'tx-2', description: 'AMZN MKTP *7KQ2', match: 'The merchant appears under two categories in the history, Office supplies and Equipment.', suggestion: 'Office supplies', band: 'unsure' },
-  { id: 'tx-3', description: 'TRF J SMITH 3321', match: 'A bank transfer to a person. Earlier transfers to this name were coded inconsistently.', suggestion: 'Contractor payments', band: 'unsure' },
-  { id: 'tx-4', description: 'HARBOURVIEW ENG LTD', match: 'No earlier transaction resembles this merchant.', suggestion: null, band: 'new' },
+  { id: 'banner', box: pct(109, 111, 1101, 65), dx: '0%', dy: '-9%', regionId: 'banner' },
+  { id: 'query', box: pct(109, 203, 1101, 70), dx: '0%', dy: '-3%', regionId: 'query' },
+  { id: 'answer', box: pct(109, 302, 643, 458), dx: '-3.5%', dy: '5%', regionId: 'answer' },
+  { id: 'evidence', box: pct(780, 296, 430, 509), dx: '3.5%', dy: '5%', regionId: 'sources' },
 ];
 
 /* ---------------- Tiny Paws: real captures of the running prototype ---------------- */

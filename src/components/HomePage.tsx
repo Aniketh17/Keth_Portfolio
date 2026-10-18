@@ -8,6 +8,7 @@ import { About, Approach, Contact } from './Sections';
 import { Work } from './Work';
 import { SignalHero } from './world/SignalHero';
 import { SignalStage } from './world/SignalStage';
+import { SigVoice } from './world/SigVoice';
 import { WorldLayer } from './world/WorldLayer';
 
 /**
@@ -43,6 +44,7 @@ export function HomePage() {
   return (
     <>
       {!fallback && <WorldLayer />}
+      {!fallback && <SigVoice />}
       <SiteNav />
       <main id="main" tabIndex={-1} className="relative z-10 outline-none">
         {fallback ? (

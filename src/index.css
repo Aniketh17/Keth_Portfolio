@@ -119,14 +119,14 @@ body::before {
   font-size: clamp(2.4rem, 5.6vw, 4.5rem);
   line-height: 1.04;
   text-wrap: balance;
-  letter-spacing: -0.035em;
-  font-weight: 600;
+  letter-spacing: -0.04em;
+  font-weight: 400;
 }
 .h-section {
   font-size: clamp(1.75rem, 4vw, 2.75rem);
   line-height: 1.1;
-  letter-spacing: -0.025em;
-  font-weight: 600;
+  letter-spacing: -0.035em;
+  font-weight: 400;
 }
 .prose-w {
   max-width: 62ch;
@@ -297,7 +297,7 @@ body::before {
 }
 .shot {
   position: relative;
-  aspect-ratio: 852 / 515;
+  aspect-ratio: 1318 / 805;
   width: 100%;
 }
 .shot > img {
@@ -548,4 +548,182 @@ body[data-world='on'] .contact-card {
   color: var(--canvas);
   border-radius: var(--radius);
   padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* ---------- Display type, markers, ticker and chapters ---------- */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.eyebrow::before {
+  content: '';
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--pop-soda);
+}
+.h-mega {
+  font-size: clamp(3.5rem, 15vw, 12rem);
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  font-weight: 400;
+}
+.ticker {
+  overflow: hidden;
+  border-block: 1px solid var(--line);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 52s linear infinite;
+}
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+.ticker-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.9rem 1.8rem;
+  white-space: nowrap;
+}
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: auto;
+  }
+  .ticker-track [aria-hidden='true'] {
+    display: none;
+  }
+}
+
+/* Pill nav */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem;
+  border-radius: 999px;
+  background: var(--blueberry);
+  color: var(--canvas);
+}
+.pill a,
+.pill button {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  padding: 0 0.95rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--canvas-rgb) / 0.78);
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.pill a:hover {
+  color: var(--canvas);
+}
+.pill [aria-current='true'] {
+  background: var(--canvas);
+  color: var(--blueberry);
+}
+.pill :focus-visible {
+  outline-color: var(--pop-soda);
+}
+
+/* Chapters: full-bleed colour changes between sections. */
+.chapter-dark {
+  background: var(--blueberry);
+  color: var(--canvas);
+}
+.chapter-dark .label {
+  color: rgb(var(--canvas-rgb) / 0.62);
+}
+.chapter-dark .link {
+  text-decoration-color: var(--pop-soda);
+}
+.chapter-dark :focus-visible {
+  outline-color: var(--pop-soda);
+}
+.chapter-soda {
+  background: var(--pop-soda);
+  color: var(--blueberry);
+}
+.stat {
+  border-top: 1px solid rgb(var(--canvas-rgb) / 0.25);
+  padding-top: 1rem;
+}
+.stat b {
+  display: block;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 400;
+}
+body[data-world='on'] .sheet.sheet-dark {
+  background: rgb(var(--blueberry-rgb) / 0.97);
+  color: var(--canvas);
+  border-color: transparent;
+}
+body[data-world='on'] .sheet.sheet-dark .label {
+  color: rgb(var(--canvas-rgb) / 0.62);
+}
+body[data-world='on'] .sheet.sheet-dark .text-muted {
+  color: rgb(var(--canvas-rgb) / 0.72);
+}
+body[data-world='on'] .sheet.sheet-dark .border-line,
+body[data-world='on'] .sheet.sheet-dark .border-b,
+body[data-world='on'] .sheet.sheet-dark .border-t {
+  border-color: rgb(var(--canvas-rgb) / 0.2);
+}
+body[data-world='on'] .sheet.sheet-dark .label.\!text-blueberry {
+  color: var(--pop-soda) !important;
+}
+
+/* Sig's speech bubble. */
+.bubble {
+  position: relative;
+  background: var(--blueberry);
+  color: var(--canvas);
+  border-radius: 1rem;
+  padding: 0.65rem 0.95rem;
+  box-shadow: 0 10px 30px -12px rgba(23, 43, 77, 0.55);
+  animation: bubble-in 0.3s var(--ease) both;
+}
+.bubble::after {
+  content: '';
+  position: absolute;
+  right: 2.2rem;
+  bottom: -0.4rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  background: var(--blueberry);
+  transform: rotate(45deg);
+  border-radius: 0 0 0.2rem 0;
+}
+@keyframes bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+}
+.sig-bubble {
+  top: calc(var(--sig-y, 70vh) - var(--sig-s, 80px) * 0.95);
+  transform: translateY(-100%);
+}
+[data-sig-low='0'] .sig-bubble {
+  top: calc(var(--sig-y, 70vh) + var(--sig-s, 80px) * 0.85);
+  transform: none;
+}
+[data-sig-low='0'] .sig-bubble .bubble::after {
+  top: -0.4rem;
+  bottom: auto;
+  border-radius: 0.2rem 0 0 0;
 }

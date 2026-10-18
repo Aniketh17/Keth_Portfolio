@@ -1,12 +1,20 @@
 import { useState } from 'react';
 import { DECISIONS } from '../data/decisions';
 import { achievements, education, experience, profile, skillGroups } from '../data/profile';
-import { getProjectById } from '../data/projects';
+import { getProjectById, projects } from '../data/projects';
 import type { TimelineItem } from '../data/types';
 import { projectHref } from '../lib/route';
 import { world } from '../world/store';
 import { EvidenceChip } from './Evidence';
 import { ExternalLink } from './ui';
+
+/** Only numbers that are in the résumé. */
+const STATS: [string, string][] = [
+  ['2', 'first places: WDCC × Figured, Beyonders'],
+  ['1', 'runner-up: Cicada Hackathon'],
+  ['65+', 'teams in the larger field it won'],
+  ['8.17', 'CGPA out of 10, B.E. Computer Science'],
+];
 
 export function Approach() {
   const items = DECISIONS.flatMap((pick) => {
@@ -18,35 +26,40 @@ export function Approach() {
     <section id="approach" aria-labelledby="approach-title" className="pointer-events-none relative scroll-mt-16 py-16 lg:py-24">
       <div className="wrap">
         <div className="sheet">
-          <p className="label">02 · Engineering approach</p>
-          <h2 id="approach-title" className="h-section mt-3">
-            The tools matter. The decisions matter more.
-          </h2>
-          <p className="prose-w mt-3 text-muted">Five decisions, each tied to a project. Point at one and its project lights up in the scene; open it to see the evidence.</p>
-          <ul className="mt-6 border-t border-line">
-            {items.map(({ project, decision, pick }) => (
+          <p className="label eyebrow">02 · Engineering approach</p>
+          <div className="mt-4 grid gap-4 lg:items-end">
+            <h2 id="approach-title" className="h-section">
+              The tools matter. The decisions matter more.
+            </h2>
+            <p className="text-muted">Five decisions, each tied to a project. Point at one and its project lights up in the scene; open it to see the evidence.</p>
+          </div>
+          <ol className="mt-8 border-t border-line">
+            {items.map(({ project, decision, pick }, i) => (
               <li
                 key={decision.title}
-                className="border-b border-line py-5"
+                className="grid gap-x-6 gap-y-1 border-b border-line py-6 md:grid-cols-[4rem_1fr]"
                 onPointerEnter={() => world.set({ decision: pick.id })}
                 onPointerLeave={() => world.set({ decision: null })}
                 onFocus={() => world.set({ decision: pick.id })}
                 onBlur={() => world.set({ decision: null })}
               >
-                <p className="label">{project.shortTitle}</p>
-                <h3 className="mt-1 text-xl font-semibold tracking-tight">{decision.title}</h3>
-                <p className="mt-2 text-muted">{decision.body}</p>
-                <div className="mt-2 flex flex-wrap gap-x-6">
-                  <EvidenceChip projectId={pick.projectId} focusId={pick.focusId}>
-                    {pick.label}
-                  </EvidenceChip>
-                  <a href={projectHref(project.slug)} className="link inline-flex min-h-11 items-center text-sm font-medium">
-                    Case study
-                  </a>
+                <span className="font-mono text-sm text-soda">#{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <p className="label">{project.shortTitle}</p>
+                  <h3 className="mt-1 text-2xl tracking-tight">{decision.title}</h3>
+                  <p className="prose-w mt-2 text-muted">{decision.body}</p>
+                  <div className="mt-2 flex flex-wrap gap-x-6">
+                    <EvidenceChip projectId={pick.projectId} focusId={pick.focusId}>
+                      {pick.label} <span aria-hidden="true">→</span>
+                    </EvidenceChip>
+                    <a href={projectHref(project.slug)} className="link inline-flex min-h-11 items-center text-sm font-medium">
+                      Case study
+                    </a>
+                  </div>
                 </div>
               </li>
             ))}
-          </ul>
+          </ol>
         </div>
       </div>
     </section>
@@ -91,12 +104,22 @@ export function About() {
   return (
     <section id="about" aria-labelledby="about-title" className="pointer-events-none relative scroll-mt-16 py-16 lg:py-24">
       <div className="wrap">
-        <div className="sheet">
-          <p className="label">03 · About and experience</p>
-          <h2 id="about-title" className="h-section mt-3">
+        <div className="sheet sheet-dark">
+          <p className="label eyebrow">03 · About and experience</p>
+          <h2 id="about-title" className="h-section mt-4">
             The work behind the work.
           </h2>
           <p className="prose-w mt-3 text-muted">Each entry sits on a timeline in the scene, at its real dates. Hover or tap one to lift it forward.</p>
+          <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-4">
+            {STATS.map(([n, label]) => (
+              <div key={label} className="stat">
+                <dd>
+                  <b>{n}</b>
+                </dd>
+                <dt className="mt-2 text-sm text-canvas/70">{label}</dt>
+              </div>
+            ))}
+          </dl>
           <Group title="Experience" items={experience} />
           <Group title="Achievements" items={achievements} />
           <Group title="Education" items={education} />
@@ -160,52 +183,70 @@ export function Contact() {
     }
   };
   return (
-    <section id="contact" aria-labelledby="contact-title" className="contact on-dark pointer-events-none relative mt-8 scroll-mt-16 bg-blueberry text-canvas">
-      <div className="wrap py-16 lg:py-24">
-        <div className="contact-card pointer-events-auto">
-          <p className="label !text-canvas/70">04 · Contact</p>
-          <h2 id="contact-title" className="h-section mt-3 max-w-[20ch]">
-            Have something worth building?
-          </h2>
-          <p className="prose-w mt-4 text-lg text-canvas/80">
-            I'm open to software engineering and applied AI opportunities, as well as conversations about interesting technical problems.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a href={`mailto:${profile.email}`} className="btn btn-solid break-all">
-              {profile.email}
-            </a>
-            <button type="button" onClick={copy} className="btn btn-ghost">
-              Copy address
-            </button>
-            <span role="status" className="text-sm text-soda">
-              {copied ? 'Copied.' : ''}
-            </span>
+    <section id="contact" aria-labelledby="contact-title" className="chapter-soda pointer-events-auto relative z-10 scroll-mt-16">
+      <div className="wrap pb-10 pt-20 lg:pt-28">
+        <p className="label eyebrow !text-blueberry/70">04 · Contact</p>
+        <h2 id="contact-title" className="h-mega mt-4">
+          Say hello.
+        </h2>
+        <p className="mt-6 max-w-[34rem] text-xl">
+          Have something worth building? I'm open to software engineering and applied AI opportunities, and to conversations about interesting technical problems.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <a href={`mailto:${profile.email}`} className="btn btn-solid break-all">
+            {profile.email}
+          </a>
+          <button type="button" onClick={copy} className="btn btn-ghost">
+            Copy address
+          </button>
+          <span role="status" className="text-sm font-medium">
+            {copied ? 'Copied.' : ''}
+          </span>
+        </div>
+        <div className="mt-16 grid gap-8 border-t border-blueberry/25 pt-8 sm:grid-cols-3">
+          <div>
+            <p className="label !text-blueberry/70">Elsewhere</p>
+            <ul className="mt-2">
+              {profile.links
+                .filter((l) => l.label !== 'ITO Master (live site)')
+                .map((l) => (
+                  <li key={l.url}>
+                    <ExternalLink href={l.url} className="inline-flex min-h-11 items-center font-medium underline decoration-blueberry decoration-2 underline-offset-4">
+                      {l.label}
+                    </ExternalLink>
+                  </li>
+                ))}
+              <li>
+                <a
+                  href={profile.resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center font-medium underline decoration-blueberry decoration-2 underline-offset-4"
+                >
+                  Resume (PDF)<span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+            </ul>
           </div>
-          <ul className="mt-8 flex flex-wrap gap-x-8 gap-y-1">
-            {profile.links
-              .filter((l) => l.label !== 'ITO Master (live site)')
-              .map((l) => (
-                <li key={l.url}>
-                  <ExternalLink href={l.url} className="inline-flex min-h-11 items-center font-medium underline decoration-soda decoration-2 underline-offset-4">
-                    {l.label}
-                  </ExternalLink>
+          <div>
+            <p className="label !text-blueberry/70">Work</p>
+            <ul className="mt-2">
+              {projects.map((p) => (
+                <li key={p.id}>
+                  <a href={projectHref(p.slug)} className="inline-flex min-h-11 items-center font-medium">
+                    {p.shortTitle}
+                  </a>
                 </li>
               ))}
-            <li>
-              <a
-                href={profile.resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center font-medium underline decoration-soda decoration-2 underline-offset-4"
-              >
-                Resume (PDF)<span className="sr-only"> (opens in a new tab)</span>
-              </a>
-            </li>
-          </ul>
-          <p className="label mt-10 border-t border-canvas/20 pt-4 !text-canvas/60">
-            {profile.fullName} · {profile.location}
-          </p>
+            </ul>
+          </div>
+          <div>
+            <p className="label !text-blueberry/70">Credits</p>
+            <p className="mt-2 text-sm">Built by hand in Auckland with React and three.js. Sig is an original character.</p>
+          </div>
         </div>
+        <p className="mt-12 text-[clamp(2.2rem,8vw,6rem)] leading-none tracking-tight">{profile.fullName}</p>
+        <p className="label mt-2 pb-6 !text-blueberry/70">© 2026 · {profile.location}</p>
       </div>
     </section>
   );

@@ -16,7 +16,7 @@ export interface DecisionRef {
 export const DECISIONS: DecisionRef[] = [
   { id: 'refuse', projectId: 'imac-advisor', title: 'Refuse rather than guess', focusId: 'confidence', label: 'See the confidence badge' },
   { id: 'two-stage', projectId: 'imac-advisor', title: 'Two stages instead of one', focusId: 'sources', label: 'See the reranked sources' },
-  { id: 'suggest-review', projectId: 'transaction-coding', title: 'Suggest, then review', focusId: 'tx-2', label: 'See an uncertain case' },
-  { id: 'retrieved-confirmed', projectId: 'fit-check', title: 'Retrieved is not confirmed', focusId: 'req-2', label: 'See it needing confirmation' },
+  { id: 'suggest-review', projectId: 'transaction-coding', title: 'Suggest, then review', focusId: 'step-5', label: 'See the review lane' },
+  { id: 'retrieved-confirmed', projectId: 'fit-check', title: 'Retrieved is not confirmed', focusId: 'step-9', label: 'See the question it asks' },
   { id: 'frontend-first', projectId: 'tiny-paws', title: 'Front end first', focusId: 'checkout', label: 'See the simulated checkout' },
 ];

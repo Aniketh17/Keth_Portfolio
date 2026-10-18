@@ -63,7 +63,7 @@ export function ImacInspector(props: InspectorProps) {
     >
       <div className={mode === 'layers' ? 'px-[4%] py-[5%]' : ''} style={{ transition: 'padding 560ms var(--ease)' }}>
         <div className="shot" data-mode={mode} data-has-focus={region ? 'true' : 'false'}>
-          <img src={IMG} alt="The IMAC Immunisation Advisor interface: a query, a clinical summary with a confidence badge, and source grounding cards" width={1704} height={1030} loading="eager" />
+          <img src={IMG} alt="The IMAC Immunisation Advisor interface: a query, a clinical summary with a confidence badge, and source grounding cards" width={1318} height={805} loading="eager" />
 
           {IMAC_LAYERS.map((l) => (
             <button
@@ -106,7 +106,7 @@ export function ImacInspector(props: InspectorProps) {
                 aria-pressed={focus === r.id}
                 aria-label={`${r.n}. ${r.label}`}
                 onClick={() => setFocus(focus === r.id ? null : r.id)}
-                style={{ left: `${r.box[0] + Math.min(r.box[2], 6) / 2}%`, top: `${r.box[1] + Math.min(r.box[3], 6) / 2}%` }}
+                style={{ left: '1.2%', top: `${r.box[1] + Math.min(r.box[3], 14) / 2}%` }}
               >
                 {r.n}
               </button>

@@ -1,16 +1,13 @@
 import { profile } from '../data/profile';
-import { getProjectById } from '../data/projects';
-import { projectHref } from '../lib/route';
-import { ImacInspector } from './inspectors/Imac';
+import { Ticker } from './Ticker';
 
 export function Hero() {
-  const featured = getProjectById('imac-advisor');
   return (
-    <section id="top" aria-labelledby="hero-title" className="pt-12 lg:pt-20">
-      <div className="wrap grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-center lg:gap-14">
+    <section id="top" aria-labelledby="hero-title" className="pt-28 lg:pt-36">
+      <div className="wrap grid gap-10 lg:items-center">
         <div className="fade-in">
-          <p className="label">
-            {profile.fullName} · Software engineer · {profile.location}
+          <p className="label eyebrow">
+            Software engineer · {profile.location}
           </p>
           <h1 id="hero-title" className="h-hero mt-5">
             Software that works. <span className="underline decoration-soda decoration-[0.08em] underline-offset-[0.12em]">AI that earns its place.</span>
@@ -31,19 +28,9 @@ export function Hero() {
           <p className="label mt-8">Master of Artificial Intelligence, University of Auckland</p>
         </div>
 
-        {featured && (
-          <div className="fade-in bleed-r min-w-0" style={{ animationDelay: '120ms' }}>
-            <ImacInspector compact />
-            <p className="mt-1 flex flex-wrap gap-x-5 text-sm text-muted">
-              <a className="link inline-flex min-h-11 items-center font-medium text-blueberry" href="#work">
-                Inspect every region
-              </a>
-              <a className="link inline-flex min-h-11 items-center font-medium text-blueberry" href={projectHref(featured.slug)}>
-                Read the case study
-              </a>
-            </p>
-          </div>
-        )}
+        </div>
+      <div className="mt-14">
+        <Ticker />
       </div>
     </section>
   );

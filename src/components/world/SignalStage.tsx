@@ -34,7 +34,7 @@ export function SignalStage() {
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         <div className="wrap relative h-full pt-20">
           <div className="max-w-md">
-            <p className="label">01 · Selected work</p>
+            <p className="label eyebrow">01 · Selected work</p>
             <h2 id="work-title" className="h-section mt-2 !text-[clamp(1.5rem,3vw,2.25rem)]">
               Four projects. Four different problems.
             </h2>
@@ -73,7 +73,7 @@ export function SignalStage() {
               )}
             </div>
 
-            <h3 key={project.id} className="swap mt-2 text-2xl font-semibold tracking-tight">
+            <h3 key={project.id} className="swap mt-2 text-3xl leading-tight tracking-tight">
               {project.title}
             </h3>
 
@@ -92,6 +92,15 @@ export function SignalStage() {
             ) : (
               <div key={`o-${project.id}`} className="swap">
                 <p className="mt-1 font-medium">{project.headline}</p>
+                {project.technologies.length > 0 && (
+                  <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Technologies">
+                    {project.technologies.slice(0, 5).map((t) => (
+                      <li key={t} className="rounded-[4px] bg-blueberry/[0.07] px-2 py-1 font-mono text-[0.7rem] text-blueberry/80">
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <p className="mt-1 text-sm text-muted">{project.hook}</p>
                 {project.role && (
                   <p className="mt-2 text-sm">

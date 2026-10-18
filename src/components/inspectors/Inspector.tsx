@@ -1,10 +1,9 @@
 import type { Project } from '../../data/types';
+import { LiveDemo } from '../../mock/LiveDemo';
 import { ProjectArtifact } from '../Artifact';
-import { FitInspector } from './Fit';
 import { ImacInspector } from './Imac';
 import { JourneyInspector } from './Journey';
 import type { InspectorProps } from './shared';
-import { TriageInspector } from './Triage';
 
 /** Each project gets the inspection that suits its real evidence; a project without one falls back to its flow. */
 export function Inspector({ project, ...props }: InspectorProps & { project: Project }) {
@@ -12,9 +11,9 @@ export function Inspector({ project, ...props }: InspectorProps & { project: Pro
     case 'imac-advisor':
       return <ImacInspector {...props} />;
     case 'fit-check':
-      return <FitInspector {...props} />;
+      return <LiveDemo demo="fit" />;
     case 'transaction-coding':
-      return <TriageInspector {...props} />;
+      return <LiveDemo demo="transactions" />;
     case 'tiny-paws':
       return <JourneyInspector {...props} />;
     default:

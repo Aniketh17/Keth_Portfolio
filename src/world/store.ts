@@ -13,6 +13,15 @@ export const PROJECT_COUNT = 4;
 
 export type WorldStatus = 'loading' | 'ready' | 'failed' | 'unsupported';
 export type Mode = 'overview' | 'inspect';
+export type Mood = 'idle' | 'happy' | 'think' | 'surprised' | 'sleepy';
+
+export interface Say {
+  id: number;
+  text: string;
+  mood: Mood;
+  /** Offer the three "what do you want to see" choices under the line. */
+  offer?: boolean;
+}
 
 export interface WorldState {
   status: WorldStatus;
@@ -20,15 +29,15 @@ export interface WorldState {
   /** Phones and small tablets: portrait camera framing and a lighter scene. */
   small: boolean;
   mode: Mode;
+  /** Which chapter the camera is in: 0 arrival, 1 work, 2 approach, 3 experience, 4 contact. */
+  zone: number;
+  /** Sig, the mascot: what it is saying (null is quiet), how it looks, and whether the visitor muted it. */
+  say: Say | null;
+  quiet: boolean;
   /** Index of the project currently in front. */
   active: number;
   /** The region, requirement, transaction or step being inspected; null is the overview of that project. */
   focus: string | null;
-  /** Fit Check: which claims the visitor has used or confirmed. */
-  fitUsed: Record<string, boolean>;
-  fitConfirmed: Record<string, boolean>;
-  /** Transaction Coding: the reviewer's decisions. */
-  txDecisions: Record<string, string>;
   /** Highlighted decision in the systems view, and highlighted entry on the timeline. */
   decision: string | null;
   timeline: string | null;
@@ -72,11 +81,11 @@ let state: WorldState = {
   reduced: false,
   small: false,
   mode: 'overview',
+  zone: 0,
+  say: null,
+  quiet: false,
   active: 0,
   focus: null,
-  fitUsed: { 'req-0': true },
-  fitConfirmed: {},
-  txDecisions: {},
   decision: null,
   timeline: null,
 };

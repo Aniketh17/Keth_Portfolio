@@ -9,8 +9,8 @@ import { world } from '../store';
 import type { WorldTextures } from '../textures';
 import { BOX, BOX_EDGES, damp, dampColor, palette, PLANE } from './common';
 
-const ASPECT: Record<string, number> = { 'imac-advisor': 1704 / 1030, 'transaction-coding': 1600 / 967, 'fit-check': 1600 / 967, 'tiny-paws': 1280 / 800 };
-const tex = (id: string, t: WorldTextures): Texture => (id === 'imac-advisor' ? t.imac : id === 'transaction-coding' ? t.tx : id === 'fit-check' ? t.fit : t.tiny[0]);
+const ASPECT: Record<string, number> = { 'imac-advisor': 1318 / 805, 'transaction-coding': 1.6, 'fit-check': 1.6, 'tiny-paws': 1280 / 800 };
+const tex = (id: string, t: WorldTextures): Texture => (id === 'imac-advisor' ? t.imac : id === 'transaction-coding' ? t.posters.transactions : id === 'fit-check' ? t.posters.fit : t.tiny[0]);
 
 /* ---------------------------- Systems: projects, and the decisions made in them ---------------------------- */
 

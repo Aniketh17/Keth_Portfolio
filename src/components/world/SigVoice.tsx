@@ -1,0 +1,135 @@
+import { useEffect, useRef } from 'react';
+import { OFFERS, decisionLine, lineForFocus, loadQuiet, setQuiet, sigDismiss, sigPoke, sigSay, sigTake, PROJECT_LINES, ZONE_LINES } from '../../world/sig';
+import { useWorld, world } from '../../world/store';
+
+/**
+ * Everything about Sig that is not 3D: the line he is saying (a live region, so it is announced), the tap
+ * target over him (a real button, so he is reachable by keyboard and screen reader), and the director that
+ * decides when he speaks. Lines are triggered by what the visitor does, are spaced out, and can be muted.
+ */
+export function SigVoice() {
+  const say = useWorld((s) => s.say);
+  const quiet = useWorld((s) => s.quiet);
+  const status = useWorld((s) => s.status);
+  const zone = useWorld((s) => s.zone);
+  const active = useWorld((s) => s.active);
+  const mode = useWorld((s) => s.mode);
+  const focus = useWorld((s) => s.focus);
+  const decision = useWorld((s) => s.decision);
+  const timeline = useWorld((s) => s.timeline);
+  const seen = useRef<Set<string>>(new Set());
+  const idle = useRef(0);
+
+  useEffect(loadQuiet, []);
+
+  // Say something once per trigger, never the same thing twice.
+  const once = (key: string, fn: () => void) => {
+    if (status !== 'ready' || seen.current.has(key)) return;
+    seen.current.add(key);
+    fn();
+  };
+
+  useEffect(() => {
+    if (status !== 'ready') return;
+    const t = window.setTimeout(() => once(`z${zone}`, () => sigSay(ZONE_LINES[zone], zone === 4 ? 'happy' : 'idle')), 900);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zone, status]);
+
+  useEffect(() => {
+    if (zone === 1 && mode === 'overview') once(`p${active}`, () => sigSay(PROJECT_LINES[active], 'think'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, zone, mode]);
+
+  useEffect(() => {
+    if (mode === 'inspect') once('inspect', () => sigSay('Taken apart. Pick a part, or press Esc to go back.', 'surprised'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
+
+  useEffect(() => {
+    if (mode !== 'inspect') return;
+    const l = lineForFocus(active, focus);
+    if (l) once(`f${active}:${focus}`, () => sigSay(l[0], l[1]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focus, mode, active]);
+
+  useEffect(() => {
+    const l = decisionLine(decision);
+    if (l) once(`d${decision}`, () => sigSay(l, 'think'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [decision]);
+
+  useEffect(() => {
+    if (timeline) once('timeline', () => sigSay('Dates are from the résumé. Hackathons are year-level only.', 'idle'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeline]);
+
+  // One gentle nudge after a long quiet stretch.
+  useEffect(() => {
+    if (status !== 'ready') return;
+    const reset = () => {
+      window.clearTimeout(idle.current);
+      idle.current = window.setTimeout(() => once('idle', () => sigSay('Still here. Try "Inspect system".', 'sleepy')), 16000);
+    };
+    reset();
+    window.addEventListener('scroll', reset, { passive: true });
+    window.addEventListener('pointerdown', reset);
+    return () => {
+      window.clearTimeout(idle.current);
+      window.removeEventListener('scroll', reset);
+      window.removeEventListener('pointerdown', reset);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  if (status !== 'ready') return null;
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={sigPoke}
+        aria-label="Poke Sig, the guide"
+        className="fixed z-30 -translate-x-1/2 -translate-y-1/2 rounded-2xl"
+        style={{ left: 'var(--sig-x, 80vw)', top: 'var(--sig-y, 70vh)', width: 'calc(var(--sig-s, 80px) * 1.3)', height: 'calc(var(--sig-s, 80px) * 1.6)', minWidth: 52, minHeight: 52 }}
+      />
+      <div
+        className="sig-bubble pointer-events-none fixed z-30 w-max max-w-[min(17rem,calc(100vw-1.5rem))]"
+        style={{ left: 'clamp(0.75rem, calc(var(--sig-x, 80vw) - 17rem + 3rem), calc(100vw - 17rem - 0.75rem))' }}
+      >
+        <div aria-live="polite" role="status">
+          {say && (
+            <div key={say.id} className="bubble pointer-events-auto !static">
+              <p className="!m-0 text-[0.9rem] leading-snug">
+                <span className="sr-only">Sig says: </span>
+                {say.text}
+              </p>
+              {say.offer && (
+                <div className="mt-2 flex flex-col gap-1.5">
+                  {OFFERS.map((o) => (
+                    <button key={o.label} type="button" className="min-h-10 rounded-full bg-soda px-3 text-left text-[0.8rem] font-semibold text-blueberry" onClick={() => sigTake(o.project)}>
+                      {o.label} <span className="text-citron">→</span>
+                    </button>
+                  ))}
+                  <button type="button" className="min-h-10 rounded-full px-3 text-left text-[0.8rem] font-medium text-canvas/75 underline" onClick={sigDismiss}>
+                    No thanks
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+      <button
+        type="button"
+        aria-pressed={quiet}
+        onClick={() => setQuiet(!quiet)}
+        className="fixed bottom-3 right-3 z-30 hidden min-h-9 items-center rounded-full border border-line bg-canvas/90 px-3 font-mono text-[0.7rem] uppercase tracking-wider text-muted hover:text-blueberry md:inline-flex"
+      >
+        Sig: {quiet ? 'quiet' : 'on'}
+      </button>
+    </>
+  );
+}
+
+export const mute = () => world.get().quiet;

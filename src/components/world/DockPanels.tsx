@@ -1,4 +1,6 @@
-import { BASIS_LABEL, IMAC_REGIONS, JOURNEY, TRANSACTIONS, TX_BAND, TX_CATEGORIES } from '../../data/artifacts';
+import { useEffect, useState } from 'react';
+import { BASIS_LABEL, IMAC_REGIONS, JOURNEY } from '../../data/artifacts';
+import { REST_STEP, STEPS, type DemoId } from '../../mock/flows';
 import { getProjectById } from '../../data/projects';
 import { world, useWorld } from '../../world/store';
 
@@ -73,118 +75,91 @@ export function ImacPanel() {
   );
 }
 
-export function FitPanel() {
+/**
+ * Playback for the two recreated product demos. The scene shows the frame for the chosen step; this panel
+ * owns the controls and says in words what is happening at that step, so nothing depends on watching.
+ */
+function DemoPanel({ demo, intro }: { demo: DemoId; intro: string }) {
   const focus = useWorld((s) => s.focus);
-  const used = useWorld((s) => s.fitUsed);
-  const confirmed = useWorld((s) => s.fitConfirmed);
-  const rows = getProjectById('fit-check')!.example!.rows;
-  const idx = rows.findIndex((_, i) => `req-${i}` === focus);
-  const row = idx >= 0 ? rows[idx] : null;
-  const summary = rows.flatMap((r, i) => {
-    const id = `req-${i}`;
-    if (r.state === 'Direct' && used[id]) return [{ text: r.requirement, tag: 'retrieved from profile' }];
-    if (r.state === 'Related' && used[id]) return [{ text: `Adjacent experience: ${r.evidence.replace(/^"|"$/g, '')}`, tag: 'retrieved, not a claim of the skill' }];
-    if (r.state === 'Needs confirmation' && confirmed[id]) return [{ text: r.requirement, tag: 'confirmed by you' }];
-    return [];
-  });
+  const steps = STEPS[demo];
+  const m = /^step-(\d+)$/.exec(focus ?? '');
+  const step = m ? Number(m[1]) : REST_STEP[demo];
+  const [playing, setPlaying] = useState(false);
+  const go = (n: number) => world.set({ focus: `step-${Math.max(0, Math.min(steps.length - 1, n))}` });
+
+  useEffect(() => {
+    if (!playing) return;
+    if (step >= steps.length - 1) {
+      setPlaying(false);
+      return;
+    }
+    const t = window.setTimeout(() => go(step + 1), world.get().reduced ? 2600 : 1700);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, step]);
+
   return (
     <div className="space-y-4">
-      <p className="label">Synthetic profile. Select a requirement, or its slab in the scene.</p>
-      <Chips label="Requirements" focus={focus} items={rows.map((r, i) => ({ id: `req-${i}`, label: r.requirement, n: String(i + 1) }))} />
-      <div aria-live="polite" className="note min-h-[6rem]">
-        {row && focus ? (
-          <div key={focus} className="swap">
-            <p className="label">{row.state}</p>
-            <p className="mt-1 text-muted">{row.explanation}</p>
-            {row.state === 'Not found' ? (
-              <p className="mt-2 text-sm">Nothing to use. It stays out unless evidence is added.</p>
-            ) : (
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                {row.state === 'Needs confirmation' && <span className="w-full text-sm font-medium">Asks: “{row.question}”</span>}
-                <button
-                  type="button"
-                  className="chip"
-                  aria-pressed={row.state === 'Needs confirmation' ? !!confirmed[focus] : !!used[focus]}
-                  onClick={() =>
-                    row.state === 'Needs confirmation'
-                      ? world.set({ fitConfirmed: { ...confirmed, [focus]: !confirmed[focus] } })
-                      : world.set({ fitUsed: { ...used, [focus]: !used[focus] } })
-                  }
-                >
-                  {row.state === 'Needs confirmation' ? (confirmed[focus] ? 'Confirmed by you' : 'Yes, confirm this') : used[focus] ? 'In the summary' : 'Use in the summary'}
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <p className="text-muted">Solid thread: direct. Dashed: related. Dotted: needs you. No thread: not found.</p>
-        )}
+      <p className="label">{intro}</p>
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          className="btn btn-solid !min-h-11 text-sm"
+          onClick={() => {
+            if (playing) setPlaying(false);
+            else {
+              if (step >= steps.length - 1) go(0);
+              else if (!m) go(0);
+              setPlaying(true);
+            }
+          }}
+        >
+          {playing ? 'Pause' : step >= steps.length - 1 ? 'Replay' : m ? 'Play' : 'Play the flow'}
+        </button>
+        <button type="button" className="chip" aria-label="Previous step" disabled={step === 0} onClick={() => { setPlaying(false); go(step - 1); }}>
+          ←
+        </button>
+        <button type="button" className="chip" aria-label="Next step" disabled={step >= steps.length - 1} onClick={() => { setPlaying(false); go(step + 1); }}>
+          →
+        </button>
+        <span className="label">
+          Step {step + 1} of {steps.length}
+        </span>
       </div>
-      <div className="surface p-3">
-        <p className="label">Application summary, built live</p>
-        {summary.length === 0 ? (
-          <p className="mt-1 text-sm">Empty. Nothing has been used or confirmed yet.</p>
-        ) : (
-          <ul className="mt-1 space-y-1">
-            {summary.map((s) => (
-              <li key={s.text} className="swap text-sm">
-                <span className="font-medium">{s.text}</span> <span className="label">· {s.tag}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-        <p className="mt-2 text-xs text-muted">
-          {rows.length - summary.length} of {rows.length} requirements are not in the summary, and nothing unsupported fills the gap.
+      <div aria-live="polite" className="note min-h-[4.5rem]">
+        <p key={step} className="swap text-muted">
+          {steps[step].caption}
         </p>
       </div>
+      <ol className="flex flex-wrap gap-1" aria-label="Steps">
+        {steps.map((_, i) => (
+          <li key={i}>
+            <button
+              type="button"
+              aria-label={`Step ${i + 1}`}
+              aria-current={i === step}
+              onClick={() => {
+                setPlaying(false);
+                go(i);
+              }}
+              className="grid h-9 w-7 place-items-center"
+            >
+              <span className={`block h-2 rounded-full transition-all ${i === step ? 'w-5 bg-soda' : 'w-2 bg-blueberry/30'}`} />
+            </button>
+          </li>
+        ))}
+      </ol>
+      <p className="text-xs text-muted">Interface recreated from the project description on invented data. Not a screenshot of the product.</p>
     </div>
   );
 }
 
+export function FitPanel() {
+  return <DemoPanel demo="fit" intro="A job listing, a Should I apply? button, and what happens next." />;
+}
+
 export function TriagePanel() {
-  const focus = useWorld((s) => s.focus);
-  const decisions = useWorld((s) => s.txDecisions);
-  const tx = TRANSACTIONS.find((t) => t.id === focus) ?? null;
-  const decide = (id: string, category: string) => world.set({ txDecisions: { ...decisions, [id]: category } });
-  const waiting = TRANSACTIONS.filter((t) => t.band !== 'familiar' && !decisions[t.id]).length;
-  return (
-    <div className="space-y-4">
-      <p className="label">Invented transactions. Select one, or its slab in the scene.</p>
-      <Chips label="Transactions" focus={focus} items={TRANSACTIONS.map((t, i) => ({ id: t.id, label: t.description, n: String(i + 1) }))} />
-      <div aria-live="polite" className="note min-h-[6.5rem]">
-        {tx ? (
-          <div key={tx.id} className="swap space-y-2">
-            <p className="text-muted">{tx.match}</p>
-            <p className="text-sm">
-              <span className="font-semibold">{TX_BAND[tx.band].label}.</span> {TX_BAND[tx.band].route}
-            </p>
-            <div className="flex flex-wrap items-center gap-2">
-              {tx.suggestion && (
-                <button type="button" className="chip" aria-pressed={decisions[tx.id] === tx.suggestion} onClick={() => decide(tx.id, tx.suggestion!)}>
-                  {tx.band === 'familiar' ? 'Accept' : 'Confirm'} “{tx.suggestion}”
-                </button>
-              )}
-              <label className="flex items-center gap-2 text-sm">
-                <span className="label">{tx.suggestion ? 'Or correct to' : 'Choose'}</span>
-                <select
-                  className="min-h-10 rounded-[4px] border border-line bg-paper px-2"
-                  value={decisions[tx.id] && decisions[tx.id] !== tx.suggestion ? decisions[tx.id] : ''}
-                  onChange={(e) => e.target.value && decide(tx.id, e.target.value)}
-                >
-                  <option value="">Select…</option>
-                  {TX_CATEGORIES.map((c) => (
-                    <option key={c}>{c}</option>
-                  ))}
-                </select>
-              </label>
-            </div>
-          </div>
-        ) : (
-          <p className="text-muted">The routine ones are quick; the unclear ones come to a person. {waiting} of {TRANSACTIONS.length} are waiting for a reviewer.</p>
-        )}
-      </div>
-    </div>
-  );
+  return <DemoPanel demo="transactions" intro="A bank feed, an Auto-categorise button, and a review lane." />;
 }
 
 export function TinyPanel() {

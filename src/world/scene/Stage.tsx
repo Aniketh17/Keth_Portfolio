@@ -1,18 +1,22 @@
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Group, Mesh, MeshBasicMaterial, MeshLambertMaterial, type Texture } from 'three';
-import { scrollToId, selectProject, inspect } from '../env';
+import { selectProject, inspect } from '../env';
 import { CAROUSEL_SPACING, HERO_ART, STAGE_ART_W, ZONE } from '../layout';
 import { frame, world } from '../store';
 import type { WorldTextures } from '../textures';
 import { projects } from '../../data/projects';
 import { anim, BOX, BOX_EDGES, damp, palette, PLANE } from './common';
-import { FitDetail, ImacDetail, TinyDetail, TriageDetail } from './details';
+import { DEMO_ASPECT, REST_STEP } from '../../mock/flows';
+import { DemoDetail, ImacDetail, TinyDetail } from './details';
 
-const ASPECT: Record<string, number> = { 'imac-advisor': 1704 / 1030, 'transaction-coding': 1600 / 967, 'fit-check': 1600 / 967, 'tiny-paws': 1280 / 800 };
+const ASPECT: Record<string, number> = { 'imac-advisor': 1318 / 805, 'transaction-coding': DEMO_ASPECT, 'fit-check': DEMO_ASPECT, 'tiny-paws': 1280 / 800 };
 
 function posterTexture(id: string, t: WorldTextures): Texture {
-  return id === 'imac-advisor' ? t.imac : id === 'transaction-coding' ? t.tx : id === 'fit-check' ? t.fit : t.tiny[0];
+  if (id === 'imac-advisor') return t.imac;
+  if (id === 'tiny-paws') return t.tiny[0];
+  const demo = id === 'fit-check' ? 'fit' : 'transactions';
+  return t.posters[demo];
 }
 
 const setCursor = (c: string) => {
@@ -64,7 +68,8 @@ function StageProject({ i, textures }: { i: number; textures: WorldTextures }) {
     const spread = s.small ? 0.66 : 1;
     const push = isActive ? 1 : 1 + w * 0.5;
     g.position.set(d * CAROUSEL_SPACING * spread * push, 1.3, ZONE.stage - Math.min(ad, 2) * 1.5 - (isActive ? 0 : w * 1.4));
-    g.rotation.y = -d * 0.32 + (isActive ? -0.1 * w : 0);
+    // Artifacts that carry readable text face the viewer squarely; only the neighbours turn away a little.
+    g.rotation.y = -d * 0.22 * (1 - insp);
     const sc = (1 - Math.min(ad, 2) * 0.15) * (1 + 0.12 * insp) * (hover.current && !isActive ? 1.03 : 1);
     g.scale.setScalar(sc);
     const fade = (1 - Math.min(ad, 1) * 0.5) * (isActive ? 1 - Math.min(1, insp * 4) : 1 - w * 0.7);
@@ -98,8 +103,8 @@ function StageProject({ i, textures }: { i: number; textures: WorldTextures }) {
       </group>
       <group ref={detail} visible={false}>
         {project.id === 'imac-advisor' && <ImacDetail index={i} texture={textures.imac} />}
-        {project.id === 'fit-check' && <FitDetail index={i} />}
-        {project.id === 'transaction-coding' && <TriageDetail index={i} />}
+        {project.id === 'fit-check' && <DemoDetail index={i} atlas={textures.fitAtlas} rest={REST_STEP.fit} />}
+        {project.id === 'transaction-coding' && <DemoDetail index={i} atlas={textures.txAtlas} rest={REST_STEP.transactions} />}
         {project.id === 'tiny-paws' && <TinyDetail index={i} textures={textures.tiny} />}
       </group>
       {/* Active marker: a coral underline beneath whichever project is in front. */}
@@ -135,47 +140,33 @@ export function Stage({ textures }: { textures: WorldTextures }) {
   );
 }
 
-/** The featured artifact at arrival. It drifts a little, answers the pointer, and clicking it goes to the work. */
-export function HeroArtifact({ textures }: { textures: WorldTextures }) {
-  const g = useRef<Group>(null);
-  const hover = useRef(false);
+/**
+ * Arrival shows the world, not a screenshot: four empty frames stand down the route, one per project, so the
+ * visitor can see where they are about to go. The real artifacts only appear when the camera gets to them.
+ */
+export function HeroFrames() {
   const pal = useMemo(() => palette(), []);
-  useFrame(({ clock }, dt) => {
-    const group = g.current;
-    if (!group) return;
+  const g = useRef<Group>(null);
+  useFrame(({ clock }) => {
+    if (!g.current) return;
     const t = world.get().reduced ? 0 : clock.elapsedTime;
-    group.position.y = HERO_ART.pos[1] + Math.sin(t * 0.5) * 0.06;
-    group.rotation.y = damp(group.rotation.y, HERO_ART.rotY + frame.pointerX * -0.08, 4, dt);
-    group.scale.setScalar(damp(group.scale.x, hover.current ? 1.025 : 1, 6, dt));
+    g.current.children.forEach((c, i) => {
+      c.position.y = 1.15 + Math.sin(t * 0.4 + i) * 0.05;
+    });
+    g.current.rotation.y = damp(g.current.rotation.y, frame.pointerX * -0.05, 4, 0.016);
   });
-  const h = HERO_ART.width / (1704 / 1030);
   return (
-    <group
-      ref={g}
-      position={HERO_ART.pos}
-      onClick={(e) => {
-        e.stopPropagation();
-        scrollToId('work');
-      }}
-      onPointerOver={() => {
-        hover.current = true;
-        setCursor('pointer');
-      }}
-      onPointerOut={() => {
-        hover.current = false;
-        setCursor('');
-      }}
-    >
-      <Poster texture={textures.imac} width={HERO_ART.width} aspect={1704 / 1030} />
-      {/* Two quiet ghost frames behind it, to give the arrival depth. */}
-      {[1, 2].map((k) => (
-        <lineSegments key={k} geometry={BOX_EDGES} position={[0.5 * k, 0.2 * k, -1.6 * k]} scale={[HERO_ART.width, h, 0.01]}>
-          <lineBasicMaterial color={pal.blueberry} transparent opacity={0.35 / k} />
-        </lineSegments>
+    <group ref={g}>
+      {[0, 1, 2, 3].map((k) => (
+        <group key={k} position={[HERO_ART.pos[0] + k * 0.55, 1.15, HERO_ART.pos[2] - k * 4.2]}>
+          <lineSegments geometry={BOX_EDGES} scale={[HERO_ART.width * (1 - k * 0.04), HERO_ART.width / 1.6, 0.01]}>
+            <lineBasicMaterial color={pal.blueberry} transparent opacity={0.85 - k * 0.17} />
+          </lineSegments>
+          <mesh geometry={BOX} position={[-HERO_ART.width / 2 + 0.18, HERO_ART.width / 3.2 + 0.2, 0]} scale={[0.1, 0.1, 0.05]} rotation={[0, 0, Math.PI / 4]}>
+            <meshBasicMaterial color={k === 0 ? pal.soda : pal.blueberry} />
+          </mesh>
+        </group>
       ))}
-      <mesh geometry={BOX} position={[-HERO_ART.width / 2 + 0.2, h / 2 + 0.28, 0.06]} scale={[0.14, 0.14, 0.06]}>
-        <meshBasicMaterial color={pal.soda} />
-      </mesh>
     </group>
   );
 }

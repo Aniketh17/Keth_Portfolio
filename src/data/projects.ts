@@ -96,8 +96,8 @@ export const projects: Project[] = [
     image: {
       src: 'assets/imac_main.webp',
       alt: 'The IMAC Immunisation Advisor: a query, a clinical summary with a confidence badge, and source grounding cards',
-      width: 1704,
-      height: 1030,
+      width: 1318,
+      height: 805,
     },
     links: [{ label: 'Project documentation', url: 'https://nishhh-03.github.io/COMPSCI-714_Hackathon/' }],
     status: 'Hackathon project',
@@ -171,7 +171,7 @@ export const projects: Project[] = [
       'Reading a job listing, people ask "should I apply?" They overlook relevant experience because an old role used different words, or assume they lack a skill without noticing adjacent experience.',
     whyItMatters:
       'A match percentage hides the reasoning. Showing the evidence behind each requirement lets the applicant decide, and keeps the application honest.',
-    role: 'Built as a feature during a ZEIL hackathon.',
+    role: 'Built independently at a ZEIL hackathon: an individual entry, with no team.',
     approach: [
       'Analyse the job listing and split compound requirements into individual claims.',
       "Retrieve relevant evidence from the applicant's profile for each claim.",
@@ -229,9 +229,9 @@ export const projects: Project[] = [
       ],
     },
     example: {
-      title: 'Illustrative review',
+      title: 'A review, step by step',
       disclaimer:
-        'Synthetic example for illustration: a fictional profile and employer, not a screenshot of the product.',
+        'Interface recreated from the project description, on a fictional profile and employer. It is not a screenshot of the product.',
       rows: [
         {
           requirement: 'Built and maintained REST APIs',
@@ -246,14 +246,14 @@ export const projects: Project[] = [
           explanation: 'Working with queues is adjacent to event-driven design but does not establish it.',
         },
         {
-          requirement: 'Led a team of engineers',
+          requirement: 'Worked with PostgreSQL in production',
           state: 'Needs confirmation',
-          evidence: '"Coordinated delivery for a small project group"',
-          explanation: 'This hints at leadership but does not say how many people were involved.',
-          question: 'How many people did you coordinate, and in what capacity?',
+          evidence: '"Wrote SQL for the reporting dashboards"',
+          explanation: 'This shows SQL work, but not which database engine was used or whether it was in production.',
+          question: 'Which database engine did those dashboards run on?',
         },
         {
-          requirement: 'Kubernetes in production',
+          requirement: 'Experience deploying to AWS',
           state: 'Not found',
           evidence: 'None in the profile',
           explanation: 'Left out of the summary unless the applicant confirms relevant experience.',

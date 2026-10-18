@@ -38,7 +38,7 @@ export const skillGroups: SkillGroup[] = [
       { name: 'Bi-encoder and cross-encoder retrieval', usedIn: 'IMAC two-stage pipeline', evidence: { projectId: 'imac-advisor', focusId: 'match', label: 'Reranker match scores' } },
       { name: 'Azure OpenAI', usedIn: 'IMAC answer synthesis', evidence: { projectId: 'imac-advisor', focusId: 'answer', label: 'Clinical summary' } },
       { name: 'Confidence scoring and review paths', usedIn: 'IMAC Advisor, transaction coding', evidence: { projectId: 'imac-advisor', focusId: 'confidence', label: 'Confidence badge' } },
-      { name: 'Evidence-based LLM design', usedIn: 'Fit Check', evidence: { projectId: 'fit-check', focusId: 'req-2', label: 'Fit Check evidence' } },
+      { name: 'Evidence-based LLM design', usedIn: 'Fit Check', evidence: { projectId: 'fit-check', focusId: 'step-8', label: 'Fit Check report' } },
     ],
   },
   {
@@ -109,7 +109,7 @@ export const timeline: TimelineItem[] = [
     points: [
       'Built Spring Boot REST APIs for a live workforce-management product, cutting manual processing time by 20%.',
       'Refactored monolithic services into microservices for independent deployment and scaling.',
-      'Optimised PostgreSQL schemas and queries.',
+      'Optimised PostgreSQL schemas and queries; the résumé reports a 15% drop in average API response time.',
     ],
   },
   {
