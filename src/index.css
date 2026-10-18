@@ -924,3 +924,20 @@ body[data-world='off'] header.fixed {
     min-height: 2.25rem;
   }
 }
+
+/* Experience, achievement and education rows respond to hover, focus and tap. */
+.timeline-row {
+  position: relative;
+  padding-inline: 0.75rem;
+  margin-inline: -0.75rem;
+  border-radius: 0.5rem;
+  cursor: default;
+  transition: background var(--dur-fast), box-shadow var(--dur-fast);
+}
+.timeline-row[data-active='true'] {
+  background: rgb(var(--canvas-rgb) / 0.09);
+  box-shadow: inset 3px 0 0 var(--pop-soda);
+}
+body[data-world='off'] .timeline-row[data-active='true'] {
+  background: rgb(var(--canvas-rgb) / 0.09);
+}

@@ -68,9 +68,17 @@ export function Approach() {
 }
 
 function Row({ item }: { item: TimelineItem }) {
+  const active = useWorld((s) => s.timeline === item.id);
   const select = () => world.set({ timeline: item.id });
   return (
-    <li className="grid gap-1 border-t border-line py-5 md:grid-cols-[9rem_1fr] md:gap-6" onPointerEnter={select} onFocus={select} onClick={select}>
+    <li
+      className="timeline-row grid gap-1 border-t border-line py-5 md:grid-cols-[9rem_1fr] md:gap-6"
+      data-active={active ? 'true' : 'false'}
+      onPointerEnter={select}
+      onPointerLeave={() => world.set({ timeline: null })}
+      onFocus={select}
+      onClick={select}
+    >
       <p className="label pt-1">{item.period}</p>
       <div>
         <h4 className="text-lg font-semibold tracking-tight">{item.title}</h4>
