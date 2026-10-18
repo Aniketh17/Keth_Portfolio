@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { JOURNEY } from '../../data/artifacts';
 import { Stage, useFocus, type InspectorProps } from './shared';
 
@@ -12,12 +13,43 @@ const TAG_STYLE = { implemented: 'bg-canvas text-blueberry', mock: 'border borde
 export function JourneyInspector(props: InspectorProps) {
   const [focus, setFocus] = useFocus(props);
   const step = JOURNEY.find((s) => s.id === focus) ?? JOURNEY[0];
+  const idx = JOURNEY.indexOf(step);
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    if (!playing) return;
+    if (idx >= JOURNEY.length - 1) {
+      setPlaying(false);
+      return;
+    }
+    const t = window.setTimeout(() => setFocus(JOURNEY[idx + 1].id), 2000);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, idx]);
 
   return (
     <Stage title="The Tiny Paws journey" basis="visible">
+      <div className="mb-3">
+        <button
+          type="button"
+          className="chip"
+          onClick={() => {
+            // Play always starts from the first step.
+            if (playing) setPlaying(false);
+            else {
+              setFocus(JOURNEY[0].id);
+              setPlaying(true);
+            }
+          }}
+        >
+          {playing ? 'Pause' : 'Play from the start'}
+        </button>
+      </div>
       <div role="tablist" aria-label="Steps" className="flex flex-wrap gap-2">
         {JOURNEY.map((s, i) => (
-          <button key={s.id} role="tab" type="button" className="chip" aria-selected={step.id === s.id} onClick={() => setFocus(s.id)}>
+          <button key={s.id} role="tab" type="button" className="chip" aria-selected={step.id === s.id} onClick={() => {
+              setPlaying(false);
+              setFocus(s.id);
+            }}>
             <span className="font-mono text-xs">{i + 1}</span> {s.label}
           </button>
         ))}

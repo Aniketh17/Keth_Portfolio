@@ -8,7 +8,7 @@ import type { WorldTextures } from '../textures';
 import { projects } from '../../data/projects';
 import { anim, BOX, BOX_EDGES, damp, palette, PLANE } from './common';
 import { DEMO_ASPECT, REST_STEP } from '../../mock/flows';
-import { DemoDetail, ImacDetail, TinyDetail } from './details';
+import { DemoDetail, TinyDetail } from './details';
 
 const ASPECT: Record<string, number> = { 'imac-advisor': 1318 / 805, 'transaction-coding': DEMO_ASPECT, 'fit-check': DEMO_ASPECT, 'tiny-paws': 1280 / 800 };
 
@@ -102,7 +102,7 @@ function StageProject({ i, textures }: { i: number; textures: WorldTextures }) {
         <Poster texture={tex} width={STAGE_ART_W} aspect={aspect} matRef={(m) => (posterMat.current = m)} slabRef={(m) => (slabMat.current = m)} />
       </group>
       <group ref={detail} visible={false}>
-        {project.id === 'imac-advisor' && <ImacDetail index={i} texture={textures.imac} />}
+        {project.id === 'imac-advisor' && <DemoDetail index={i} atlas={textures.imacAtlas} rest={REST_STEP.imac} />}
         {project.id === 'fit-check' && <DemoDetail index={i} atlas={textures.fitAtlas} rest={REST_STEP.fit} />}
         {project.id === 'transaction-coding' && <DemoDetail index={i} atlas={textures.txAtlas} rest={REST_STEP.transactions} />}
         {project.id === 'tiny-paws' && <TinyDetail index={i} textures={textures.tiny} />}

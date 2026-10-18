@@ -162,6 +162,8 @@ export function watchWorld(): () => void {
     });
   };
   const onPointer = (e: PointerEvent) => {
+    frame.lookX = e.clientX;
+    frame.lookY = e.clientY;
     if (e.pointerType !== 'mouse') return;
     frame.pointerX = (e.clientX / window.innerWidth) * 2 - 1;
     frame.pointerY = (e.clientY / window.innerHeight) * 2 - 1;
@@ -174,6 +176,7 @@ export function watchWorld(): () => void {
   window.addEventListener('resize', remeasure);
   window.addEventListener('load', remeasure);
   window.addEventListener('pointermove', onPointer, { passive: true });
+  window.addEventListener('pointerdown', onPointer, { passive: true });
   window.addEventListener('keydown', onKey);
   motion.addEventListener('change', remeasure);
   const ro = new ResizeObserver(remeasure);
@@ -186,6 +189,7 @@ export function watchWorld(): () => void {
     window.removeEventListener('resize', remeasure);
     window.removeEventListener('load', remeasure);
     window.removeEventListener('pointermove', onPointer);
+    window.removeEventListener('pointerdown', onPointer);
     window.removeEventListener('keydown', onKey);
     motion.removeEventListener('change', remeasure);
     ro.disconnect();

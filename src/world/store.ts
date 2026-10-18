@@ -54,6 +54,11 @@ export interface FrameState {
   blend: number;
   pointerX: number;
   pointerY: number;
+  /** Last pointer position in pixels, from any pointer type (NaN until the first move). Sig looks at it. */
+  lookX: number;
+  lookY: number;
+  /** Incremented on every poke; Sig plays a different reaction each time. */
+  pokes: number;
   /** Scroll offsets that bound the sticky project stage. */
   stageStart: number;
   stageRange: number;
@@ -70,6 +75,9 @@ export const frame: FrameState = {
   blend: 0,
   pointerX: 0,
   pointerY: 0,
+  lookX: NaN,
+  lookY: NaN,
+  pokes: 0,
   stageStart: 0,
   stageRange: 1,
   waypoints: [{ s: 0, d: 0 }],

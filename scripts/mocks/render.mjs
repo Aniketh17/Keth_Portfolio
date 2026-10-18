@@ -3,7 +3,7 @@
  * public/mock/<demo>.webp, 3 columns x 4 rows of 1280x800 frames (3840x3200, within the 4096px limit phones allow).
  *
  * Needs the dev server (npm run dev) and, outside the project: npm i --no-save playwright sharp
- * Run:  node scripts/mocks/render.mjs [http://localhost:5173] [transactions|fit]
+ * Run:  node scripts/mocks/render.mjs [http://localhost:5173] [transactions|fit|imac]
  */
 import { chromium } from 'playwright';
 import sharp from 'sharp';
@@ -15,7 +15,7 @@ const W = 1280;
 const H = 800;
 const COLS = 3;
 const ROWS = 4;
-const DEMOS = { transactions: 'transactions', fit: 'fit' };
+const DEMOS = { transactions: 'transactions', fit: 'fit', imac: 'imac' };
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });

@@ -4,7 +4,7 @@
  * the live version, the captured frames and the 3D scene all show the same thing.
  */
 
-export type DemoId = 'transactions' | 'fit';
+export type DemoId = 'transactions' | 'fit' | 'imac';
 
 export interface Step {
   /** Short caption shown beside the demo (and read by screen readers). */
@@ -14,7 +14,7 @@ export interface Step {
 export const DEMO_SIZE = { w: 1280, h: 800 };
 export const DEMO_ASPECT = DEMO_SIZE.w / DEMO_SIZE.h;
 /** The step shown when the demo is at rest, before anyone plays it: the most informative frame. */
-export const REST_STEP: Record<DemoId, number> = { transactions: 7, fit: 8 };
+export const REST_STEP: Record<DemoId, number> = { transactions: 7, fit: 8, imac: 11 };
 
 export const TRANSACTION_STEPS: Step[] = [
   { caption: 'A bank feed of uncoded transactions, with an Auto-categorise button on top.' },
@@ -46,7 +46,22 @@ export const FIT_STEPS: Step[] = [
   { caption: 'The draft summary uses only claims that were retrieved and used, or confirmed. The unsupported one stays out.' },
 ];
 
-export const STEPS: Record<DemoId, Step[]> = { transactions: TRANSACTION_STEPS, fit: FIT_STEPS };
+export const IMAC_STEPS: Step[] = [
+  { caption: 'An empty advisor: a question box and a Search button, and nowhere for sources to appear yet.' },
+  { caption: 'A clinician starts typing a question.' },
+  { caption: 'The full question: the catch-up schedule and dose interval for Gardasil 9 in an immunocompetent 18-year-old.' },
+  { caption: 'Search is pressed. First, personal details are redacted and the question is classified.' },
+  { caption: 'Candidate passages are recalled from the guidelines quickly, by embedding similarity.' },
+  { caption: 'A slower cross-encoder reranks the candidates for precision.' },
+  { caption: 'The best passages appear first, each with its source ID and match score: 85% and 84% here.' },
+  { caption: 'A gate checks the sources are strong enough to answer. If they were not, the system would say so instead of guessing.' },
+  { caption: 'The answer starts to be written, from the retrieved passages only.' },
+  { caption: 'The first paragraph is complete.' },
+  { caption: 'The structured points follow, ending with "Advisor review required before clinical application."' },
+  { caption: 'The confidence badge shows High, 88%: how well the sources matched the question, not a guarantee the answer is right.' },
+];
+
+export const STEPS: Record<DemoId, Step[]> = { transactions: TRANSACTION_STEPS, fit: FIT_STEPS, imac: IMAC_STEPS };
 
 /* ----------------------------- Transaction data (fictional, a small farm business) ----------------------------- */
 

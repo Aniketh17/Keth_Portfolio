@@ -73,6 +73,7 @@ export interface WorldTextures {
   tiny: Texture[];
   fitAtlas: Texture;
   txAtlas: Texture;
+  imacAtlas: Texture;
   /** Carousel posters: the demo atlases framed on their most informative step. */
   posters: { fit: Texture; transactions: Texture };
 }
@@ -86,12 +87,14 @@ export function useWorldTextures(): WorldTextures {
   );
   const fitAtlas = useLoader(TextureLoader, `${BASE}mock/fit.webp`);
   const txAtlas = useLoader(TextureLoader, `${BASE}mock/transactions.webp`);
+  const imacAtlas = useLoader(TextureLoader, `${BASE}mock/imac.webp`);
   useMemo(() => {
     prep(imac);
     tiny.forEach(prep);
     prep(fitAtlas);
     prep(txAtlas);
-  }, [imac, tiny, fitAtlas, txAtlas]);
+    prep(imacAtlas);
+  }, [imac, tiny, fitAtlas, txAtlas, imacAtlas]);
   const posters = useMemo(() => {
     const fit = atlasView(fitAtlas);
     const transactions = atlasView(txAtlas);
@@ -99,5 +102,5 @@ export function useWorldTextures(): WorldTextures {
     setAtlasStep(transactions, REST_STEP.transactions);
     return { fit, transactions };
   }, [fitAtlas, txAtlas]);
-  return { imac, tiny, fitAtlas, txAtlas, posters };
+  return { imac, tiny, fitAtlas, txAtlas, imacAtlas, posters };
 }

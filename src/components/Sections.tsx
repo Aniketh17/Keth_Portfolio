@@ -120,11 +120,17 @@ export function About() {
               </div>
             ))}
           </dl>
-          <Group title="Experience" items={experience} />
-          <Group title="Achievements" items={achievements} />
-          <Group title="Education" items={education} />
+          <div data-sig="experience">
+            <Group title="Experience" items={experience} />
+          </div>
+          <div data-sig="achievements">
+            <Group title="Achievements" items={achievements} />
+          </div>
+          <div data-sig="education">
+            <Group title="Education" items={education} />
+          </div>
 
-          <div className="mt-8">
+          <div className="mt-8" data-sig="skills">
             <h3 className="label !text-blueberry">Skills, and where each was used</h3>
             <div className="mt-3 border-b border-line">
               {skillGroups.map((g) => {
@@ -185,6 +191,7 @@ export function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-title" className="chapter-soda pointer-events-auto relative z-10 scroll-mt-16">
       <div className="wrap pb-10 pt-20 lg:pt-28">
+        <div className="contact-card">
         <p className="label eyebrow !text-blueberry/70">04 · Contact</p>
         <h2 id="contact-title" className="h-mega mt-4">
           Say hello.
@@ -203,7 +210,7 @@ export function Contact() {
             {copied ? 'Copied.' : ''}
           </span>
         </div>
-        <div className="mt-16 grid gap-8 border-t border-blueberry/25 pt-8 sm:grid-cols-3">
+        <div className="mt-10 grid gap-8 border-t border-blueberry/25 pt-6 sm:grid-cols-3">
           <div>
             <p className="label !text-blueberry/70">Elsewhere</p>
             <ul className="mt-2">
@@ -228,7 +235,7 @@ export function Contact() {
               </li>
             </ul>
           </div>
-          <div>
+          <div className="contact-hide">
             <p className="label !text-blueberry/70">Work</p>
             <ul className="mt-2">
               {projects.map((p) => (
@@ -240,13 +247,14 @@ export function Contact() {
               ))}
             </ul>
           </div>
-          <div>
+          <div className="contact-hide">
             <p className="label !text-blueberry/70">Credits</p>
             <p className="mt-2 text-sm">Built by hand in Auckland with React and three.js. Sig is an original character.</p>
           </div>
         </div>
-        <p className="mt-12 text-[clamp(2.2rem,8vw,6rem)] leading-none tracking-tight">{profile.fullName}</p>
-        <p className="label mt-2 pb-6 !text-blueberry/70">© 2026 · {profile.location}</p>
+        <p className="contact-hide mt-12 text-[clamp(2.2rem,8vw,6rem)] leading-none tracking-tight">{profile.fullName}</p>
+        <p className="label mt-4 !text-blueberry/70">© 2026 · {profile.location}</p>
+        </div>
       </div>
     </section>
   );

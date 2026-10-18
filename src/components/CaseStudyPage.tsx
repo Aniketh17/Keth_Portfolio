@@ -4,7 +4,7 @@ import type { Project } from '../data/types';
 import { closeProject, projectHref } from '../lib/route';
 import { ExplodedFlow } from './Artifact';
 import { Inspector } from './inspectors/Inspector';
-import { ExternalLink, projectLinks } from './ui';
+import { ExternalLink, Screenshot, projectLinks } from './ui';
 
 function usePageMeta(title: string, description: string) {
   useEffect(() => {
@@ -69,6 +69,15 @@ function CaseStudy({ project }: { project: Project }) {
         </div>
       </header>
 
+      {project.id === 'imac-advisor' && project.image && (
+        <figure className="surface mb-6 overflow-hidden">
+          <Screenshot project={project} eager />
+          <figcaption className="border-t border-line px-4 py-3 text-sm text-muted">
+            <span className="label">Real interface · </span>
+            {project.image.alt}
+          </figcaption>
+        </figure>
+      )}
       <Inspector project={project} />
 
       {(project.role || project.technologies.length > 0) && (

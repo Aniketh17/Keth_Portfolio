@@ -715,15 +715,46 @@ body[data-world='on'] .sheet.sheet-dark .label.\!text-blueberry {
   }
 }
 .sig-bubble {
-  top: calc(var(--sig-y, 70vh) - var(--sig-s, 80px) * 0.95);
+  top: calc(var(--sig-y, 70vh) - var(--sig-s, 80px) * 1.12);
   transform: translateY(-100%);
 }
 [data-sig-low='0'] .sig-bubble {
-  top: calc(var(--sig-y, 70vh) + var(--sig-s, 80px) * 0.85);
+  top: calc(var(--sig-y, 70vh) + var(--sig-s, 80px) * 0.78);
   transform: none;
 }
 [data-sig-low='0'] .sig-bubble .bubble::after {
   top: -0.4rem;
   bottom: auto;
   border-radius: 0.2rem 0 0 0;
+}
+
+/* With the 3D world running, Contact is a coral card on the left so the world (and Sig) stays visible on the right. */
+body[data-world='on'] #contact {
+  background: transparent;
+  color: var(--blueberry);
+  pointer-events: none;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+}
+body[data-world='on'] #contact > .wrap {
+  padding-block: 0 2.25rem;
+}
+body[data-world='on'] #contact .contact-card {
+  pointer-events: auto;
+  background: var(--pop-soda);
+  border-radius: var(--radius);
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  max-width: 46rem;
+}
+body[data-world='on'] #contact .h-mega {
+  font-size: clamp(3rem, 8vw, 6.5rem);
+}
+@media (max-width: 640px) {
+  body[data-world='on'] .contact-hide {
+    display: none;
+  }
+  body[data-world='on'] #contact .contact-card {
+    padding: 1.25rem;
+  }
 }

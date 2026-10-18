@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { OFFERS, decisionLine, lineForFocus, loadQuiet, setQuiet, sigDismiss, sigPoke, sigSay, sigTake, PROJECT_LINES, ZONE_LINES } from '../../world/sig';
+import { OFFERS, SECTION_LINES, decisionLine, lineForFocus, loadQuiet, setQuiet, sigDismiss, sigPoke, sigSay, sigTake, PROJECT_LINES, ZONE_LINES } from '../../world/sig';
 import { useWorld, world } from '../../world/store';
 
 /**
@@ -42,7 +42,7 @@ export function SigVoice() {
   }, [active, zone, mode]);
 
   useEffect(() => {
-    if (mode === 'inspect') once('inspect', () => sigSay('Taken apart. Pick a part, or press Esc to go back.', 'surprised'));
+    if (mode === 'inspect') once('inspect', () => sigSay('Pulled apart. Poke around, or press Esc to put it back together.', 'surprised'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
@@ -60,16 +60,35 @@ export function SigVoice() {
   }, [decision]);
 
   useEffect(() => {
-    if (timeline) once('timeline', () => sigSay('Dates are from the résumé. Hackathons are year-level only.', 'idle'));
+    if (timeline) once('timeline', () => sigSay('Every bar is a chapter. Hover one to see where it sits.', 'idle'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeline]);
+
+  // Sub-sections announce themselves as they scroll into view (experience, achievements, education, skills).
+  useEffect(() => {
+    if (status !== 'ready') return;
+    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-sig]'));
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const key = (e.target as HTMLElement).dataset.sig ?? '';
+          const line = SECTION_LINES[key];
+          if (e.isIntersecting && line) once(`s${key}`, () => sigSay(line[0], line[1]));
+        }
+      },
+      { rootMargin: '-35% 0px -45% 0px' },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   // One gentle nudge after a long quiet stretch.
   useEffect(() => {
     if (status !== 'ready') return;
     const reset = () => {
       window.clearTimeout(idle.current);
-      idle.current = window.setTimeout(() => once('idle', () => sigSay('Still here. Try "Inspect system".', 'sleepy')), 16000);
+      idle.current = window.setTimeout(() => once('idle', () => sigSay('Psst. "Inspect system" is where the fun is.', 'sleepy')), 16000);
     };
     reset();
     window.addEventListener('scroll', reset, { passive: true });
@@ -95,7 +114,7 @@ export function SigVoice() {
       />
       <div
         className="sig-bubble pointer-events-none fixed z-30 w-max max-w-[min(17rem,calc(100vw-1.5rem))]"
-        style={{ left: 'clamp(0.75rem, calc(var(--sig-x, 80vw) - 17rem + 3rem), calc(100vw - 17rem - 0.75rem))' }}
+        style={{ right: 'max(0.75rem, calc(100vw - var(--sig-x, 80vw) - 1.7rem))' }}
       >
         <div aria-live="polite" role="status">
           {say && (

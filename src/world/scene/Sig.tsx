@@ -4,6 +4,7 @@ import { CanvasTexture, CircleGeometry, ConeGeometry, Group, MathUtils, Mesh, Me
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { frame, world, type Mood } from '../store';
 import { readPalette } from '../palette';
+import { sigSay } from '../sig';
 import { BOX, damp, palette } from './common';
 
 /**
@@ -133,8 +134,8 @@ const PERCH: Record<'wide' | 'narrow', { overview: [number, number][]; inspect: 
     inspect: [0.86, 0.58],
   },
   narrow: {
-    overview: [[0.74, 0.62], [0.8, 0.44], [0.8, -0.6], [0.8, -0.6], [0.8, 0.7]],
-    inspect: [0.8, 0.5],
+    overview: [[0.7, 0.62], [0.7, 0.44], [0.72, -0.6], [0.72, -0.6], [0.72, 0.7]],
+    inspect: [0.7, 0.5],
   },
 };
 
@@ -145,6 +146,8 @@ export function Sig() {
   const handL = useRef<Mesh>(null);
   const handR = useRef<Mesh>(null);
   const diamond = useRef<Mesh>(null);
+  const plate = useRef<Mesh>(null);
+  const lift = useRef<Group>(null);
   const face = useMemo(faceTexture, []);
   const geo = useMemo(
     () => ({
@@ -156,7 +159,7 @@ export function Sig() {
     [],
   );
   const mats = useMemo(() => ({ blue: new MeshLambertMaterial({ color: pal.blueberry }), soda: new MeshBasicMaterial({ color: pal.soda }), shadow: new MeshBasicMaterial({ color: pal.blueberry, transparent: true, opacity: 0.16, depthWrite: false }) }), [pal]);
-  const st = useRef({ nx: 0.7, ny: 0, squash: 0, mood: 'idle' as Mood, blinkAt: 2.5, blinkEnd: 0, lastSay: 0, sleepAt: 0 });
+  const st = useRef({ nx: 0.7, ny: 0, squash: 0, mood: 'idle' as Mood, blinkAt: 2.5, blinkEnd: 0, lastSay: 0, sleepAt: 0, sx: 0, sy: 0, yaw: 0, pitch: 0, px: 0, py: 0, pokes: 0, pokeAt: -9, pokeKind: 0, scrollY: 0, fast: 0, hover: 0 });
   const tmp = useMemo(() => ({ fwd: new Vector3(), right: new Vector3(), up: new Vector3(), pos: new Vector3(), ndc: new Vector3() }), []);
 
   useEffect(
@@ -181,7 +184,29 @@ export function Sig() {
     me.ny = s.reduced ? ty : damp(me.ny, ty, 3.2, dt);
 
     // Mood, with a squash-and-stretch kick whenever it changes or he is given a new line.
-    const mood: Mood = s.say?.mood ?? (performance.now() - me.sleepAt > 0 && me.sleepAt > 0 ? 'sleepy' : 'idle');
+    // Pointer: how far is it from Sig, and is it close enough to count as hovering over him?
+    const haveLook = !Number.isNaN(frame.lookX);
+    const dxPx = haveLook ? frame.lookX - me.sx : 0;
+    const dyPx = haveLook ? frame.lookY - me.sy : 0;
+    const near = haveLook && Math.hypot(dxPx, dyPx) < Math.max(54, size.height * 0.11);
+    me.hover = s.reduced ? (near ? 1 : 0) : damp(me.hover, near ? 1 : 0, 10, dt);
+    // Scrolling fast makes him wide-eyed; it fades when the page settles.
+    const scrollSpeed = Math.abs(frame.scrollY - me.scrollY) / Math.max(dt, 0.001);
+    me.scrollY = frame.scrollY;
+    const wasFast = me.fast > 0.6;
+    me.fast = damp(me.fast, scrollSpeed > 2600 ? 1 : 0, scrollSpeed > 2600 ? 12 : 3, dt);
+    if (!wasFast && me.fast > 0.6) sigSay('Whoa, slow down. I get dizzy.', 'surprised', 2800);
+    // A new poke starts a reaction; each poke plays a different one.
+    if (frame.pokes !== me.pokes) {
+      me.pokes = frame.pokes;
+      me.pokeAt = clock.elapsedTime;
+      me.pokeKind = frame.pokes % 4;
+    }
+    const pokeT = s.reduced ? 1 : (clock.elapsedTime - me.pokeAt) / 0.8;
+    const poking = pokeT >= 0 && pokeT < 1;
+
+    const base: Mood = s.say?.mood ?? (performance.now() - me.sleepAt > 0 && me.sleepAt > 0 ? 'sleepy' : 'idle');
+    const mood: Mood = !s.say && me.fast > 0.6 ? 'surprised' : !s.say && me.hover > 0.5 ? 'happy' : base;
     if (s.say && s.say.id !== me.lastSay) {
       me.lastSay = s.say.id;
       me.squash = 1;
@@ -226,15 +251,31 @@ export function Sig() {
     const scale = halfH * 2 * frac;
     g.scale.setScalar(scale);
 
+    // Look at the pointer: turn toward it from where Sig actually is, and slide the face across the cube.
+    const lx = haveLook ? Math.max(-1, Math.min(1, dxPx / (size.width * 0.45))) : frame.pointerX * 0.5;
+    const ly = haveLook ? Math.max(-1, Math.min(1, dyPx / (size.height * 0.45))) : frame.pointerY * 0.5;
+    const follow = s.reduced ? 1 : 0.18;
+    me.yaw = MathUtils.lerp(me.yaw, lx * 0.75, follow);
+    me.pitch = MathUtils.lerp(me.pitch, ly * 0.45, follow);
+    me.px = MathUtils.lerp(me.px, lx * 0.085, follow);
+    me.py = MathUtils.lerp(me.py, -ly * 0.06, follow);
+    // The poke reaction: 0 hop, 1 spin, 2 shake, 3 flip of the hands.
+    const e = poking ? Math.sin(pokeT * Math.PI) : 0;
+    const spin = poking && me.pokeKind === 1 ? pokeT * Math.PI * 2 : 0;
+    const shake = poking && me.pokeKind === 2 ? Math.sin(pokeT * 40) * 0.25 * (1 - pokeT) : 0;
+    const hop = poking && me.pokeKind === 0 ? e * 0.55 : poking ? e * 0.12 : 0;
+    if (lift.current) lift.current.position.y = hop + me.hover * 0.04;
     if (body.current) {
-      body.current.rotation.y = MathUtils.lerp(body.current.rotation.y, frame.pointerX * 0.35, 0.08);
-      body.current.rotation.x = MathUtils.lerp(body.current.rotation.x, frame.pointerY * 0.18 - (mood === 'sleepy' ? 0.18 : 0), 0.08);
-      body.current.rotation.z = mood === 'think' ? 0.12 : mood === 'sleepy' ? -0.08 : 0;
+      body.current.rotation.y = me.yaw + spin;
+      body.current.rotation.x = me.pitch - (mood === 'sleepy' ? 0.18 : 0) - me.fast * 0.25;
+      body.current.rotation.z = shake + (mood === 'think' ? 0.12 : mood === 'sleepy' ? -0.08 : 0) + me.hover * Math.sin(t * 6) * 0.04;
       body.current.scale.set(1 + sq * 0.8, 1 - sq, 1 + sq * 0.8);
     }
-    const wave = mood === 'happy' ? Math.sin(t * 9) * 0.25 : 0;
-    if (handL.current) handL.current.position.set(-0.7, -0.12 + Math.sin(t * 1.9) * 0.06 + wave, 0.1);
-    if (handR.current) handR.current.position.set(0.7, -0.12 + Math.sin(t * 1.9 + 1.6) * 0.06 - wave, 0.1);
+    if (plate.current) plate.current.position.set(me.px, me.py, 0.51);
+    const wave = mood === 'happy' || me.hover > 0.5 ? Math.sin(t * 9) * 0.25 : 0;
+    const up = poking && me.pokeKind === 3 ? Math.sin(pokeT * Math.PI) * 0.7 : 0;
+    if (handL.current) handL.current.position.set(-0.7, -0.12 + Math.sin(t * 1.9) * 0.06 + wave + up, 0.1);
+    if (handR.current) handR.current.position.set(0.7, -0.12 + Math.sin(t * 1.9 + 1.6) * 0.06 - wave + up, 0.1);
     if (diamond.current) {
       diamond.current.rotation.y = t * 1.1;
       diamond.current.scale.setScalar(0.18 * (mood === 'think' ? 1.3 : 1));
@@ -244,6 +285,8 @@ export function Sig() {
     tmp.ndc.copy(g.position).project(camera);
     const sx = Math.round((tmp.ndc.x * 0.5 + 0.5) * size.width);
     const sy = Math.round((-tmp.ndc.y * 0.5 + 0.5) * size.height);
+    me.sx = sx;
+    me.sy = sy;
     const px = Math.round((scale * (size.height / (halfH * 2))) * 1);
     const root$ = document.documentElement.style;
     root$.setProperty('--sig-x', `${sx}px`);
@@ -257,9 +300,10 @@ export function Sig() {
   return (
     <group ref={root}>
       <mesh geometry={geo.shadow} material={mats.shadow} position={[0, -0.95, 0]} rotation={[-Math.PI / 2.4, 0, 0]} />
+      <group ref={lift}>
       <group ref={body}>
         <mesh geometry={geo.body} material={mats.blue} />
-        <mesh position={[0, 0, 0.51]}>
+        <mesh ref={plate} position={[0, 0, 0.51]}>
           <planeGeometry args={[0.76, 0.76]} />
           <meshBasicMaterial map={face} toneMapped={false} />
         </mesh>
@@ -269,6 +313,7 @@ export function Sig() {
         <mesh ref={diamond} geometry={BOX} material={mats.soda} position={[0, 0.96, 0]} scale={[0.18, 0.18, 0.18]} rotation={[0, 0, Math.PI / 4]} />
         <mesh ref={handL} geometry={geo.hand} material={mats.blue} />
         <mesh ref={handR} geometry={geo.hand} material={mats.blue} />
+      </group>
       </group>
     </group>
   );

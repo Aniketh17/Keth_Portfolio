@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { BASIS_LABEL, IMAC_REGIONS, JOURNEY } from '../../data/artifacts';
+import { JOURNEY } from '../../data/artifacts';
 import { REST_STEP, STEPS, type DemoId } from '../../mock/flows';
-import { getProjectById } from '../../data/projects';
 import { world, useWorld } from '../../world/store';
 
 /**
@@ -10,70 +9,6 @@ import { world, useWorld } from '../../world/store';
  * clicking the part in the scene selects the chip. All the explanatory text lives here, as normal page content.
  */
 
-const setFocus = (id: string | null) => world.set({ focus: id });
-const toggle = (focus: string | null, id: string) => setFocus(focus === id ? null : id);
-
-function Chips({ items, focus, label }: { items: { id: string; label: string; n?: string }[]; focus: string | null; label: string }) {
-  return (
-    <ul className="flex flex-wrap gap-2" aria-label={label}>
-      {items.map((it) => (
-        <li key={it.id}>
-          <button type="button" className="chip" aria-pressed={focus === it.id} onClick={() => toggle(focus, it.id)}>
-            {it.n && <span className="font-mono text-xs">{it.n}</span>} {it.label}
-          </button>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-export function ImacPanel() {
-  const focus = useWorld((s) => s.focus);
-  const steps = getProjectById('imac-advisor')?.diagrams?.[0]?.steps ?? [];
-  const region = IMAC_REGIONS.find((r) => r.id === focus) ?? null;
-  const pickStage = (i: number) => {
-    const r = IMAC_REGIONS.find((x) => x.stages.includes(i));
-    if (r) setFocus(r.id);
-  };
-  return (
-    <div className="space-y-4">
-      <p className="label">The real interface, taken apart. Select a part, or a layer in the scene.</p>
-      <Chips label="Regions" focus={focus} items={IMAC_REGIONS.map((r) => ({ id: r.id, label: r.label, n: String(r.n) }))} />
-      <div aria-live="polite" className="note min-h-[5.5rem]">
-        {region ? (
-          <div key={region.id} className="swap">
-            <p className="label">{BASIS_LABEL[region.basis]}</p>
-            <p className="mt-1 text-lg font-semibold tracking-tight">{region.label}</p>
-            <p className="mt-1 text-muted">{region.note}</p>
-          </div>
-        ) : (
-          <p className="text-muted">Four real layers: the framing, the question, the answer and the evidence. Each comes from a different stage of the pipeline.</p>
-        )}
-      </div>
-      <div>
-        <p className="label mb-2">The documented flow</p>
-        <ol className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
-          {steps.map((s, i) => {
-            const on = region?.stages.includes(i);
-            return (
-              <li key={s.label}>
-                <button
-                  type="button"
-                  aria-label={`${s.label}: ${s.detail}`}
-                  onClick={() => pickStage(i)}
-                  className={`min-h-12 w-full rounded-[4px] border px-2 text-left text-sm transition-colors ${on ? 'border-soda bg-soda' : 'border-line hover:border-blueberry'}`}
-                >
-                  <span className="font-mono text-[0.7rem] opacity-70">{String(i + 1).padStart(2, '0')}</span>
-                  <span className="block font-semibold leading-tight">{s.label}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ol>
-      </div>
-    </div>
-  );
-}
 
 /**
  * Playback for the two recreated product demos. The scene shows the frame for the chosen step; this panel
@@ -106,15 +41,15 @@ function DemoPanel({ demo, intro }: { demo: DemoId; intro: string }) {
           type="button"
           className="btn btn-solid !min-h-11 text-sm"
           onClick={() => {
+            // Play always starts from the first step, wherever the demo was left.
             if (playing) setPlaying(false);
             else {
-              if (step >= steps.length - 1) go(0);
-              else if (!m) go(0);
+              go(0);
               setPlaying(true);
             }
           }}
         >
-          {playing ? 'Pause' : step >= steps.length - 1 ? 'Replay' : m ? 'Play' : 'Play the flow'}
+          {playing ? 'Pause' : 'Play from the start'}
         </button>
         <button type="button" className="chip" aria-label="Previous step" disabled={step === 0} onClick={() => { setPlaying(false); go(step - 1); }}>
           ←
@@ -149,9 +84,13 @@ function DemoPanel({ demo, intro }: { demo: DemoId; intro: string }) {
           </li>
         ))}
       </ol>
-      <p className="text-xs text-muted">Interface recreated from the project description on invented data. Not a screenshot of the product.</p>
+      <p className="text-xs text-muted">{demo === 'imac' ? 'Recreated from the real screenshot: the question, answer, sources and scores are the ones visible in it.' : 'Interface recreated from the project description on invented data. Not a screenshot of the product.'}</p>
     </div>
   );
+}
+
+export function ImacPanel() {
+  return <DemoPanel demo="imac" intro="A question goes in; a cited answer and a confidence badge come out." />;
 }
 
 export function FitPanel() {
@@ -164,11 +103,61 @@ export function TriagePanel() {
 
 export function TinyPanel() {
   const focus = useWorld((s) => s.focus);
-  const step = JOURNEY.find((s) => s.id === focus) ?? JOURNEY[0];
+  const idx = Math.max(0, JOURNEY.findIndex((s) => s.id === focus));
+  const step = JOURNEY[idx];
+  const [playing, setPlaying] = useState(false);
+  const go = (i: number) => world.set({ focus: JOURNEY[Math.max(0, Math.min(JOURNEY.length - 1, i))].id });
+
+  useEffect(() => {
+    if (!playing) return;
+    if (idx >= JOURNEY.length - 1) {
+      setPlaying(false);
+      return;
+    }
+    const t = window.setTimeout(() => go(idx + 1), world.get().reduced ? 2600 : 2000);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, idx]);
+
   return (
     <div className="space-y-4">
-      <p className="label">Real captures of the running prototype. Select a step, or a screen in the scene.</p>
-      <Chips label="Steps" focus={step.id} items={JOURNEY.map((s, i) => ({ id: s.id, label: s.label, n: String(i + 1) }))} />
+      <p className="label">Real captures of the running prototype, one step at a time.</p>
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          className="btn btn-solid !min-h-11 text-sm"
+          onClick={() => {
+            // Play always starts from the first step, wherever it was left.
+            if (playing) setPlaying(false);
+            else {
+              go(0);
+              setPlaying(true);
+            }
+          }}
+        >
+          {playing ? 'Pause' : 'Play from the start'}
+        </button>
+        <span className="label">
+          Step {idx + 1} of {JOURNEY.length}
+        </span>
+      </div>
+      <ul className="flex flex-wrap gap-2" aria-label="Steps">
+        {JOURNEY.map((s, i) => (
+          <li key={s.id}>
+            <button
+              type="button"
+              className="chip !text-blueberry"
+              aria-pressed={step.id === s.id}
+              onClick={() => {
+                setPlaying(false);
+                go(i);
+              }}
+            >
+              <span className="font-mono text-xs">{i + 1}</span> {s.label}
+            </button>
+          </li>
+        ))}
+      </ul>
       <div aria-live="polite" className="note min-h-[5.5rem]">
         <div key={step.id} className="swap">
           <ul className="flex flex-wrap gap-2" aria-label="What this is">
