@@ -113,25 +113,34 @@ export function SigVoice() {
         style={{ left: 'var(--sig-x, 80vw)', top: 'var(--sig-y, 70vh)', width: 'calc(var(--sig-s, 80px) * 1.3)', height: 'calc(var(--sig-s, 80px) * 1.6)', minWidth: 52, minHeight: 52 }}
       />
       <div
-        className="sig-bubble pointer-events-none fixed z-30 w-max max-w-[min(17rem,calc(100vw-1.5rem))]"
-        style={{ right: 'max(0.75rem, calc(100vw - var(--sig-x, 80vw) - 1.7rem))' }}
+        className="sig-bubble pointer-events-none fixed z-30 w-max max-w-[min(19.5rem,calc(100vw-1.5rem))]"
+        
       >
         <div aria-live="polite" role="status">
           {say && (
-            <div key={say.id} className="bubble pointer-events-auto !static">
-              <p className="!m-0 text-[0.9rem] leading-snug">
+            <div key={say.id} className={`bubble pointer-events-auto !static ${say.offer ? 'bubble-menu' : ''}`}>
+              <p className={`!m-0 leading-snug ${say.offer ? 'text-[1rem] font-medium' : 'text-[0.9rem]'}`}>
                 <span className="sr-only">Sig says: </span>
                 {say.text}
               </p>
               {say.offer && (
-                <div className="mt-2 flex flex-col gap-1.5">
-                  {OFFERS.map((o) => (
-                    <button key={o.label} type="button" className="min-h-10 rounded-full bg-soda px-3 text-left text-[0.8rem] font-semibold text-blueberry" onClick={() => sigTake(o.project)}>
-                      {o.label} <span className="text-citron">→</span>
-                    </button>
-                  ))}
-                  <button type="button" className="min-h-10 rounded-full px-3 text-left text-[0.8rem] font-medium text-canvas/75 underline" onClick={sigDismiss}>
-                    No thanks
+                <div className="sig-menu pointer-events-auto mt-3">
+                  <ul>
+                    {OFFERS.map((o, i) => (
+                      <li key={o.label}>
+                        <button type="button" onClick={() => sigTake(o.project)}>
+                          <span className="font-mono text-[0.68rem] text-soda">{String(i + 1).padStart(2, '0')}</span>
+                          <span className="min-w-0 flex-1 text-left">
+                            <span className="block text-[0.95rem] font-medium leading-tight">{o.label}</span>
+                            <span className="block text-[0.74rem] leading-tight text-canvas/60">{o.hint}</span>
+                          </span>
+                          <span aria-hidden="true" className="arrow">→</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  <button type="button" className="sig-dismiss" onClick={sigDismiss}>
+                    Not now
                   </button>
                 </div>
               )}

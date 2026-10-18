@@ -714,12 +714,14 @@ body[data-world='on'] .sheet.sheet-dark .label.\!text-blueberry {
     transform: translateY(6px) scale(0.97);
   }
 }
+/* Where the speech bubble sits. Narrow screens: above Sig (or below him when he is high on screen). */
 .sig-bubble {
+  right: max(0.75rem, calc(100vw - var(--sig-x, 80vw) - 1.7rem));
   top: calc(var(--sig-y, 70vh) - var(--sig-s, 80px) * 1.12);
   transform: translateY(-100%);
 }
 [data-sig-low='0'] .sig-bubble {
-  top: calc(var(--sig-y, 70vh) + var(--sig-s, 80px) * 0.78);
+  top: calc(var(--sig-y, 70vh) + var(--sig-s, 80px) * 1.05);
   transform: none;
 }
 [data-sig-low='0'] .sig-bubble .bubble::after {
@@ -727,34 +729,78 @@ body[data-world='on'] .sheet.sheet-dark .label.\!text-blueberry {
   bottom: auto;
   border-radius: 0.2rem 0 0 0;
 }
+/* Wide screens: beside Sig, on his left, with the tail pointing at him. */
+@media (min-width: 768px) {
+  .sig-bubble,
+  [data-sig-low='0'] .sig-bubble {
+    right: calc(100vw - var(--sig-x, 80vw) + var(--sig-s, 80px) * 0.78);
+    top: clamp(4.75rem, calc(var(--sig-y, 70vh) - 2.4rem), calc(100svh - 22.5rem));
+    transform: none;
+  }
+  .sig-bubble .bubble::after,
+  [data-sig-low='0'] .sig-bubble .bubble::after {
+    right: -0.4rem;
+    left: auto;
+    top: 1.75rem;
+    bottom: auto;
+    border-radius: 0 0.2rem 0 0;
+  }
+}
 
-/* With the 3D world running, Contact is a coral card on the left so the world (and Sig) stays visible on the right. */
-body[data-world='on'] #contact {
-  background: transparent;
-  color: var(--blueberry);
-  pointer-events: none;
-  min-height: 100svh;
+.bubble {
+  border: 1px solid rgb(var(--canvas-rgb) / 0.12);
+}
+.bubble-menu {
+  min-width: min(19rem, calc(100vw - 2.5rem));
+  padding: 1rem 1rem 0.5rem;
+  border-radius: 1.1rem;
+}
+.sig-menu ul {
+  border-top: 1px solid rgb(var(--canvas-rgb) / 0.16);
+}
+.sig-menu li + li {
+  border-top: 1px solid rgb(var(--canvas-rgb) / 0.12);
+}
+.sig-menu li button {
   display: flex;
-  align-items: flex-end;
+  width: 100%;
+  min-height: 3.4rem;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.5rem 0.25rem;
+  border-radius: 0.5rem;
+  color: var(--canvas);
+  transition: background var(--dur-fast), padding var(--dur-fast) var(--ease);
 }
-body[data-world='on'] #contact > .wrap {
-  padding-block: 0 2.25rem;
+.sig-menu li button:hover {
+  background: rgb(var(--canvas-rgb) / 0.08);
+  padding-inline: 0.6rem;
 }
-body[data-world='on'] #contact .contact-card {
-  pointer-events: auto;
+.sig-menu .arrow {
+  display: grid;
+  width: 1.7rem;
+  height: 1.7rem;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
   background: var(--pop-soda);
-  border-radius: var(--radius);
-  padding: clamp(1.25rem, 3vw, 2.5rem);
-  max-width: 46rem;
+  color: var(--blueberry);
+  font-size: 0.9rem;
+  transition: transform var(--dur-fast) var(--ease);
 }
-body[data-world='on'] #contact .h-mega {
-  font-size: clamp(3rem, 8vw, 6.5rem);
+.sig-menu li button:hover .arrow {
+  transform: translateX(3px);
 }
-@media (max-width: 640px) {
-  body[data-world='on'] .contact-hide {
-    display: none;
-  }
-  body[data-world='on'] #contact .contact-card {
-    padding: 1.25rem;
-  }
+.sig-dismiss {
+  display: block;
+  min-height: 2.5rem;
+  margin: 0.15rem 0 0 auto;
+  padding: 0 0.25rem;
+  font-size: 0.78rem;
+  color: rgb(var(--canvas-rgb) / 0.6);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.sig-dismiss:hover {
+  color: var(--canvas);
 }

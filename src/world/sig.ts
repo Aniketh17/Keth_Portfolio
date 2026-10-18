@@ -64,38 +64,88 @@ export function sigDismiss(): void {
   world.set({ say: null });
 }
 
-const POKES: [string, Mood][] = [
+const OPENERS: [string, Mood][] = [
   ['Hey!', 'surprised'],
   ['Okay, okay.', 'happy'],
   ['Ticklish. A bit.', 'happy'],
-  ['Want me to pick something for you?', 'think'],
-  ['Still here. Still a cube.', 'idle'],
-  ['Careful, I bruise easily. Corners.', 'surprised'],
-  ['You really like poking things.', 'happy'],
-  ['Fine. Poke away.', 'happy'],
-  ['Ten pokes. We should get coffee.', 'happy'],
 ];
-const AGAIN: [string, Mood][] = [
-  ['Boop.', 'happy'],
-  ['Still counting.', 'think'],
-  ['Wheee.', 'happy'],
-  ['That tickled.', 'surprised'],
+
+/** Things Sig says about himself and the site. Always honest, never about anything that is not on the page. */
+const GENERAL: string[] = [
+  "I'm a cube. It's a living.",
+  'I only exist while this tab is open.',
+  "Nobody asked me to be a mascot. I volunteered.",
+  'I run on three.js and good intentions.',
+  'Two hands, no pockets. Design constraints.',
+  "Everything on this page is real, except me.",
+  'Tab to me and press Enter. Keyboard pokes count.',
+  'If I get too chatty, there is a Quiet switch bottom-right.',
+  "I blink for you, not at you. Slightly different.",
+  'Try scrolling really fast. Just a thought.',
+  'Move your cursor around. I notice.',
+  "Don't tell the other cubes you poked me.",
+  "I don't have a favourite project. That's a lie. It's the one you're looking at.",
+  'My antenna does nothing. It looks great though.',
+  'You can hit Esc to back out of almost anything.',
+  'I get dizzy easily. See: fast scrolling.',
+  "I can't read your mind, but I can read the room. It's mostly warm white.",
+  'Someone had to be the guide. The cube was available.',
+  'Press the arrow keys when a project is selected. Neat, right?',
+  'If I fall asleep, poke me. It is fine.',
 ];
+
+/** What Sig says about the chapter you are in. */
+const ZONE: string[][] = [
+  ['Scroll down. The route is that way.', "The headline says 'software that works'. I'm software too. Mostly works.", 'The strip at the bottom is real, not decoration.', 'Try the buttons. They are friendlier than me.'],
+  ['Pick a project, then hit Inspect system.', 'Every demo has a Play button, and it always starts at step one.', 'Arrow keys move between projects.', 'Use Esc to leave an inspection.'],
+  ['Hover a decision and I light up the project it came from.', 'These are trade-offs, not slogans.', 'The evidence links jump you to the exact step.', 'Five decisions. Pick your favourite.'],
+  ['Mostly backend, mostly PostgreSQL.', 'Hover a bar on the timeline and it lifts forward.', 'Skills list says where each one was actually used.', 'The coloured chapter is the part with the numbers.'],
+  ['Email is the fastest way in.', 'Copy address is right there. I would use it.', 'That coral card is the end of the route.', 'Say hello. I will pretend I did not push you.'],
+];
+
+/** What Sig says about the project in front of you. */
+const PROJECT: string[][] = [
+  ['Everything in that demo comes from the real screenshot.', 'It would rather refuse than guess.', 'That confidence badge means sources matched, not that the answer is right.'],
+  ['Confidence is a band here, never a promise.', 'A merchant it has never seen gets no suggestion at all.', 'A person always makes the final call.'],
+  ['Built independently at a ZEIL hackathon. No team.', 'Retrieved is not the same as confirmed.', 'It asks a question instead of filling a gap.'],
+  ['A front-end prototype: mock data, pretend payment.', 'The cart and the vault live in your browser.', 'Four real screens. No backend.'],
+];
+
+const recent: string[] = [];
+const draw = (pool: string[]): string => {
+  const options = pool.filter((l) => !recent.includes(l));
+  const pick = options[Math.floor(Math.random() * options.length)] ?? pool[Math.floor(Math.random() * pool.length)];
+  recent.push(pick);
+  if (recent.length > 12) recent.shift();
+  return pick;
+};
+
 let pokes = 0;
 
-/** The visitor poked Sig: always answers with a reaction, and after a few pokes offers a choice. */
+/** The visitor poked Sig: always answers with a reaction. Fresh lines every time, tuned to where they are. */
 export function sigPoke(): void {
   pokes++;
   frame.pokes = pokes;
-  const [text, mood] = pokes <= POKES.length ? POKES[pokes - 1] : AGAIN[pokes % AGAIN.length];
-  show(text, mood, 3200, pokes === 4);
   lastAuto = performance.now();
+  if (pokes <= OPENERS.length) {
+    show(OPENERS[pokes - 1][0], OPENERS[pokes - 1][1], 3200);
+    return;
+  }
+  if (pokes === 4 || (pokes > 4 && (pokes - 4) % 14 === 0)) {
+    show('Want me to pick something for you?', 'think', 0, true);
+    return;
+  }
+  const s = world.get();
+  const roll = Math.random();
+  const pool = roll < 0.4 && s.zone === 1 ? PROJECT[s.active] : roll < 0.7 ? ZONE[Math.min(4, s.zone)] : GENERAL;
+  const moods: Mood[] = ['happy', 'idle', 'think', 'happy', 'surprised'];
+  show(draw(pool), moods[Math.floor(Math.random() * moods.length)], 3800);
 }
 
 export const OFFERS = [
-  { label: 'Show me your AI work', project: 0 },
-  { label: 'Show me your software engineering', project: 1 },
-  { label: 'Show me how you build', project: 2 },
+  { label: 'AI work', hint: 'Retrieval, sources, refusal', project: 0 },
+  { label: 'Software engineering', hint: 'A person stays in the loop', project: 1 },
+  { label: 'How I build', hint: 'Decisions and evidence', project: 2 },
 ] as const;
 
 /** Take an offer: travel to the project and inspect it. */
