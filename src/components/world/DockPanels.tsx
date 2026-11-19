@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { JOURNEY } from '../../data/artifacts';
+import { GRU_SCREENS, JOURNEY } from '../../data/artifacts';
 import { REST_STEP, STEPS, type DemoId } from '../../mock/flows';
 import { world, useWorld } from '../../world/store';
 
@@ -101,6 +101,78 @@ export function TriagePanel() {
   return <DemoPanel demo="transactions" intro="A bank feed, an Auto-categorise button, and a review lane." />;
 }
 
+export function GruPanel() {
+  const focus = useWorld((s) => s.focus);
+  const idx = Math.max(0, GRU_SCREENS.findIndex((s) => s.id === focus));
+  const step = GRU_SCREENS[idx];
+  const [playing, setPlaying] = useState(false);
+  const go = (i: number) => world.set({ focus: GRU_SCREENS[Math.max(0, Math.min(GRU_SCREENS.length - 1, i))].id });
+
+  useEffect(() => {
+    if (!playing) return;
+    if (idx >= GRU_SCREENS.length - 1) {
+      setPlaying(false);
+      return;
+    }
+    const t = window.setTimeout(() => go(idx + 1), world.get().reduced ? 2800 : 2400);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, idx]);
+
+  return (
+    <div className="space-y-4">
+      <p className="label">Real captures of the running app on a phone. Names are redacted.</p>
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          className="btn btn-solid !min-h-11 text-sm"
+          onClick={() => {
+            if (playing) setPlaying(false);
+            else {
+              go(0);
+              setPlaying(true);
+            }
+          }}
+        >
+          {playing ? 'Pause' : 'Play from the start'}
+        </button>
+        <span className="label">
+          Screen {idx + 1} of {GRU_SCREENS.length}
+        </span>
+      </div>
+      <ul className="flex flex-wrap gap-2" aria-label="Screens">
+        {GRU_SCREENS.map((s, i) => (
+          <li key={s.id}>
+            <button
+              type="button"
+              className="chip !text-blueberry"
+              aria-pressed={step.id === s.id}
+              onClick={() => {
+                setPlaying(false);
+                go(i);
+              }}
+            >
+              <span className="font-mono text-xs">{i + 1}</span> {s.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+      <div aria-live="polite" className="note min-h-[5.5rem]">
+        <div key={step.id} className="swap">
+          <ul className="flex flex-wrap gap-2" aria-label="What this is">
+            {step.tags.map((t) => (
+              <li key={t.text} className={`label rounded-full px-2.5 py-0.5 ${t.kind === 'implemented' ? 'bg-blueberry !text-canvas' : 'border border-line !text-blueberry'}`}>
+                {t.text}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-muted">{step.note}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function TinyPanel() {
   const focus = useWorld((s) => s.focus);
   const idx = Math.max(0, JOURNEY.findIndex((s) => s.id === focus));
@@ -176,6 +248,8 @@ export function TinyPanel() {
 
 export function InspectionPanel({ projectId }: { projectId: string }) {
   switch (projectId) {
+    case 'gru':
+      return <GruPanel />;
     case 'imac-advisor':
       return <ImacPanel />;
     case 'fit-check':

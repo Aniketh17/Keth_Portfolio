@@ -32,7 +32,7 @@ export function Approach() {
             <h2 id="approach-title" className="h-section">
               The tools matter. The decisions matter more.
             </h2>
-            <p className="text-muted">{lite ? 'Five decisions, each tied to a project. Open one to see the evidence behind it.' : 'Five decisions, each tied to a project. Point at one and its project lights up in the scene; open it to see the evidence.'}</p>
+            <p className="text-muted">{lite ? 'Seven decisions, each tied to a project. Open one to see the evidence behind it.' : 'Seven decisions, each tied to a project. Point at one and its project lights up in the scene; open it to see the evidence.'}</p>
           </div>
           <ol className="mt-8 border-t border-line">
             {items.map(({ project, decision, pick }, i) => (

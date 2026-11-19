@@ -8,11 +8,12 @@ import type { WorldTextures } from '../textures';
 import { projects } from '../../data/projects';
 import { anim, BOX, BOX_EDGES, damp, palette, PLANE } from './common';
 import { DEMO_ASPECT, REST_STEP } from '../../mock/flows';
-import { DemoDetail, TinyDetail } from './details';
+import { DemoDetail, GruDetail, TinyDetail } from './details';
 
-const ASPECT: Record<string, number> = { 'imac-advisor': 1318 / 805, 'transaction-coding': DEMO_ASPECT, 'fit-check': DEMO_ASPECT, 'tiny-paws': 1280 / 800 };
+const ASPECT: Record<string, number> = { gru: 1.6, 'imac-advisor': 1318 / 805, 'transaction-coding': DEMO_ASPECT, 'fit-check': DEMO_ASPECT, 'tiny-paws': 1280 / 800 };
 
 function posterTexture(id: string, t: WorldTextures): Texture {
+  if (id === 'gru') return t.gru;
   if (id === 'imac-advisor') return t.imac;
   if (id === 'tiny-paws') return t.tiny[0];
   const demo = id === 'fit-check' ? 'fit' : 'transactions';
@@ -102,6 +103,7 @@ function StageProject({ i, textures }: { i: number; textures: WorldTextures }) {
         <Poster texture={tex} width={STAGE_ART_W} aspect={aspect} matRef={(m) => (posterMat.current = m)} slabRef={(m) => (slabMat.current = m)} />
       </group>
       <group ref={detail} visible={false}>
+        {project.id === 'gru' && <GruDetail index={i} textures={textures.gruScreens} />}
         {project.id === 'imac-advisor' && <DemoDetail index={i} atlas={textures.imacAtlas} rest={REST_STEP.imac} />}
         {project.id === 'fit-check' && <DemoDetail index={i} atlas={textures.fitAtlas} rest={REST_STEP.fit} />}
         {project.id === 'transaction-coding' && <DemoDetail index={i} atlas={textures.txAtlas} rest={REST_STEP.transactions} />}
@@ -141,7 +143,7 @@ export function Stage({ textures }: { textures: WorldTextures }) {
 }
 
 /**
- * Arrival shows the world, not a screenshot: four empty frames stand down the route, one per project, so the
+ * Arrival shows the world, not a screenshot: five empty frames stand down the route, one per project, so the
  * visitor can see where they are about to go. The real artifacts only appear when the camera gets to them.
  */
 export function HeroFrames() {
@@ -157,7 +159,7 @@ export function HeroFrames() {
   });
   return (
     <group ref={g}>
-      {[0, 1, 2, 3].map((k) => (
+      {[0, 1, 2, 3, 4].map((k) => (
         <group key={k} position={[HERO_ART.pos[0] + k * 0.55, 1.15, HERO_ART.pos[2] - k * 4.2]}>
           <lineSegments geometry={BOX_EDGES} scale={[HERO_ART.width * (1 - k * 0.04), HERO_ART.width / 1.6, 0.01]}>
             <lineBasicMaterial color={pal.blueberry} transparent opacity={0.85 - k * 0.17} />

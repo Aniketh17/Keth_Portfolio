@@ -37,7 +37,7 @@ export function destinations(aspect: number, small: boolean): Dest[] {
   const fov = small ? 42 : 36;
   const heroDist = small ? fitDistance(HERO_ART.width, fov, aspect, 0.92) : 8.4;
   const stageDist = small ? fitDistance(STAGE_ART_W, fov, aspect, 0.9) : 9.6;
-  const sysDist = small ? fitDistance(9.4, fov, aspect, 0.98) : 15;
+  const sysDist = small ? fitDistance(11.4, fov, aspect, 0.98) : 15;
   const timeDist = small ? fitDistance(10.5, fov, aspect, 0.98) : 15;
   return [
     {

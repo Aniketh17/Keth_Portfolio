@@ -17,18 +17,18 @@ npm run build    # tsc + vite build
 | The scene (environment, carousel, inspection, zones) | `src/world/scene/` |
 | Engineering decisions and where their evidence lives | `src/data/decisions.ts` |
 | Skills, experience, education, contact | `src/data/profile.ts` |
-| Inspectable regions, synthetic specimens, Tiny Paws journey | `src/data/artifacts.ts` |
+| Inspectable regions, synthetic specimens, Tiny Paws journey, GRU screens | `src/data/artifacts.ts` |
 | The inspectors (one per project) | `src/components/inspectors/` |
 | Evidence lens (opens an inspector from any claim) | `src/components/Evidence.tsx` |
 
-Notes: routes are hash-based (`#/projects/<slug>`), so any static host works. Flows marked "conceptual" come from the project brief rather than code and are labelled as such on the page. Fonts: Switzer (Fontshare, free for commercial use) and Geist Mono (Google Fonts); Söhne is not licensed here. The IMAC image is a cropped (sidebar removed) and 2x-upscaled version of the original screenshot, so it is softer than a true high-resolution capture. Tiny Paws images are real captures of the running prototype. Fit Check and Transaction Coding use labelled illustrations on synthetic data.
+Notes: routes are hash-based (`#/projects/<slug>`), so any static host works. Flows marked "conceptual" come from the project brief rather than code and are labelled as such on the page. Fonts: Switzer (Fontshare, free for commercial use) and Geist Mono (Google Fonts); Söhne is not licensed here. The IMAC image is a cropped (sidebar removed) and 2x-upscaled version of the original screenshot, so it is softer than a true high-resolution capture. Tiny Paws images are real captures of the running prototype. GRU images (`public/gru/`) are real captures of the private app on a phone with company names and the user's name covered by redaction bars; GRU has no live demo because it is login-gated. Fit Check and Transaction Coding use labelled illustrations on synthetic data.
 
 ## How the world works
 
 - `world/store.ts`: one store (active project, inspection mode and focus, selections). The scroll handler writes a plain `frame` object that the render loop reads, so scrolling never causes a React render.
 - `world/env.ts` turns the page's real layout into waypoints. The camera moves a fraction of the way toward its target every frame, so a click, a fast scroll or a reversal just changes the target and the camera turns from where it is.
 - The projects stage is a tall section with a pinned view; ordinary scrolling through it moves the carousel. Choosing a project scrolls to it, so scroll position is the single source of truth.
-- Inspection takes the active project apart in 3D (the IMAC interface into four real layers; Fit Check and Transaction Coding as routed threads; Tiny Paws as its real screens). The HTML dock explains the selected part and shares the same `focus` as the scene.
+- Inspection takes the active project apart in 3D (the IMAC interface into four real layers; Fit Check and Transaction Coding as routed threads; Tiny Paws and GRU as their real screens). The HTML dock explains the selected part and shares the same `focus` as the scene.
 - Reduced motion: the camera snaps, ambient motion stops, and rendering is on demand.
 
 ## Sig, the guide

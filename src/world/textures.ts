@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useLoader } from '@react-three/fiber';
 import { CanvasTexture, SRGBColorSpace, TextureLoader, type Texture } from 'three';
-import { JOURNEY } from '../data/artifacts';
+import { GRU_SCREENS, JOURNEY } from '../data/artifacts';
 import { REST_STEP } from '../mock/flows';
 import { readPalette, type Palette } from './palette';
 
@@ -70,6 +70,9 @@ export function setAtlasStep(t: Texture, step: number): void {
 
 export interface WorldTextures {
   imac: Texture;
+  /** GRU: the three-phone poster, then each real phone screen. */
+  gru: Texture;
+  gruScreens: Texture[];
   tiny: Texture[];
   fitAtlas: Texture;
   txAtlas: Texture;
@@ -81,6 +84,11 @@ export interface WorldTextures {
 /** Loads the real captures and the demo atlases (suspends until ready). */
 export function useWorldTextures(): WorldTextures {
   const imac = useLoader(TextureLoader, `${BASE}assets/imac_main.webp`);
+  const gru = useLoader(TextureLoader, `${BASE}gru/poster.webp`);
+  const gruScreens = useLoader(
+    TextureLoader,
+    GRU_SCREENS.map((s) => `${BASE}${s.image}`),
+  );
   const tiny = useLoader(
     TextureLoader,
     JOURNEY.map((s) => `${BASE}${s.image}`),
@@ -90,11 +98,13 @@ export function useWorldTextures(): WorldTextures {
   const imacAtlas = useLoader(TextureLoader, `${BASE}mock/imac.webp`);
   useMemo(() => {
     prep(imac);
+    prep(gru);
+    gruScreens.forEach(prep);
     tiny.forEach(prep);
     prep(fitAtlas);
     prep(txAtlas);
     prep(imacAtlas);
-  }, [imac, tiny, fitAtlas, txAtlas, imacAtlas]);
+  }, [imac, gru, gruScreens, tiny, fitAtlas, txAtlas, imacAtlas]);
   const posters = useMemo(() => {
     const fit = atlasView(fitAtlas);
     const transactions = atlasView(txAtlas);
@@ -102,5 +112,5 @@ export function useWorldTextures(): WorldTextures {
     setAtlasStep(transactions, REST_STEP.transactions);
     return { fit, transactions };
   }, [fitAtlas, txAtlas]);
-  return { imac, tiny, fitAtlas, txAtlas, imacAtlas, posters };
+  return { imac, gru, gruScreens, tiny, fitAtlas, txAtlas, imacAtlas, posters };
 }

@@ -76,7 +76,7 @@ export function WorkCards() {
     <section id="work" aria-labelledby="work-title" className="wrap scroll-mt-16 pt-14 lg:pt-20">
       <p className="label eyebrow">01 · Selected work</p>
       <h2 id="work-title" className="h-section mt-3">
-        Four projects. Four different problems.
+        Five projects. Five different problems.
       </h2>
       <p className="prose-w mt-3 text-muted">Each one started with a real problem. Open a card to see how it works underneath.</p>
       <ol className="mt-8 grid gap-6 md:grid-cols-2" aria-label="Projects">

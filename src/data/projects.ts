@@ -8,6 +8,77 @@ import type { Project } from './types';
  */
 export const projects: Project[] = [
   {
+    id: 'gru',
+    slug: 'gru-job-search-assistant',
+    title: 'GRU: Private AI Job-Search Assistant',
+    shortTitle: 'GRU',
+    eyebrow: 'AI / LLM · FULL-STACK · BACKEND',
+    category: 'AI / LLM',
+    headline: 'A job search that keeps itself up to date.',
+    summary:
+      'GRU is a personal job-search assistant I designed, built and deployed. It connects to Gmail with read-only OAuth, reads only job-related mail, and keeps my applications up to date: rejections, offers, interview invites (with meeting links and calendar events), assessments, and vacancies from job-alert emails. It runs on a phone as an installable web app and costs $0 to operate.',
+    hook: "A private assistant that reads my job emails, tracks every application's status automatically, finds good-match roles, and talks to me with a natural voice.",
+    role: 'Designed, built and deployed by me, Nov 2026 to present.',
+    decisions: [
+      {
+        title: 'The model must quote its proof',
+        body: 'Deterministic phrase rules run first, then an LLM gives a second opinion that must quote the sentence that proves its answer. The quote is verified against the email, so hallucinated or prompt-injected answers are discarded. Every automatic change shows up with a 24-hour undo.',
+      },
+      {
+        title: 'The assistant suggests; I confirm',
+        body: 'The chat answers only from a read-only snapshot of my data, treats email text as untrusted, and can only suggest steps. Every change needs my confirmation tap. Voice in and out uses Whisper and neural text-to-speech, with an on-device fallback.',
+      },
+      {
+        title: 'Privacy by design',
+        body: 'Email bodies are processed in memory and never stored. Free text is AES-256-GCM encrypted, search uses an HMAC blind index, logs are allow-listed, and a wipe/lock kill switch exists.',
+      },
+      {
+        title: 'Engineering under tight limits',
+        body: 'Built to the Cloudflare free tier: 10 ms of CPU per run, a per-run call budget and a daily AI quota. It includes a shared AI budget ledger, crash-loop-proof batch processing and rate-limit back-off.',
+      },
+    ],
+    features: [
+      'Reads only job-related Gmail messages, with read-only OAuth 2.0',
+      "Keeps each application's status current: applied, assessment, interview, offer, rejected",
+      'Interview invites with meeting links and calendar events',
+      'Vacancies pulled from job-alert emails',
+      'Resume matching: scores each vacancy out of 100 with evidence and gaps, and builds an "Apply today" list',
+      'Voice assistant and LLM chat, with a confirmation tap for every change',
+      'Installable on a phone as a PWA, running at $0',
+    ],
+    outcomes: ['300+ automated unit, integration and end-to-end tests, including regression tests for real bugs found in production.'],
+    learned: [
+      "Decoding Gmail's padded base64 message bodies.",
+      'Making LLM output safe to act on.',
+      'Keeping everything inside free-tier limits.',
+    ],
+    limitations: [
+      'GRU is private and login-gated, so there is no live demo. The screenshots are from the running app on a phone, with names redacted.',
+      'A match score is a decision aid. I always apply myself.',
+    ],
+    technologies: [
+      'TypeScript',
+      'React',
+      'Cloudflare Workers',
+      'D1 (SQLite)',
+      'Workers AI (Gemma, Whisper, Aura TTS)',
+      'Gmail API (OAuth 2.0)',
+      'Hono',
+      'Vite',
+      'PWA',
+      'Vitest',
+      'Playwright',
+    ],
+    image: {
+      src: 'gru/poster.webp',
+      alt: 'Three phone screens from GRU: the Today brief, the scored Apply today list, and the Talk to GRU chat. Names are redacted.',
+      width: 1280,
+      height: 800,
+    },
+    status: 'Private · deployed',
+    accent: '#2F7D6B',
+  },
+  {
     id: 'imac-advisor',
     slug: 'imac-immunisation-advisor',
     title: 'IMAC Immunisation Advisor',

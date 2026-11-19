@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { MeshBasicMaterial, MeshLambertMaterial, type Texture } from 'three';
-import { JOURNEY } from '../../data/artifacts';
+import { GRU_SCREENS, JOURNEY } from '../../data/artifacts';
 import { DEMO_ASPECT } from '../../mock/flows';
 import { STAGE_ART_W } from '../layout';
 import { world } from '../store';
@@ -38,6 +38,39 @@ export function DemoDetail({ index, atlas, rest }: { index: number; atlas: Textu
       </mesh>
       <mesh geometry={PLANE} scale={[W, H, 1]} position={[0, 0, 0.03]}>
         <meshBasicMaterial ref={mat} map={view} transparent opacity={0} toneMapped={false} />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------------------------- GRU: real phone screens, one at a time ---------------------------- */
+
+/** One redacted phone capture, swapped as the step changes. Portrait, so it stands in the middle of the stage. */
+export function GruDetail({ index, textures }: { index: number; textures: Texture[] }) {
+  const H = (STAGE_ART_W * 1.12) / 1.6;
+  const W = H * (640 / 1386);
+  const pal = palette();
+  const mat = useRef<MeshBasicMaterial>(null);
+  const slab = useRef<MeshLambertMaterial>(null);
+  const shown = useRef(-1);
+  useFrame(() => {
+    const f = fadeOf(inspOf(index));
+    const i = Math.max(0, GRU_SCREENS.findIndex((j) => j.id === world.get().focus));
+    if (mat.current && shown.current !== i) {
+      mat.current.map = textures[i];
+      mat.current.needsUpdate = true;
+      shown.current = i;
+    }
+    if (mat.current) mat.current.opacity = f;
+    if (slab.current) slab.current.opacity = f;
+  });
+  return (
+    <group>
+      <mesh geometry={BOX} scale={[W + 0.14, H + 0.14, 0.08]} position={[0, 0, -0.02]}>
+        <meshLambertMaterial ref={slab} color={pal.blueberry} transparent opacity={0} />
+      </mesh>
+      <mesh geometry={PLANE} scale={[W, H, 1]} position={[0, 0, 0.03]}>
+        <meshBasicMaterial ref={mat} map={textures[0]} transparent opacity={0} toneMapped={false} />
       </mesh>
     </group>
   );

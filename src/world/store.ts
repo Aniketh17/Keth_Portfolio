@@ -9,7 +9,7 @@ import { useSyncExternalStore } from 'react';
  *  - `world` is a small subscribable store for the few values React needs (active project, inspection, status).
  */
 
-export const PROJECT_COUNT = 4;
+export const PROJECT_COUNT = 5;
 
 export type WorldStatus = 'loading' | 'ready' | 'failed' | 'unsupported';
 export type Mode = 'overview' | 'inspect';

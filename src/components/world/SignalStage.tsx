@@ -36,7 +36,7 @@ export function SignalStage() {
           <div className="max-w-md">
             <p className="label eyebrow">01 · Selected work</p>
             <h2 id="work-title" className="h-section mt-2 !text-[clamp(1.5rem,3vw,2.25rem)]">
-              Four projects. Four different problems.
+              Five projects. Five different problems.
             </h2>
           </div>
 

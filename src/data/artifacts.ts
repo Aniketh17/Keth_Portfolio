@@ -72,3 +72,70 @@ export const JOURNEY: JourneyStep[] = [
     note: 'Companion profiles and an upload area that links each document to a specific pet. Records are kept in browser storage, not on a server.',
   },
 ];
+
+/* ---------------- GRU: real screens of the running app, with names redacted ---------------- */
+
+export interface GruScreen {
+  id: string;
+  label: string;
+  image: string;
+  alt: string;
+  tags: { text: string; kind: 'implemented' | 'mock' | 'simulated' }[];
+  note: string;
+}
+
+const GRU_TAGS: GruScreen['tags'] = [
+  { text: 'Real app, on a phone', kind: 'implemented' },
+  { text: 'Names redacted', kind: 'mock' },
+];
+
+export const GRU_SCREENS: GruScreen[] = [
+  {
+    id: 'today',
+    label: 'Today',
+    image: 'gru/1.webp',
+    alt: 'GRU Today screen on a phone: a morning brief with emails to review and jobs to apply for, and a pipeline of application counts',
+    tags: GRU_TAGS,
+    note: 'The morning brief: mail waiting for review, new jobs from alerts, and the pipeline from applied to offer. A name in the greeting is redacted.',
+  },
+  {
+    id: 'activity',
+    label: 'Recent activity',
+    image: 'gru/2.webp',
+    alt: 'GRU recent activity list on a phone: applications with Applied and Rejected status chips, company names redacted',
+    tags: GRU_TAGS,
+    note: 'Each application carries a status that GRU keeps current from the mail it reads. Company names are redacted.',
+  },
+  {
+    id: 'apply',
+    label: 'Apply today',
+    image: 'gru/3.webp',
+    alt: 'GRU Apply today list on a phone: job vacancies scored out of 100 with strong and good labels, employer names redacted',
+    tags: GRU_TAGS,
+    note: 'Vacancies from job-alert emails, scored out of 100 against my resume and sorted best first. A score is a decision aid; I always apply myself. Employer names are redacted.',
+  },
+  {
+    id: 'calendar',
+    label: 'Calendar',
+    image: 'gru/4.webp',
+    alt: 'GRU calendar on a phone: a month view with today highlighted and an option to subscribe from a phone calendar',
+    tags: GRU_TAGS,
+    note: 'Interview invites, deadlines and tasks land on a calendar, with meeting links, and can be subscribed to from a phone calendar.',
+  },
+  {
+    id: 'week',
+    label: 'Last 7 days',
+    image: 'gru/5.webp',
+    alt: 'GRU weekly summary on a phone: counts for applications, replies, interviews, rejections, tasks and jobs from alerts',
+    tags: GRU_TAGS,
+    note: 'A weekly summary of applications, replies, interviews and tasks, so the pipeline is visible at a glance.',
+  },
+  {
+    id: 'chat',
+    label: 'Ask GRU',
+    image: 'gru/6.webp',
+    alt: 'Talk to GRU chat on a phone: an assistant message summarising mail and a top-scored job, with suggestion chips and a microphone button',
+    tags: GRU_TAGS,
+    note: 'Voice or text chat grounded in a read-only snapshot of my data. It can only suggest steps; every change needs a confirmation tap. Names are redacted.',
+  },
+];

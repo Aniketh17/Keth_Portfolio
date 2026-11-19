@@ -3,6 +3,7 @@ import { getProjectBySlug, projects } from '../data/projects';
 import type { Project } from '../data/types';
 import { closeProject, projectHref } from '../lib/route';
 import { ExplodedFlow } from './Artifact';
+import { GruArchitecture } from './GruArchitecture';
 import { Inspector } from './inspectors/Inspector';
 import { ExternalLink, Screenshot, projectLinks } from './ui';
 
@@ -120,6 +121,12 @@ function CaseStudy({ project }: { project: Project }) {
         </Block>
       )}
 
+      {project.id === 'gru' && (
+        <Block n={next()} title="Architecture">
+          <GruArchitecture />
+        </Block>
+      )}
+
       {project.diagrams?.map((d) => (
         <Block key={d.title} n={next()} title="Flow">
           <ExplodedFlow diagram={d} />
@@ -176,6 +183,12 @@ function CaseStudy({ project }: { project: Project }) {
         </Block>
       )}
 
+      {project.learned && (
+        <Block n={next()} title="What I learned">
+          <Bullets items={project.learned} />
+        </Block>
+      )}
+
       {project.limitations && (
         <Block n={next()} title="Limits and caveats">
           <Bullets items={project.limitations} />
@@ -184,7 +197,7 @@ function CaseStudy({ project }: { project: Project }) {
 
       <nav aria-label="Other projects" className="border-t border-line pt-9">
         <h2 className="label !text-blueberry">Other projects</h2>
-        <ul className="mt-3 grid gap-3 sm:grid-cols-3">
+        <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {others.map((p) => (
             <li key={p.id}>
               <a href={projectHref(p.slug)} className="surface flex min-h-16 flex-col justify-center p-4 transition-colors hover:bg-white">

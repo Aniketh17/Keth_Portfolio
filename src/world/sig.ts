@@ -88,7 +88,7 @@ interface Line {
   link?: { label: string; slug: string };
 }
 
-const slugs = ['imac-immunisation-advisor', 'transaction-coding', 'fit-check', 'tiny-paws'];
+const slugs = ['gru-job-search-assistant', 'imac-immunisation-advisor', 'transaction-coding', 'fit-check', 'tiny-paws'];
 const open = (i: number, label = 'Open the case study') => ({ label, slug: slugs[i] });
 
 const AI: string[] = [
@@ -201,22 +201,26 @@ const ZONE: Line[] = [
 
 /** Lines about a project, each with a shortcut to its write-up. */
 const PROJECT: Line[] = [
-  { text: 'The IMAC advisor would rather say "not enough information" than guess.', project: 0, link: open(0), mood: 'think' },
-  { text: 'Every IMAC answer comes with sources you can check.', project: 0, link: open(0, 'See how it works'), mood: 'happy' },
-  { text: 'Retrieve first, rerank second, answer last. That is the IMAC pipeline.', project: 0, link: open(0), mood: 'think' },
-  { text: 'That 88% badge means the sources matched well. It does not promise the answer is right.', project: 0, link: open(0), mood: 'think' },
-  { text: 'Transaction coding: automate the routine, flag the odd, let a person decide.', project: 1, link: open(1), mood: 'happy' },
-  { text: 'A merchant it has never seen gets no suggestion at all. Honest, if humbling.', project: 1, link: open(1), mood: 'idle' },
-  { text: 'In transaction coding, confidence is a band, never a promise.', project: 1, link: open(1, 'See how it works'), mood: 'think' },
-  { text: 'The review lane is where the interesting transactions go.', project: 1, link: open(1), mood: 'happy' },
-  { text: 'Fit Check shows evidence, not a score.', project: 2, link: open(2), mood: 'think' },
-  { text: 'Fit Check asks before it assumes. Revolutionary, apparently.', project: 2, link: open(2), mood: 'happy' },
-  { text: 'It was built independently at a ZEIL hackathon. No team, just a deadline.', project: 2, link: open(2), mood: 'idle' },
-  { text: 'Retrieved is not the same as confirmed. Fit Check keeps them apart.', project: 2, link: open(2, 'See how it works'), mood: 'think' },
-  { text: 'Tiny Paws has a cart, a checkout and a medical vault. All front end.', project: 3, link: open(3), mood: 'happy' },
-  { text: 'The Tiny Paws payment is simulated. No money moves. I checked.', project: 3, link: open(3), mood: 'idle' },
-  { text: 'Tiny Paws saves its cart and vault in your browser. No backend.', project: 3, link: open(3, 'See how it works'), mood: 'think' },
-  { text: 'A prototype that is honest about being a prototype. Tiny Paws.', project: 3, link: open(3), mood: 'happy' },
+  { text: 'GRU reads my job mail so I do not have to. It only ever opens the job-related messages.', project: 0, link: open(0), mood: 'happy' },
+  { text: 'When GRU says an application was rejected, it has to quote the sentence that proves it.', project: 0, link: open(0, 'See how it works'), mood: 'think' },
+  { text: 'GRU runs on the Cloudflare free tier. Ten milliseconds of CPU per run, so every call counts.', project: 0, link: open(0), mood: 'think' },
+  { text: 'GRU can suggest. Anything that changes data waits for a confirmation tap.', project: 0, link: open(0), mood: 'idle' },
+  { text: 'The IMAC advisor would rather say "not enough information" than guess.', project: 1, link: open(1), mood: 'think' },
+  { text: 'Every IMAC answer comes with sources you can check.', project: 1, link: open(1, 'See how it works'), mood: 'happy' },
+  { text: 'Retrieve first, rerank second, answer last. That is the IMAC pipeline.', project: 1, link: open(1), mood: 'think' },
+  { text: 'That 88% badge means the sources matched well. It does not promise the answer is right.', project: 1, link: open(1), mood: 'think' },
+  { text: 'Transaction coding: automate the routine, flag the odd, let a person decide.', project: 2, link: open(2), mood: 'happy' },
+  { text: 'A merchant it has never seen gets no suggestion at all. Honest, if humbling.', project: 2, link: open(2), mood: 'idle' },
+  { text: 'In transaction coding, confidence is a band, never a promise.', project: 2, link: open(2, 'See how it works'), mood: 'think' },
+  { text: 'The review lane is where the interesting transactions go.', project: 2, link: open(2), mood: 'happy' },
+  { text: 'Fit Check shows evidence, not a score.', project: 3, link: open(3), mood: 'think' },
+  { text: 'Fit Check asks before it assumes. Revolutionary, apparently.', project: 3, link: open(3), mood: 'happy' },
+  { text: 'It was built independently at a ZEIL hackathon. No team, just a deadline.', project: 3, link: open(3), mood: 'idle' },
+  { text: 'Retrieved is not the same as confirmed. Fit Check keeps them apart.', project: 3, link: open(3, 'See how it works'), mood: 'think' },
+  { text: 'Tiny Paws has a cart, a checkout and a medical vault. All front end.', project: 4, link: open(4), mood: 'happy' },
+  { text: 'The Tiny Paws payment is simulated. No money moves. I checked.', project: 4, link: open(4), mood: 'idle' },
+  { text: 'Tiny Paws saves its cart and vault in your browser. No backend.', project: 4, link: open(4, 'See how it works'), mood: 'think' },
+  { text: 'A prototype that is honest about being a prototype. Tiny Paws.', project: 4, link: open(4), mood: 'happy' },
 ];
 
 /** Project lines that apply wherever you are, so the shortcuts to the write-ups are never out of reach. */
@@ -285,9 +289,9 @@ export function sigPoke(): void {
 }
 
 export const OFFERS = [
-  { label: 'AI work', hint: 'Retrieval, sources, refusal', project: 0 },
-  { label: 'Software engineering', hint: 'A person stays in the loop', project: 1 },
-  { label: 'How I build', hint: 'Decisions and evidence', project: 2 },
+  { label: 'AI work', hint: 'Retrieval, sources, refusal', project: 1 },
+  { label: 'Software engineering', hint: 'A person stays in the loop', project: 2 },
+  { label: 'How I build', hint: 'Decisions and evidence', project: 3 },
 ] as const;
 
 /** Take an offer: travel to the project and inspect it (or, without the 3D world, open its write-up). */
@@ -314,8 +318,8 @@ export function sigGo(slug: string): void {
 
 export const ZONE_LINES = [
   "Hello, and welcome. I'm Sig, and I'll keep you company while you look around.",
-  'Four projects, four different problems. Start anywhere.',
-  'Five decisions. Point at one and I will show you where it came from.',
+  'Five projects, five different problems. Start anywhere.',
+  'Seven decisions. Point at one and I will show you where it came from.',
   'Now the people part. Mostly backend, mostly PostgreSQL, a fair bit of coffee.',
   "That's the end of the road. Email is quicker than poking me, but poking is more fun.",
 ];
@@ -329,6 +333,7 @@ export const SECTION_LINES: Record<string, [string, Mood]> = {
 };
 
 export const PROJECT_LINES = [
+  'A job search that keeps itself up to date, and asks before it changes anything.',
   'This one would rather say "I don\'t know" than guess.',
   'The boring work, automated. The odd cases, left to humans.',
   'No score. No verdict. Just receipts.',
@@ -336,6 +341,8 @@ export const PROJECT_LINES = [
 ];
 
 const DECISION_LINES: Record<string, string> = {
+  'quote-proof': 'The model has to quote its proof, and the quote is checked.',
+  'suggest-only': 'GRU suggests. I tap to confirm.',
   refuse: 'If sources fall short, it says so instead of guessing.',
   'two-stage': 'Fast recall first, then a slower, sharper rerank.',
   'suggest-review': 'It suggests. A person decides.',
@@ -348,11 +355,11 @@ export function lineForFocus(projectIndex: number, focus: string | null): [strin
   const step = /^step-(\d+)$/.exec(focus);
   if (step) {
     const n = Number(step[1]);
-    if (projectIndex === 0 && n === 6) return ['Sources first, then the answer.', 'think'];
-    if (projectIndex === 0 && n === 11) return ['88% is how well the sources matched. Not how right the answer is.', 'think'];
-    if (projectIndex === 1 && n === 5) return ["Three didn't fit, so they wait for a person.", 'think'];
-    if (projectIndex === 2 && n === 9) return ['Partial evidence means a question, not a guess.', 'think'];
-    if (projectIndex === 2 && n === 11) return ['The unsupported claim stays out.', 'happy'];
+    if (projectIndex === 1 && n === 6) return ['Sources first, then the answer.', 'think'];
+    if (projectIndex === 1 && n === 11) return ['88% is how well the sources matched. Not how right the answer is.', 'think'];
+    if (projectIndex === 2 && n === 5) return ["Three didn't fit, so they wait for a person.", 'think'];
+    if (projectIndex === 3 && n === 9) return ['Partial evidence means a question, not a guess.', 'think'];
+    if (projectIndex === 3 && n === 11) return ['The unsupported claim stays out.', 'happy'];
   }
   return null;
 }

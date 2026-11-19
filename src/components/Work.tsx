@@ -55,7 +55,7 @@ export function Work() {
     <section id="work" aria-labelledby="work-title" className="wrap scroll-mt-16 pt-8 lg:pt-16">
       <p className="label">01 · Selected work</p>
       <h2 id="work-title" className="h-section mt-3">
-        Four projects. Four different problems.
+        Five projects. Five different problems.
       </h2>
       <p className="prose-w mt-3 text-muted">A closer look at how I approach the work. Pick a project, then inspect its evidence.</p>
 

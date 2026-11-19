@@ -51,6 +51,8 @@ export interface Project {
   outcomes?: string[];
   achievements?: string[];
   limitations?: string[];
+  /** Short reflections, shown as "What I learned". */
+  learned?: string[];
   diagrams?: Diagram[];
   definitions?: { title: string; rows: DefinitionRow[] };
   example?: EvidenceExample;

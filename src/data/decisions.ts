@@ -14,6 +14,8 @@ export interface DecisionRef {
 }
 
 export const DECISIONS: DecisionRef[] = [
+  { id: 'quote-proof', projectId: 'gru', title: 'The model must quote its proof', focusId: 'activity', label: 'See the tracked statuses' },
+  { id: 'suggest-only', projectId: 'gru', title: 'The assistant suggests; I confirm', focusId: 'chat', label: 'See the assistant' },
   { id: 'refuse', projectId: 'imac-advisor', title: 'Refuse rather than guess', focusId: 'confidence', label: 'See the confidence badge' },
   { id: 'two-stage', projectId: 'imac-advisor', title: 'Two stages instead of one', focusId: 'sources', label: 'See the reranked sources' },
   { id: 'suggest-review', projectId: 'transaction-coding', title: 'Suggest, then review', focusId: 'step-5', label: 'See the review lane' },

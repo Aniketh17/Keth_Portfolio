@@ -1,5 +1,6 @@
 /** A strip of real facts from the résumé. Under reduced motion it stops scrolling and wraps instead. */
 const ITEMS: [string, string][] = [
+  ['Manukora', 'AI / software intern'],
   ['Ito Master', 'freelance backend'],
   ['Eruna Technologies', 'junior developer'],
   ['WDCC × Figured', 'first place'],
